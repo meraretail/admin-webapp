@@ -1,0 +1,47 @@
+/* Importing tailwind utility classes */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Importing fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+
+/* overriding default styles */
+@layer base {
+  body {
+    @apply font-inter text-[#333333];
+  }
+  h1 {
+    @apply font-lato;
+    @apply font-bold;
+    @apply text-2xl;
+    @apply mb-4;
+  }
+  h2 {
+    @apply font-lato;
+    @apply font-bold;
+    @apply text-xl;
+    @apply mb-2;
+  }
+  h3 {
+    @apply font-lato;
+    @apply font-semibold;
+    @apply text-lg;
+    @apply mb-1;
+  }
+  h4,
+  h5,
+  h6 {
+    @apply font-lato;
+    @apply mb-1;
+  }
+  p {
+    @apply mb-1;
+  }
+
+  li {
+    @apply font-roboto;
+  }
+}
