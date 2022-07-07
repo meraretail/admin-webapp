@@ -1,0 +1,45 @@
+export const createUserInputs = [
+  {
+    id: 1,
+    name: 'firstName',
+    type: 'text',
+    placeholder: 'Enter your first name',
+    label: 'Name',
+  },
+  {
+    id: 2,
+    name: 'lastName',
+    type: 'text',
+    placeholder: 'Enter your last name',
+    label: 'Name',
+  },
+  {
+    id: 3,
+    name: 'phone',
+    type: 'text',
+    placeholder: 'Phone (e.g. 9876512345)',
+    label: 'Phone (e.g. 9876512345)',
+  },
+  {
+    id: 4,
+    name: 'email',
+    type: 'email',
+    placeholder: 'Enter your email',
+    label: 'Email',
+    // errorMsg: 'Please provide a valid email',
+  },
+  {
+    id: 5,
+    name: 'password',
+    type: 'password',
+    placeholder: 'Enter your password',
+    label: 'Password',
+  },
+  {
+    id: 6,
+    name: 'confirmPassword',
+    type: 'password',
+    placeholder: 'Confirm your password',
+    label: 'Confirm password',
+  },
+];

@@ -1,5 +1,47 @@
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
+import Login from './pages/Login';
+
+// User Pages
+import Users from './pages/users/Users';
+import AddUser from './pages/users/AddUser';
+import EditUser from './pages/users/EditUser';
+import AddAddress from './pages/users/AddAddress';
+import EditAddress from './pages/users/EditAddress';
+
+// Category Pages
+import Categories from './pages/categories/Categories';
+import SubCategories from './pages/categories/SubCategories';
+import ChildCategories from './pages/categories/ChildCategories';
+
 function App() {
-  return <div>Admin app</div>;
+  return (
+    <Routes>
+      <Route path='/login' element={<Login />} />
+
+      {/* Protected Routes */}
+      <Route path='/' element={<Home />}>
+        <Route path='/' element={<Dashboard />} index />
+
+        {/* User routes */}
+        <Route path='/users' element={<Users />} />
+        <Route path='/user/new' element={<AddUser />} />
+        <Route path='/user/:userId' element={<EditUser />} />
+        <Route path='/user/:userId/add-address' element={<AddAddress />} />
+        <Route
+          path='/user/:userId/edit-address/:addressId'
+          element={<EditAddress />}
+        />
+
+        {/* Category routes */}
+        <Route path='/categories' element={<Categories />} />
+        <Route path='/sub-categories' element={<SubCategories />} />
+        <Route path='/child-categories' element={<ChildCategories />} />
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;
