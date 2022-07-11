@@ -1,10 +1,10 @@
-import { axiosInstance } from './axios.config';
+import { axiosIdInstance } from './axios.config';
 
 // no try catch block - error handled by redux thunk
 
 // 5. ADMIN login route | POST /api/identity/admin/login
 export const loginUser = async ({ email, phone, password }) => {
-  const response = await axiosInstance({
+  const response = await axiosIdInstance({
     method: 'post',
     url: '/admin/login',
     data: {
@@ -18,7 +18,7 @@ export const loginUser = async ({ email, phone, password }) => {
 
 // 7. Refresh Auth tokens | POST /api/identity/refresh-tokens
 export const refreshAccessAndRefreshTokens = async () => {
-  const response = await axiosInstance({
+  const response = await axiosIdInstance({
     method: 'post',
     url: '/refresh-tokens',
   });
@@ -27,7 +27,7 @@ export const refreshAccessAndRefreshTokens = async () => {
 
 // 8. Logout route | POST /api/identity/logout
 export const logoutUser = async () => {
-  const response = await axiosInstance({
+  const response = await axiosIdInstance({
     method: 'post',
     url: '/logout',
   });

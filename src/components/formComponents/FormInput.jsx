@@ -9,7 +9,7 @@ const FormInput = (props) => {
         value={value ? value : ''}
         onChange={onChange}
         {...inputProps}
-        className={`peer px-3 py-2 bg-white border border-inputBorder placeholder-gray-400 
+        className={`peer px-3 py-2 bg-white border border-violet-300 placeholder-gray-400 
                     focus:outline-none focus:border-violet-500 focus:ring-violet-500 block 
                     w-full rounded sm:text-sm focus:ring-1 invalid:invalid-input
                     focus:placeholder:text-transparent transition duration-200 ${className}`}

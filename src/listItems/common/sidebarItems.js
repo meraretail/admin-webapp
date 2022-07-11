@@ -11,7 +11,6 @@ export const sidebarItems = [
       { id: 3.3, text: 'Child categories', link: '/child-categories' },
       { id: 3.4, text: 'Variations', link: '/variations' },
       { id: 3.5, text: 'Features', link: '/features' },
-      { id: 3.6, text: 'Informations', link: '/informations', icon: 'icon' },
       { id: 3.7, text: 'Details', link: '/details' },
     ],
   },

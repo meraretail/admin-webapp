@@ -7,7 +7,7 @@ import TableSearchInput from '../tableComponents/TableSearchInput';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
-import { adminGetAllCategories } from '../../apis/categories.apis';
+import { adminAllCategoriesSummary } from '../../apis/categories.apis';
 import {
   catPopularFilters,
   catTableHeaders,
@@ -34,7 +34,7 @@ const CategoriesTable = ({ setResSuccess, setResMessage, rerender }) => {
   useEffect(() => {
     const delayedResponse = setTimeout(async () => {
       setLoading(true);
-      adminGetAllCategories(page, size, searchText)
+      adminAllCategoriesSummary(page, size, searchText)
         .then((response) => {
           const { totalCategories, categories, success, message } =
             response.data;
@@ -51,10 +51,10 @@ const CategoriesTable = ({ setResSuccess, setResMessage, rerender }) => {
     }, 100);
 
     return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, setResSuccess, setResMessage]);
+  }, [page, size, searchText, setResSuccess, setResMessage, rerender]);
 
   const handleEditCategory = (id) => {
-    navigate(`/categories/${id}`);
+    navigate(`/category/edit/${id}`);
   };
 
   const handleDeleteCategory = async (id) => {};
@@ -205,7 +205,7 @@ const CategoriesTable = ({ setResSuccess, setResMessage, rerender }) => {
           <div>Pages: </div>
           <div>{page + 1}</div>
           <div>of</div>
-          <div>{Math.ceil(rowCount / size)}</div>
+          <div>{Math.ceil(rowCount / size) || 0}</div>
           <button className='w-6 h-6 rounded-full flex items-center justify-center border border-gray-400'>
             <GrFormPrevious onClick={prevPageClickHandler} />
           </button>

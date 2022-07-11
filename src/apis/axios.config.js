@@ -5,8 +5,16 @@ import axios from 'axios';
 // hence, withCredentials: true,
 
 /***** USE BELOW IN DEVELOPMENT *****/
-export const axiosInstance = axios.create({
+export const axiosIdInstance = axios.create({
   baseURL: 'http://localhost:8000/api/identity',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+});
+
+export const axiosPdInstance = axios.create({
+  baseURL: 'http://localhost:8000/api/product',
   headers: {
     'Content-Type': 'application/json',
   },

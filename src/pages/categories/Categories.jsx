@@ -3,10 +3,13 @@ import SuccErrMsg from '../../components/common/SuccErrMsg';
 import PageTitle from '../../components/common/PageTitle';
 import { MdOutlineAddChart } from 'react-icons/md';
 import CategoriesTable from '../../components/categories/CategoriesTable';
+import NewCategory from '../../components/categories/NewCategory';
+import ItemContainer from '../../components/common/ItemContainer';
 
 const Categories = () => {
   const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
+  const [rerender, setRerender] = useState(false);
 
   // console.log(categories);
   return (
@@ -14,21 +17,29 @@ const Categories = () => {
       {/* page header */}
       <PageTitle
         title='Categories'
-        btnLink='/categories/new'
-        btnIcon={<MdOutlineAddChart />}
-        btnText='Add new category'
-        type='positive'
+        btnText='Back to previous page'
+        type='negative'
         className='fixed top-0 left-[12rem] right-0 px-4 shadow'
       />
       {/* page header ends */}
-      <div className='px-4 mt-[5rem] mb-10'>
+      <div className='px-4 mt-[5.5rem] mb-10 space-y-6'>
         {/* success / error message zone */}
         <SuccErrMsg resSuccess={resSuccess} resMessage={resMessage} />
         {/* success / error message zone ends */}
-        <CategoriesTable
+        <NewCategory
           setResSuccess={setResSuccess}
           setResMessage={setResMessage}
+          setRerender={setRerender}
+          rerender={rerender}
         />
+
+        <ItemContainer title='All categories summary'>
+          <CategoriesTable
+            setResSuccess={setResSuccess}
+            setResMessage={setResMessage}
+            rerender={rerender}
+          />
+        </ItemContainer>
       </div>
     </div>
   );

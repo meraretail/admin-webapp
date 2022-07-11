@@ -7,7 +7,7 @@ import TableSearchInput from '../tableComponents/TableSearchInput';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { AiOutlineEdit } from 'react-icons/ai';
-import { adminGetAllChildCategories } from '../../apis/categories.apis';
+import { adminAllChildCategoriesSummary } from '../../apis/childcategories.apis';
 import {
   catPopularFilters,
   childCatTableHeaders,
@@ -37,8 +37,9 @@ const ChildCategoriesTable = ({
   useEffect(() => {
     const delayedResponse = setTimeout(async () => {
       setLoading(true);
-      adminGetAllChildCategories(page, size, searchText, subCategoryId)
+      adminAllChildCategoriesSummary(page, size, searchText, subCategoryId)
         .then((response) => {
+          // console.log(response.data);
           const { totalChildCategories, childCategories, success, message } =
             response.data;
           setChildCategories(childCategories);
@@ -51,10 +52,18 @@ const ChildCategoriesTable = ({
     }, 100);
 
     return () => clearTimeout(delayedResponse);
-  }, [page, searchText, setResMessage, setResSuccess, size, subCategoryId]);
+  }, [
+    page,
+    searchText,
+    size,
+    setResMessage,
+    setResSuccess,
+    subCategoryId,
+    rerender,
+  ]);
 
   const handleEditChildCategory = (id) => {
-    navigate(`/child-categories/${id}`);
+    navigate(`/child-category/edit/${id}`);
   };
 
   const sizeOptionClickHandler = (option) => {
@@ -143,19 +152,16 @@ const ChildCategoriesTable = ({
                   <td className='p-1 lg:p-2 text-sm text-gray-700'>
                     {childCategory.category}
                   </td>
-                  <td className='p-1 lg:p-2 text-sm text-gray-700'>
+                  <td className='p-1 lg:p-2 text-sm text-gray-700 text-center'>
                     {childCategory.variations}
                   </td>
-                  <td className='p-1 lg:p-2 text-sm text-gray-700'>
+                  <td className='p-1 lg:p-2 text-sm text-gray-700 text-center'>
                     {childCategory.features}
                   </td>
-                  <td className='p-1 lg:p-2 text-sm text-gray-700'>
-                    {childCategory.informations}
-                  </td>
-                  <td className='p-1 lg:p-2 text-sm text-gray-700'>
+                  <td className='p-1 lg:p-2 text-sm text-gray-700 text-center'>
                     {childCategory.details}
                   </td>
-                  <td className='p-1 lg:p-2 text-sm text-gray-700'>
+                  <td className='p-1 lg:p-2 text-sm text-gray-700 text-center'>
                     {childCategory.products}
                   </td>
                   <td className='p-1 lg:p-2 text-xs'>
@@ -209,7 +215,7 @@ const ChildCategoriesTable = ({
           <div>Pages: </div>
           <div>{page + 1}</div>
           <div>of</div>
-          <div>{Math.ceil(rowCount / size)}</div>
+          <div>{Math.ceil(rowCount / size) || 0}</div>
           <button className='w-6 h-6 rounded-full flex items-center justify-center border border-gray-400'>
             <GrFormPrevious onClick={prevPageClickHandler} />
           </button>

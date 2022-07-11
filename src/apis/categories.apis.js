@@ -1,13 +1,56 @@
-import { axiosInstance } from './axios.config';
+import { axiosPdInstance } from './axios.config';
 
-/***************** CATEGORIES APIs ***************/
-
-// 1. Admin: Get All Categories | GET /admin/get-all-categories
-export const adminGetAllCategories = async (page, size, search) => {
+// ADMIN ONLY
+// 1.1 POST '/admin/show-similar-categories' - similar categories while typing a new category name
+export const showSimilarCategories = async (name) => {
   try {
-    const response = await axiosInstance({
+    const response = await axiosPdInstance({
+      method: 'post',
+      url: '/admin/show-similar-categories',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// ADMIN ONLY
+// 1.2 POST /admin/create-category - admin can add new category
+export const adminCreateCategory = async (name) => {
+  try {
+    const response = await axiosPdInstance({
+      method: 'post',
+      url: '/admin/create-category',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT REQUIRED
+// 1.3 GET /list-all-categories - get all categories list
+export const listAllCategories = async () => {
+  try {
+    const response = await axiosPdInstance({
       method: 'get',
-      url: '/admin/get-all-categories',
+      url: '/list-all-categories',
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// ADMIN
+// 1.4 GET /admin/all-categories-summary - admin can summary at category level
+export const adminAllCategoriesSummary = async (page, size, search) => {
+  try {
+    const response = await axiosPdInstance({
+      method: 'get',
+      url: '/admin/all-categories-summary',
       params: {
         page: page,
         size: size,
@@ -20,19 +63,13 @@ export const adminGetAllCategories = async (page, size, search) => {
   }
 };
 
-/***************** SUB CATEGORIES APIs ***************/
-
-// 1. Admin: Get All Sub Categories | GET /admin/get-all-sub-categories
-export const adminGetAllSubCategories = async (page, size, search) => {
+// ADMIN
+// 1.5 GET '/admin/category-name/:categoryId' - get category name by Id
+export const adminGetCategoryNameById = async (categoryId) => {
   try {
-    const response = await axiosInstance({
+    const response = await axiosPdInstance({
       method: 'get',
-      url: '/admin/get-all-sub-categories',
-      params: {
-        page: page,
-        size: size,
-        search: search,
-      },
+      url: `/admin/category-name/${categoryId}`,
     });
     return response;
   } catch (error) {
@@ -40,19 +77,72 @@ export const adminGetAllSubCategories = async (page, size, search) => {
   }
 };
 
-/***************** CHILD CATEGORIES APIs ***************/
-
-// 1. Admin: Get All Child Categories | GET /admin/get-all-child-categories
-export const adminGetAllChildCategories = async (page, size, search) => {
+// ADMIN
+// 1.6 PUT '/admin/update-category-name/:categoryId' - update category name by Id
+export const adminUpdateCategoryNameById = async (categoryId, name) => {
   try {
-    const response = await axiosInstance({
+    const response = await axiosPdInstance({
+      method: 'put',
+      url: `/admin/update-category/${categoryId}`,
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+/************* CATEGORY IMAGE API ROUTES ************/
+
+// 1.1 GET '/get-category-images/:categoryId' - get category images by Id
+export const getCategoryImagesById = async (categoryId) => {
+  try {
+    const response = await axiosPdInstance({
       method: 'get',
-      url: '/admin/get-all-child-categories',
-      params: {
-        page: page,
-        size: size,
-        search: search,
-      },
+      url: `/get-category-images/${categoryId}`,
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// ADMIN
+// 1.2 POST '/category-images/:categoryId' - add category images by Id
+export const adminAddCategoryImagesById = async (categoryId, images) => {
+  try {
+    const response = await axiosPdInstance({
+      method: 'post',
+      url: `/category-images/${categoryId}`,
+      data: { images: images },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// ADMIN
+// 1.3 DELETE '/category-image/:categoryId/:imageId' - delete category images by Id
+export const adminDeleteCategoryImageById = async (categoryId, imageId) => {
+  try {
+    const response = await axiosPdInstance({
+      method: 'delete',
+      url: `/category-image/${categoryId}/${imageId}`,
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// ADMIN
+// 1.4 PUT '/default-category-image/:categoryId/:imageId' - set default category images by Id
+export const adminSetDefaultCategoryImageById = async (categoryId, imageId) => {
+  try {
+    const response = await axiosPdInstance({
+      method: 'put',
+      url: `/default-category-image/${categoryId}/${imageId}`,
     });
     return response;
   } catch (error) {

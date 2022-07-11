@@ -15,6 +15,9 @@ import EditAddress from './pages/users/EditAddress';
 import Categories from './pages/categories/Categories';
 import SubCategories from './pages/categories/SubCategories';
 import ChildCategories from './pages/categories/ChildCategories';
+import EditCategory from './pages/categories/EditCategory';
+import EditSubCategory from './pages/categories/EditSubcategory';
+import EditChildCategory from './pages/categories/EditChildCategory';
 
 function App() {
   return (
@@ -39,6 +42,15 @@ function App() {
         <Route path='/categories' element={<Categories />} />
         <Route path='/sub-categories' element={<SubCategories />} />
         <Route path='/child-categories' element={<ChildCategories />} />
+        <Route path='/category/edit/:categoryId' element={<EditCategory />} />
+        <Route
+          path='/sub-category/edit/:subCategoryId'
+          element={<EditSubCategory />}
+        />
+        <Route
+          path='/child-category/edit/:childCategoryId'
+          element={<EditChildCategory />}
+        />
       </Route>
     </Routes>
   );
