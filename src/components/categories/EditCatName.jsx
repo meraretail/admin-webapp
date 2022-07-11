@@ -16,6 +16,8 @@ const EditCatName = ({
   setLoading,
   setResSuccess,
   setResMessage,
+  rerender,
+  setRerender,
 }) => {
   const [catName, setCatName] = useState(''); // only category name
   const [similarCategories, setSimilarCategories] = useState([]);
@@ -52,6 +54,7 @@ const EditCatName = ({
     if (data.success) {
       setCatName('');
       setSimilarCategories([]);
+      setRerender(!rerender);
     }
   };
   return (

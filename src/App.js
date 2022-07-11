@@ -19,6 +19,9 @@ import EditCategory from './pages/categories/EditCategory';
 import EditSubCategory from './pages/categories/EditSubcategory';
 import EditChildCategory from './pages/categories/EditChildCategory';
 
+// Product Pages
+import Products from './pages/products/Products';
+
 function App() {
   return (
     <Routes>
@@ -51,6 +54,9 @@ function App() {
           path='/child-category/edit/:childCategoryId'
           element={<EditChildCategory />}
         />
+
+        {/* Products routes */}
+        <Route path='/products' element={<Products />} />
       </Route>
     </Routes>
   );

@@ -56,6 +56,8 @@ const EditChildCategory = () => {
           orgName={childCategory ? childCategory.name : ''}
           setResSuccess={setResSuccess}
           setResMessage={setResMessage}
+          rerender={rerender}
+          setRerender={setRerender}
         />
         {/* child category name update ends */}
         {/* Child category variations, features, infos, details starts */}

@@ -63,6 +63,8 @@ const EditCategory = () => {
             setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
+            rerender={rerender}
+            setRerender={setRerender}
           />
           {/* similar categories found ends */}
         </ItemContainer>

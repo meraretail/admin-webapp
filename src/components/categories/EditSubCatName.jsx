@@ -9,7 +9,14 @@ import Button from '../formComponents/Button';
 import FormInput from '../formComponents/FormInput';
 import LoadingButton from '../formComponents/LoadingButton';
 
-const EditSubCatName = ({ id, orgName, setResStatus, setResMessage }) => {
+const EditSubCatName = ({
+  id,
+  orgName,
+  setResStatus,
+  setResMessage,
+  rerender,
+  setRerender,
+}) => {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [similarSubCategories, setSimilarSubCategories] = useState([]);
@@ -47,6 +54,7 @@ const EditSubCatName = ({ id, orgName, setResStatus, setResMessage }) => {
     if (statusText === 'OK') {
       setName('');
       setSimilarSubCategories([]);
+      setRerender(!rerender);
     }
   };
 

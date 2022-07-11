@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import SuccErrMsg from '../../components/common/SuccErrMsg';
 import PageTitle from '../../components/common/PageTitle';
-import { MdOutlineAddChart } from 'react-icons/md';
 import CategoriesTable from '../../components/categories/CategoriesTable';
 import NewCategory from '../../components/categories/NewCategory';
 import ItemContainer from '../../components/common/ItemContainer';

@@ -56,6 +56,8 @@ const EditSubCategory = () => {
             orgName={subCategory.name}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
+            rerender={rerender}
+            setRerender={setRerender}
           />
           {/* category name update ends */}
 
