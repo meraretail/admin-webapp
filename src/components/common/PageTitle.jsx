@@ -14,7 +14,7 @@ const PageTitle = ({ className, title, btnLink, btnIcon, btnText, type }) => {
 
   return (
     <div
-      className={`${className} bg-white z-20 flex items-center justify-between border-b`}
+      className={`${className} flex items-center justify-between border-b fixed top-0 left-[12rem] right-0 px-4 shadow bg-white z-20`}
     >
       <h1 className='font-manrope text-2xl font-bold my-4'>{title}</h1>
       <button

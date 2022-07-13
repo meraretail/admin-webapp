@@ -181,7 +181,7 @@ const FeatureOptionTable = ({
             <div>Pages: </div>
             <div>{page + 1}</div>
             <div>of</div>
-            <div>{Math.ceil(rowCount / size)}</div>
+            <div>{Math.ceil(rowCount / size) || 0}</div>
             <button className='w-6 h-6 rounded-full flex items-center justify-center border border-gray-400'>
               <GrFormPrevious onClick={prevPageClickHandler} />
             </button>

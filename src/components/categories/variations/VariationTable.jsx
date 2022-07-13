@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// Importing icons and services
+import LoadSpinner from '../../common/LoadSpinner';
+import TableSearchInput from '../../tableComponents/TableSearchInput';
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
-
-// Importing components
-import LoadSpinner from '../common/LoadSpinner';
-import SearchInput from '../common/SearchInput';
+import { varTableHeaders } from '../../../listItems/categoryItems/attributeTableItems';
+import { pageSizeOptions } from '../../../listItems/common/commonTableItems';
 import {
-  deleteVariationById,
-  getAllVariationsSummary,
-} from '../../services/variationAPIs';
-import { varTableHeaders } from '../listItems/varFeatTableItems';
-import { pageSizeOptions } from '../listItems/commonTableOptions';
+  adminDeleteVariationById,
+  adminAllVariationsSummary,
+} from '../../../apis/variations.apis';
 
 const VariationTable = ({
-  setResStatus,
+  setResSuccess,
   setResMessage,
   rerender,
   setRerender,
@@ -35,23 +31,22 @@ const VariationTable = ({
 
   useEffect(() => {
     const delayedResponse = setTimeout(async () => {
-      getAllVariationsSummary(page, size, searchText)
+      setLoading(true);
+      adminAllVariationsSummary(page, size, searchText)
         .then((response) => {
-          setLoading(true);
-          const { data, statusText } = response;
-          // console.log('data', data);
-          const { totalVariations, variations } = data;
+          const { totalVariations, variations } = response.data;
           setVariations(variations);
           setRowCount(totalVariations);
-          setResStatus(statusText);
-          setResMessage(data.message);
-          setLoading(false);
         })
-        .catch((error) => setResMessage(error));
+        .catch((error) => {
+          setResSuccess(error.data.success);
+          setResMessage(error.data.message);
+        });
+      setLoading(false);
     }, 200);
 
     return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, setResStatus, setResMessage, rerender]);
+  }, [page, size, searchText, rerender, setResMessage, setResSuccess]);
 
   const handleEditVariation = (id) => {
     navigate(`/variation/${id}`);
@@ -59,12 +54,14 @@ const VariationTable = ({
 
   const handleDeleteVariation = async (id) => {
     setLoading(true);
-    const response = await deleteVariationById(id);
-    const { data, statusText } = response;
-    setResStatus(statusText);
-    setResMessage(data.message);
+    const { data } = await adminDeleteVariationById(id);
     setLoading(false);
-    setRerender(!rerender);
+
+    setResSuccess(data.success);
+    setResMessage(data.message);
+    if (data.success) {
+      setRerender(!rerender);
+    }
   };
 
   const sizeOptionClickHandler = (option) => {
@@ -84,19 +81,19 @@ const VariationTable = ({
     }
   };
   return (
-    <div className="relative overflow-y-visible">
+    <div className='relative overflow-y-visible'>
       {/* search row */}
-      <div className="w-56 pb-6">
-        <SearchInput setSearchText={setSearchText} />
+      <div className='w-56 pb-6'>
+        <TableSearchInput setSearchText={setSearchText} />
       </div>
       {/* search row ends */}
-      <div className="min-h-[10rem] border border-gray-300 shadow rounded">
-        <table className="w-full">
-          <thead className="border-b border-gray-200">
+      <div className='min-h-[10rem] border border-gray-300 shadow rounded'>
+        <table className='w-full'>
+          <thead className='border-b border-gray-200'>
             <tr>
               {varTableHeaders.map((header, index) => (
                 <th
-                  className="p-1 lg:p-2 text-sm font-semibold tracking-wide text-left md:min-w-[2rem] last:max-w-[2rem]"
+                  className='p-1 lg:p-2 text-sm font-semibold tracking-wide text-left md:min-w-[2rem] last:max-w-[2rem]'
                   key={index}
                 >
                   {header}
@@ -111,19 +108,19 @@ const VariationTable = ({
                   className={`${index % 2 === 0 && 'bg-gray-100'}`}
                   key={index}
                 >
-                  <td className="p-1 lg:p-2 text-sm text-gray-700">
+                  <td className='p-1 lg:p-2 text-sm text-gray-700'>
                     {variation.id}
                   </td>
-                  <td className="p-1 lg:p-2 text-sm text-gray-700">
+                  <td className='p-1 lg:p-2 text-sm text-gray-700'>
                     {variation.name}
                   </td>
-                  <td className="p-1 lg:p-2 text-xs">
+                  <td className='p-1 lg:p-2 text-xs'>
                     {
-                      <ul className="flex gap-1">
+                      <ul className='flex gap-1'>
                         {variation.variationOptions.map((option, index) => (
                           <li
                             key={index}
-                            className="px-1 py-0.5 opacity-70 bg-yellow-50 border border-yellow-700 rounded"
+                            className='px-1 py-0.5 opacity-70 bg-yellow-50 border border-yellow-700 rounded'
                           >
                             {option.name}
                           </li>
@@ -131,23 +128,23 @@ const VariationTable = ({
                       </ul>
                     }
                   </td>
-                  <td className="p-1 lg:p-2 text-sm text-gray-700">
+                  <td className='p-1 lg:p-2 text-sm text-gray-700'>
                     {variation.variesImage ? 'Yes' : 'No'}
                   </td>
-                  <td className="p-1 lg:p-2 text-xs flex gap-1">
+                  <td className='p-1 lg:p-2 text-xs flex gap-1'>
                     <button
-                      className="flex items-center font-semibold px-1 py-0.5 opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100 rounded"
+                      className='flex items-center font-semibold px-1 py-0.5 opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100 rounded'
                       onClick={() => handleEditVariation(variation.id)}
                     >
                       <AiOutlineEdit />
-                      <span className="ml-1">Edit</span>
+                      <span className='ml-1'>Edit</span>
                     </button>
                     <button
-                      className="flex items-center font-semibold px-1 py-0.5 opacity-70 bg-red-50 text-red-700 border border-red-700 hover:bg-red-100 rounded"
+                      className='flex items-center font-semibold px-1 py-0.5 opacity-70 bg-red-50 text-red-700 border border-red-700 hover:bg-red-100 rounded'
                       onClick={() => handleDeleteVariation(variation.id)}
                     >
                       <AiOutlineDelete />
-                      <span className="ml-0.5">Delete</span>
+                      <span className='ml-0.5'>Delete</span>
                     </button>
                   </td>
                 </tr>
@@ -156,16 +153,16 @@ const VariationTable = ({
         </table>
       </div>
       {loading && (
-        <LoadSpinner className="absolute top-[7rem] left-[22rem] z-20" />
+        <LoadSpinner className='absolute top-[7rem] left-[22rem] z-20' />
       )}
       {/* items per page and pages */}
-      <div className="flex justify-between items-start py-4">
+      <div className='flex justify-between items-start py-4'>
         {/* left section */}
-        <div className="flex gap-2">
+        <div className='flex gap-2'>
           <div>Items per page:</div>
           <div>
             <button
-              className="w-20 py-0.5 px-2 rounded border border-gray-300 flex items-center justify-between"
+              className='w-20 py-0.5 px-2 rounded border border-gray-300 flex items-center justify-between'
               onClick={() => setSizeOptionsVisible(!sizeOptionsVisible)}
             >
               {size} <RiArrowDropDownLine />
@@ -178,7 +175,7 @@ const VariationTable = ({
               {pageSizeOptions.map((option, index) => (
                 <li
                   onClick={() => sizeOptionClickHandler(option)}
-                  className="cursor-pointer px-2 py-0.5 text-gray-500 text-md"
+                  className='cursor-pointer px-2 py-0.5 text-gray-500 text-md'
                   key={index}
                 >
                   {option}
@@ -188,15 +185,15 @@ const VariationTable = ({
           </div>
         </div>
         {/* right section */}
-        <div className="flex items-center gap-1">
+        <div className='flex items-center gap-1'>
           <div>Pages: </div>
           <div>{page + 1}</div>
           <div>of</div>
-          <div>{Math.ceil(rowCount / size)}</div>
-          <button className="w-6 h-6 rounded-full flex items-center justify-center border border-gray-400">
+          <div>{Math.ceil(rowCount / size) || 0}</div>
+          <button className='w-6 h-6 rounded-full flex items-center justify-center border border-gray-400'>
             <GrFormPrevious onClick={prevPageClickHandler} />
           </button>
-          <button className="w-6 h-6 rounded-full flex items-center justify-center border border-gray-400">
+          <button className='w-6 h-6 rounded-full flex items-center justify-center border border-gray-400'>
             <GrFormNext onClick={nextPageClickHandler} />
           </button>
         </div>

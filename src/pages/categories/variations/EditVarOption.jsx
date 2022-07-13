@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import PageTitle from '../../components/common/PageTitle';
-import SuccErrMsg from '../../components/common/SuccErrMsg';
-import UpdateVarOptForm from '../../components/variations/UpdateVarOptForm';
+import PageTitle from '../../../components/common/PageTitle';
+import SuccErrMsg from '../../../components/common/SuccErrMsg';
+import UpdateVarOptForm from '../../../components/categories/variations/UpdateVarOptForm';
 
 const EditVarOption = () => {
   const { id } = useParams();

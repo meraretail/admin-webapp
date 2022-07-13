@@ -10,7 +10,7 @@ import {
   showSimilarFeatures,
 } from '../../../apis/features.apis';
 
-const NewFeature = ({ setResStatus, setResMessage }) => {
+const NewFeature = ({ setResSuccess, setResMessage }) => {
   const [loading, setLoading] = useState(false);
   const [feature, setFeature] = useState('');
   const [similarFeatures, setSimilarFeatures] = useState([]);
@@ -33,13 +33,12 @@ const NewFeature = ({ setResStatus, setResMessage }) => {
   const handleAddFeature = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const response = await adminCreateFeature(feature);
-    const { data, statusText } = response;
-    setResStatus(statusText);
-    setResMessage(data.message);
+    const { data } = await adminCreateFeature(feature);
     setLoading(false);
+    setResSuccess(data.success);
+    setResMessage(data.message);
 
-    if (statusText === 'OK') {
+    if (data.success) {
       setFeature('');
     }
   };
@@ -61,10 +60,9 @@ const NewFeature = ({ setResStatus, setResMessage }) => {
         {loading ? (
           <LoadingButton />
         ) : (
-          <Button
-            text='Create new feature'
-            className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'
-          />
+          <Button className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'>
+            Create new feature
+          </Button>
         )}
       </form>
       <SimilarNames label='Similar feature names' array={similarFeatures} />

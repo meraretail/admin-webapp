@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import PageTitle from '../../components/common/PageTitle';
-import SuccErrMsg from '../../components/common/SuccErrMsg';
-import NewVarOptForVarId from '../../components/variations/NewVarOptForVarId';
-import UpdateVarForm from '../../components/variations/UpdateVarForm';
-import VarOptionTable from '../../components/variations/VarOptionTable';
+import PageTitle from '../../../components/common/PageTitle';
+import SuccErrMsg from '../../../components/common/SuccErrMsg';
+import NewVarOptForVarId from '../../../components/categories/variations/NewVarOptForVarId';
+import UpdateVarForm from '../../../components/categories/variations/UpdateVarForm';
+import VarOptionTable from '../../../components/categories/variations/VarOptionTable';
 
 const EditVariation = () => {
   const { id } = useParams();
-  const [resStatus, setResStatus] = useState('');
+  const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
   const [rerender, setRerender] = useState(false);
 
@@ -22,7 +22,7 @@ const EditVariation = () => {
       />
       {/* success / error message zone */}
       <SuccErrMsg
-        resStatus={resStatus}
+        resSuccess={resSuccess}
         resMessage={resMessage}
         showSuccess='true'
       />
@@ -31,19 +31,19 @@ const EditVariation = () => {
       <div className='mt-6 space-y-8'>
         <UpdateVarForm
           id={id}
-          setResStatus={setResStatus}
+          setResSuccess={setResSuccess}
           setResMessage={setResMessage}
         />
         <NewVarOptForVarId
           id={id}
-          setResStatus={setResStatus}
+          setResSuccess={setResSuccess}
           setResMessage={setResMessage}
           rerender={rerender}
           setRerender={setRerender}
         />
         <VarOptionTable
           id={id}
-          setResStatus={setResStatus}
+          setResSuccess={setResSuccess}
           setResMessage={setResMessage}
           rerender={rerender}
           setRerender={setRerender}

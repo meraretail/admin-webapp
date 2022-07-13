@@ -10,6 +10,7 @@ import {
   showSimilarDetails,
   adminCreateDetail,
 } from '../../../apis/details.apis';
+import MainContainer from '../../../components/common/MainContainer';
 
 const AddDetail = () => {
   const [resSuccess, setResSuccess] = useState(true);
@@ -58,11 +59,11 @@ const AddDetail = () => {
     <div>
       <PageTitle
         title='Add new detail'
-        link='/details'
+        btnLink='/details'
         btnText='Back to all details'
         type='negative'
       />
-      <div className='px-4 mt-[5.5rem] mb-10 space-y-6'>
+      <MainContainer>
         {/* success / error message zone */}
         <SuccErrMsg
           resSuccess={resSuccess}
@@ -96,16 +97,15 @@ const AddDetail = () => {
               {loading ? (
                 <LoadingButton />
               ) : (
-                <Button
-                  text='Create new detail'
-                  className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'
-                />
+                <Button className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'>
+                  Create new detail
+                </Button>
               )}
             </form>
             <SimilarNames label='Similar detail names' array={similarDetails} />
           </ItemContainer>
         </div>
-      </div>
+      </MainContainer>
     </div>
   );
 };

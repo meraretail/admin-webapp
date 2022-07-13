@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LoadSpinner from '../../common/LoadSpinner';
+import TableSearchInput from '../../tableComponents/TableSearchInput';
+import ItemContainer from '../../common/ItemContainer';
 
 // Importing icons and services
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
-
-// Importing components
-import LoadSpinner from '../common/LoadSpinner';
-import SearchInput from '../common/SearchInput';
+import { varOptTableHeaders } from '../../../listItems/categoryItems/attributeTableItems';
+import { pageSizeOptions } from '../../../listItems/common/commonTableItems';
 import {
-  deleteVariationOptionById,
-  getAllVariationOptionsSummary,
-} from '../../services/variationAPIs';
-import { varOptTableHeaders } from '../listItems/varFeatTableItems';
-import { pageSizeOptions } from '../listItems/commonTableOptions';
-import ItemContainer from '../common/ItemContainer';
+  adminDeleteVariationOptionById,
+  adminAllVariationOptionsSummary,
+} from '../../../apis/variations.apis';
 
 const VarOptionTable = ({
   id,
-  setResStatus,
+  setResSuccess,
   setResMessage,
   rerender,
   setRerender,
@@ -37,22 +35,22 @@ const VarOptionTable = ({
 
   useEffect(() => {
     const delayedResponse = setTimeout(async () => {
-      getAllVariationOptionsSummary(page, size, searchText, id)
+      setLoading(true);
+      adminAllVariationOptionsSummary(page, size, searchText, id)
         .then((response) => {
-          setLoading(true);
-          const { data, statusText } = response;
-          const { totalVarOptions, varOptions } = data;
+          const { totalVarOptions, varOptions } = response.data;
           setVarOptions(varOptions);
           setRowCount(totalVarOptions);
-          setResStatus(statusText);
-          setResMessage(data.message);
-          setLoading(false);
         })
-        .catch((error) => setResMessage(error));
+        .catch((error) => {
+          setResSuccess(error.data.success);
+          setResMessage(error.data.message);
+        });
+      setLoading(false);
     }, 200);
 
     return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, setResStatus, setResMessage, rerender, id]);
+  }, [page, size, searchText, id, setResMessage, setResSuccess]);
 
   const handleEditVariation = (id) => {
     navigate(`/variation-option/${id}`);
@@ -60,12 +58,12 @@ const VarOptionTable = ({
 
   const handleDeleteVariation = async (id) => {
     setLoading(true);
-    const response = await deleteVariationOptionById(id);
-    const { data, statusText } = response;
-    setResStatus(statusText);
-    setResMessage(data.message);
+    const { data } = await adminDeleteVariationOptionById(id);
     setLoading(false);
-    if (statusText === 'OK') {
+    setResSuccess(data.success);
+    setResMessage(data.message);
+
+    if (data.success) {
       setRerender(!rerender);
     }
   };
@@ -87,20 +85,20 @@ const VarOptionTable = ({
     }
   };
   return (
-    <ItemContainer title="Variation Options for variation">
-      <div className="relative overflow-y-visible">
+    <ItemContainer title='Variation Options for variation'>
+      <div className='relative overflow-y-visible'>
         {/* search row */}
-        <div className="w-56 pb-4">
-          <SearchInput setSearchText={setSearchText} />
+        <div className='w-56 pb-4'>
+          <TableSearchInput setSearchText={setSearchText} />
         </div>
         {/* search row ends */}
-        <div className="min-h-[10rem] border border-gray-300 shadow rounded">
-          <table className="w-full">
-            <thead className="border-b border-gray-200">
+        <div className='min-h-[10rem] border border-gray-300 shadow rounded'>
+          <table className='w-full'>
+            <thead className='border-b border-gray-200'>
               <tr>
                 {varOptTableHeaders.map((header, index) => (
                   <th
-                    className="p-1 lg:p-2 text-sm font-semibold tracking-wide text-left md:min-w-[2rem] last:max-w-[2rem]"
+                    className='p-1 lg:p-2 text-sm font-semibold tracking-wide text-left md:min-w-[2rem] last:max-w-[2rem]'
                     key={index}
                   >
                     {header}
@@ -115,13 +113,13 @@ const VarOptionTable = ({
                     className={`${index % 2 === 0 && 'bg-gray-100'}`}
                     key={index}
                   >
-                    <td className="p-1 lg:p-2 text-sm text-gray-700">
+                    <td className='p-1 lg:p-2 text-sm text-gray-700'>
                       {varOption.id}
                     </td>
-                    <td className="p-1 lg:p-2 text-sm text-gray-700">
+                    <td className='p-1 lg:p-2 text-sm text-gray-700'>
                       {varOption.name}
                     </td>
-                    <td className="p-1 lg:p-2 text-sm text-gray-700 flex items-center gap-2">
+                    <td className='p-1 lg:p-2 text-sm text-gray-700 flex items-center gap-2'>
                       <span
                         className={`w-6 h-6 rounded border block ${
                           varOption.variation.name === 'Color'
@@ -130,25 +128,25 @@ const VarOptionTable = ({
                         }`}
                         style={{ backgroundColor: varOption.value }}
                       ></span>
-                      <span className="uppercase">{varOption.value}</span>
+                      <span className='uppercase'>{varOption.value}</span>
                     </td>
-                    <td className="p-1 lg:p-2 text-sm text-gray-700">
+                    <td className='p-1 lg:p-2 text-sm text-gray-700'>
                       {varOption.variation.name}
                     </td>
-                    <td className="p-1 lg:p-2 text-xs flex gap-1">
+                    <td className='p-1 lg:p-2 text-xs flex gap-1'>
                       <button
-                        className="flex items-center font-semibold px-1 py-0.5 opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100 rounded"
+                        className='flex items-center font-semibold px-1 py-0.5 opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100 rounded'
                         onClick={() => handleEditVariation(varOption.id)}
                       >
                         <AiOutlineEdit />
-                        <span className="ml-1">Edit</span>
+                        <span className='ml-1'>Edit</span>
                       </button>
                       <button
-                        className="flex items-center font-semibold px-1 py-0.5 opacity-70 bg-red-50 text-red-700 border border-red-700 hover:bg-red-100 rounded"
+                        className='flex items-center font-semibold px-1 py-0.5 opacity-70 bg-red-50 text-red-700 border border-red-700 hover:bg-red-100 rounded'
                         onClick={() => handleDeleteVariation(varOption.id)}
                       >
                         <AiOutlineDelete />
-                        <span className="ml-0.5">Delete</span>
+                        <span className='ml-0.5'>Delete</span>
                       </button>
                     </td>
                   </tr>
@@ -157,16 +155,16 @@ const VarOptionTable = ({
           </table>
         </div>
         {loading && (
-          <LoadSpinner className="absolute top-[7rem] left-[22rem] z-20" />
+          <LoadSpinner className='absolute top-[7rem] left-[22rem] z-20' />
         )}
         {/* items per page and pages */}
-        <div className="flex justify-between items-start py-4">
+        <div className='flex justify-between items-start py-4'>
           {/* left section */}
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             <div>Items per page:</div>
             <div>
               <button
-                className="w-20 py-0.5 px-2 rounded border border-gray-300 flex items-center justify-between"
+                className='w-20 py-0.5 px-2 rounded border border-gray-300 flex items-center justify-between'
                 onClick={() => setSizeOptionsVisible(!sizeOptionsVisible)}
               >
                 {size} <RiArrowDropDownLine />
@@ -179,7 +177,7 @@ const VarOptionTable = ({
                 {pageSizeOptions.map((option, index) => (
                   <li
                     onClick={() => sizeOptionClickHandler(option)}
-                    className="cursor-pointer px-2 py-0.5 text-gray-500 text-md"
+                    className='cursor-pointer px-2 py-0.5 text-gray-500 text-md'
                     key={index}
                   >
                     {option}
@@ -189,15 +187,15 @@ const VarOptionTable = ({
             </div>
           </div>
           {/* right section */}
-          <div className="flex items-center gap-1">
+          <div className='flex items-center gap-1'>
             <div>Pages: </div>
             <div>{page + 1}</div>
             <div>of</div>
-            <div>{Math.ceil(rowCount / size)}</div>
-            <button className="w-6 h-6 rounded-full flex items-center justify-center border border-gray-400">
+            <div>{Math.ceil(rowCount / size) || 0}</div>
+            <button className='w-6 h-6 rounded-full flex items-center justify-center border border-gray-400'>
               <GrFormPrevious onClick={prevPageClickHandler} />
             </button>
-            <button className="w-6 h-6 rounded-full flex items-center justify-center border border-gray-400">
+            <button className='w-6 h-6 rounded-full flex items-center justify-center border border-gray-400'>
               <GrFormNext onClick={nextPageClickHandler} />
             </button>
           </div>

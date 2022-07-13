@@ -13,7 +13,7 @@ import {
   showSimilarFeatureOptions,
 } from '../../../apis/features.apis';
 
-const NewFeatOptSelectFeat = ({ setResStatus, setResMessage }) => {
+const NewFeatOptSelectFeat = ({ setResSuccess, setResMessage }) => {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
@@ -33,12 +33,12 @@ const NewFeatOptSelectFeat = ({ setResStatus, setResMessage }) => {
         setFeatureList(response.data.features);
       })
       .catch((error) => {
-        setResStatus(error.statusText);
+        setResSuccess(error.data.success);
         setResMessage(error.data.message);
       });
-  }, [setResMessage, setResStatus]);
+  }, [setResMessage, setResSuccess]);
 
-  // Step 2: Search similar var options using useEffect with 1 sec delay
+  // Step 2: Search similar var options using useEffect with 200ms delay
   useEffect(() => {
     if (featOption === '') {
       setSimilarFeatOptions([]);
@@ -47,7 +47,7 @@ const NewFeatOptSelectFeat = ({ setResStatus, setResMessage }) => {
     const delayedResponse = setTimeout(async () => {
       const response = await showSimilarFeatureOptions(featOption);
       setSimilarFeatOptions(response.data.featOptions);
-    }, 1000);
+    }, 200);
 
     return () => clearTimeout(delayedResponse);
   }, [featOption]);
@@ -56,18 +56,17 @@ const NewFeatOptSelectFeat = ({ setResStatus, setResMessage }) => {
   const handleAddFeatOption = async (event) => {
     event.preventDefault();
     setLoading(true);
-
-    const { data, statusText } = await adminCreateFeatureOption(
+    const { data } = await adminCreateFeatureOption(
       selectedFeature.id,
       featOption
     );
-    setResStatus(statusText);
-    if (statusText === 'OK') {
+    setLoading(false);
+    setResSuccess(data.success);
+    setResMessage(data.message);
+    if (data.success) {
       setFeatOption('');
       navigate('/features');
     }
-    setResMessage(data.message);
-    setLoading(false);
   };
 
   return (
@@ -105,10 +104,9 @@ const NewFeatOptSelectFeat = ({ setResStatus, setResMessage }) => {
             {loading ? (
               <LoadingButton />
             ) : (
-              <Button
-                text='Create new feature option'
-                className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'
-              />
+              <Button className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'>
+                Create new feature option
+              </Button>
             )}
           </form>
           <SimilarNames

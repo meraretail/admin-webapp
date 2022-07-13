@@ -14,7 +14,7 @@ import {
 } from '../../../apis/features.apis';
 
 const FeatureTable = ({
-  setResStatus,
+  setResSuccess,
   setResMessage,
   rerender,
   setRerender,
@@ -32,22 +32,22 @@ const FeatureTable = ({
 
   useEffect(() => {
     const delayedResponse = setTimeout(async () => {
+      setLoading(true);
       adminAllFeaturesSummary(page, size, searchText)
         .then((response) => {
-          setLoading(true);
-          const { data, statusText } = response;
-          const { totalFeatures, features } = data;
+          const { totalFeatures, features } = response.data;
           setFeatures(features);
           setRowCount(totalFeatures);
-          setResStatus(statusText);
-          setResMessage(data.message);
-          setLoading(false);
         })
-        .catch((error) => setResMessage(error));
+        .catch((error) => {
+          setResSuccess(error.data.success);
+          setResMessage(error.data.message);
+        });
+      setLoading(false);
     }, 200);
 
     return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, setResStatus, setResMessage, rerender]);
+  }, [page, size, searchText, rerender, setResSuccess, setResMessage]);
 
   const handleEditFeature = (id) => {
     navigate(`/feature/${id}`);
@@ -55,12 +55,14 @@ const FeatureTable = ({
 
   const handleDeleteFeature = async (id) => {
     setLoading(true);
-    const response = await adminDeleteFeatureById(id);
-    const { data, statusText } = response;
-    setResStatus(statusText);
-    setResMessage(data.message);
+    const { data } = await adminDeleteFeatureById(id);
     setLoading(false);
-    setRerender(!rerender);
+
+    setResSuccess(data.success);
+    setResMessage(data.message);
+    if (data.success) {
+      setRerender(!rerender);
+    }
   };
 
   const sizeOptionClickHandler = (option) => {
@@ -186,7 +188,7 @@ const FeatureTable = ({
           <div>Pages: </div>
           <div>{page + 1}</div>
           <div>of</div>
-          <div>{Math.ceil(rowCount / size)}</div>
+          <div>{Math.ceil(rowCount / size) || 0}</div>
           <button className='w-6 h-6 rounded-full flex items-center justify-center border border-gray-400'>
             <GrFormPrevious onClick={prevPageClickHandler} />
           </button>

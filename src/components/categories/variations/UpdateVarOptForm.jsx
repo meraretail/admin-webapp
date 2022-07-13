@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ItemContainer from '../../common/ItemContainer';
+import SimilarNames from '../../common/SimilarNames';
+import Button from '../../formComponents/Button';
+import FormInput from '../../formComponents/FormInput';
+import LoadingButton from '../../formComponents/LoadingButton';
+import ColorInput from '../../formComponents/ColorInput';
 import {
-  getSimilarVariationOptions,
-  getVariationOptionById,
-  updateVariationOptionById,
-} from '../../services/variationAPIs';
-import ItemContainer from '../common/ItemContainer';
-import SimilarNames from '../common/SimilarNames';
-import Button from '../formComponents/Button';
-import FormInput from '../formComponents/FormInput';
-import LoadingButton from '../formComponents/LoadingButton';
-import ColorInput from '../formComponents/ColorInput';
+  showSimilarVariationOptions,
+  adminGetVariationOptionById,
+  adminUpdateVariationOptionById,
+} from '../../../apis/variations.apis';
 
-const UpdateVarOptForm = ({ id, setResStatus, setResMessage }) => {
+const UpdateVarOptForm = ({ id, setResSuccess, setResMessage }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [orgVarOpt, setOrgVarOpt] = useState({});
@@ -29,7 +29,7 @@ const UpdateVarOptForm = ({ id, setResStatus, setResMessage }) => {
   // Step 1: fetch variation option data
   useEffect(() => {
     setLoading(true);
-    getVariationOptionById(id)
+    adminGetVariationOptionById(id)
       .then((res) => {
         setOrgVarOpt(res.data.varOption);
         setVarOption({
@@ -39,11 +39,11 @@ const UpdateVarOptForm = ({ id, setResStatus, setResMessage }) => {
         });
       })
       .catch((err) => {
-        setResStatus(err.data.statusText);
+        setResSuccess(err.data.success);
         setResMessage(err.data.message);
       });
     setLoading(false);
-  }, [id, setResMessage, setResStatus]);
+  }, [id, setResMessage, setResSuccess]);
 
   // Step 2: Search similar variations using useEffect with 1 sec delay
   useEffect(() => {
@@ -52,7 +52,7 @@ const UpdateVarOptForm = ({ id, setResStatus, setResMessage }) => {
       return;
     }
     const delayedResponse = setTimeout(async () => {
-      const response = await getSimilarVariationOptions(varOption.name);
+      const response = await showSimilarVariationOptions(varOption.name);
       setSimilarVarOptions(response.data.varOptions);
     }, 1000);
 
@@ -63,30 +63,29 @@ const UpdateVarOptForm = ({ id, setResStatus, setResMessage }) => {
   const handleEditVarOption = async (event) => {
     event.preventDefault();
     setLoading(true);
-
-    const response = await updateVariationOptionById(id, varOption);
-    const { data, statusText } = response;
-    setResStatus(statusText);
-    setResMessage(data.message);
+    const { data } = await adminUpdateVariationOptionById(id, varOption);
     setLoading(false);
 
-    if (statusText === 'OK') {
+    setResSuccess(data.success);
+    setResMessage(data.message);
+
+    if (data.success) {
       setVarOption('');
       navigate(-1);
     }
   };
 
   return (
-    <ItemContainer title="Update variation option">
+    <ItemContainer title='Update variation option'>
       <form
         onSubmit={handleEditVarOption}
-        className="grid md:grid-cols-3 gap-4 mt-2"
+        className='grid md:grid-cols-3 gap-4 mt-2'
       >
         <FormInput
-          label="Option name"
-          id="varOptName"
-          type="text"
-          placeholder="Enter variation option name"
+          label='Option name'
+          id='varOptName'
+          type='text'
+          placeholder='Enter variation option name'
           value={varOption.name ? varOption.name : ''}
           onChange={(event) =>
             setVarOption({ ...varOption, name: event.target.value })
@@ -94,8 +93,8 @@ const UpdateVarOptForm = ({ id, setResStatus, setResMessage }) => {
         />
         {orgVarOpt.variation && orgVarOpt.variation.name === 'Color' ? (
           <ColorInput
-            label="Value (Click icon or type to change)"
-            id="varOptValue"
+            label='Value (Click icon or type to change)'
+            id='varOptValue'
             value={varOption.value ? varOption.value : '#ffffff'}
             onColorChange={(color) =>
               setVarOption({ ...varOption, value: color.hex })
@@ -106,10 +105,10 @@ const UpdateVarOptForm = ({ id, setResStatus, setResMessage }) => {
           />
         ) : (
           <FormInput
-            label="Option value"
-            id="varOptValue"
-            type="text"
-            placeholder="Enter variation option value"
+            label='Option value'
+            id='varOptValue'
+            type='text'
+            placeholder='Enter variation option value'
             value={varOption.value ? varOption.value : ''}
             onChange={(event) =>
               setVarOption({ ...varOption, value: event.target.value })
@@ -120,13 +119,13 @@ const UpdateVarOptForm = ({ id, setResStatus, setResMessage }) => {
           <LoadingButton />
         ) : (
           <Button
-            text="Update variation option"
-            className="opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100"
+            text='Update variation option'
+            className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'
           />
         )}
       </form>
       <SimilarNames
-        label="Similar variation option names"
+        label='Similar variation option names'
         array={similarVarOptions}
       />
     </ItemContainer>

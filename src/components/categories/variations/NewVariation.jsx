@@ -9,13 +9,13 @@ import {
   showSimilarVariations,
 } from '../../../apis/variations.apis';
 
-const NewVariation = ({ setResStatus, setResMessage }) => {
+const NewVariation = ({ setResSuccess, setResMessage }) => {
   const [loading, setLoading] = useState(false);
   const [variation, setVariation] = useState('');
   const [variesImage, setVariesImage] = useState(false);
   const [similarVariations, setSimilarVariations] = useState([]);
 
-  // Step 1: Search similar variations using useEffect with 1 sec delay
+  // Step 1: Search similar variations using useEffect with 200ms delay
   useEffect(() => {
     if (variation === '') {
       setSimilarVariations([]);
@@ -24,7 +24,7 @@ const NewVariation = ({ setResStatus, setResMessage }) => {
     const delayedResponse = setTimeout(async () => {
       const response = await showSimilarVariations(variation);
       setSimilarVariations(response.data.variations);
-    }, 1000);
+    }, 200);
 
     return () => clearTimeout(delayedResponse);
   }, [variation]);
@@ -33,13 +33,12 @@ const NewVariation = ({ setResStatus, setResMessage }) => {
   const handleAddVariation = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const response = await adminCreateVariation(variation, variesImage);
-    const { data, statusText } = response;
-    setResStatus(statusText);
-    setResMessage(data.message);
+    const { data } = await adminCreateVariation(variation, variesImage);
     setLoading(false);
+    setResSuccess(data.success);
+    setResMessage(data.message);
 
-    if (statusText === 'OK') {
+    if (data.success) {
       setVariation('');
       setVariesImage(false);
     }
@@ -79,10 +78,9 @@ const NewVariation = ({ setResStatus, setResMessage }) => {
         {loading ? (
           <LoadingButton className='py-2' />
         ) : (
-          <Button
-            text='Create new variation'
-            className='py-2 opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'
-          />
+          <Button className='py-2 opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'>
+            Create new variation
+          </Button>
         )}
       </form>
       <SimilarNames label='Similar variation names' array={similarVariations} />

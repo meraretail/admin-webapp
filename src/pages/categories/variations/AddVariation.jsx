@@ -3,37 +3,40 @@ import PageTitle from '../../../components/common/PageTitle';
 import SuccErrMsg from '../../../components/common/SuccErrMsg';
 import NewVariation from '../../../components/categories/variations/NewVariation';
 import NewVarOptSelectVar from '../../../components/categories/variations/NewVarOptSelectVar';
+import MainContainer from '../../../components/common/MainContainer';
 
 const AddVariation = () => {
-  const [resStatus, setResStatus] = useState('');
+  const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
 
   return (
-    <div className='p-6'>
+    <div>
       <PageTitle
         title='Add new variation'
-        link='/variations'
+        btnLink='/variations'
         btnText='Back to all variations'
         type='negative'
       />
-      {/* success / error message zone */}
-      <SuccErrMsg
-        resStatus={resStatus}
-        resMessage={resMessage}
-        showSuccess='true'
-      />
-      {/* success / error message zone ends */}
-      {/* main content starts */}
-      <div className='mt-6 space-y-8'>
-        <NewVariation
-          setResStatus={setResStatus}
-          setResMessage={setResMessage}
+      <MainContainer>
+        {/* success / error message zone */}
+        <SuccErrMsg
+          resSuccess={resSuccess}
+          resMessage={resMessage}
+          showSuccess='true'
         />
-        <NewVarOptSelectVar
-          setResStatus={setResStatus}
-          setResMessage={setResMessage}
-        />
-      </div>
+        {/* success / error message zone ends */}
+        {/* main content starts */}
+        <div className='mt-6 space-y-8'>
+          <NewVariation
+            setResSuccess={setResSuccess}
+            setResMessage={setResMessage}
+          />
+          <NewVarOptSelectVar
+            setResSuccess={setResSuccess}
+            setResMessage={setResMessage}
+          />
+        </div>
+      </MainContainer>
     </div>
   );
 };
