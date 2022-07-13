@@ -22,8 +22,6 @@ export const sidebarItems = [
     children: [
       { id: 4.1, text: 'Products', link: '/products' },
       { id: 4.2, text: 'Brands', link: '/brands' },
-      { id: 4.3, text: 'Brand Types', link: '/brand-types' },
-      { id: 4.4, text: 'Brand Geos', link: '/brand-geos' },
     ],
   },
   {
