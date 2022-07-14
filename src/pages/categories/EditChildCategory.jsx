@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { adminChildCategoryDetailsById } from '../../apis/childcategories.apis';
+import { adminGetChildCategoryById } from '../../apis/childcategories.apis';
 import SuccErrMsg from '../../components/common/SuccErrMsg';
 import ProductsTable from '../../components/products/ProductsTable';
 import PageTitle from '../../components/common/PageTitle';
@@ -20,7 +20,7 @@ const EditChildCategory = () => {
 
   // Step 1: get child category by id
   useEffect(() => {
-    adminChildCategoryDetailsById(childCategoryId)
+    adminGetChildCategoryById(childCategoryId)
       .then((res) => {
         setChildCategory(res.data.childCategory);
       })

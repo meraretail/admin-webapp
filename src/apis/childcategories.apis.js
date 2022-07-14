@@ -68,13 +68,13 @@ export const adminAllChildCategoriesSummary = async (
   }
 };
 
-// ALL USERS
-// 3.5 GET '/admin/childcategory-details/:childCategoryId' - get category details by Id
-export const adminChildCategoryDetailsById = async (childCategoryId) => {
+// ADMIN ONLY
+// 3.5 GET '/admin/get-childcategory/:childCategoryId' - update category details by Id
+export const adminGetChildCategoryById = async (childCategoryId) => {
   try {
     const response = await axiosPdInstance({
       method: 'get',
-      url: `/admin/childcategory-details/${childCategoryId}`,
+      url: `/admin/get-childcategory/${childCategoryId}`,
     });
     return response;
   } catch (error) {
@@ -94,6 +94,20 @@ export const adminUpdateChildCategoryById = async (
       method: 'put',
       url: `/admin/update-childcategory/${childCategoryId}`,
       data: { name: name, subcategoryId: subcategoryId },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// ALL USERS
+// 3.7 GET '/get-childcategory-parameters/:childCategoryId' - get category details by Id
+export const getChildCategoryParametersById = async (childCategoryId) => {
+  try {
+    const response = await axiosPdInstance({
+      method: 'get',
+      url: `/get-childcategory-parameters/${childCategoryId}`,
     });
     return response;
   } catch (error) {

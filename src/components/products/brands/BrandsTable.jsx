@@ -1,24 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoadSpinner from '../common/LoadSpinner';
-import TableSearchInput from '../../components/tableComponents/TableSearchInput';
+import LoadSpinner from '../../common/LoadSpinner';
+import TableSearchInput from '../../tableComponents/TableSearchInput';
 
-// Importing icons and services
 import { RiArrowDropDownLine } from 'react-icons/ri';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { adminAllProductsSummary } from '../../apis/products.apis';
+import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+
 import {
-  pdtPopularFilters,
-  pdtTableHeaders,
-} from '../../listItems/productItems/productTableItems';
+  brandPopularFilters,
+  brandTableHeaders,
+} from '../../../listItems/productItems/brandTableItems';
 import {
   dateFilterOptions,
   pageSizeOptions,
-} from '../../listItems/common/commonTableItems';
+} from '../../../listItems/common/commonTableItems';
+import {
+  adminDeleteBrandById,
+  adminAllBrandsSummary,
+} from '../../../apis/products.apis';
 
-const ProductsTable = ({ childCategoryId, setResSuccess, setResMessage }) => {
-  const [products, setProducts] = useState([]);
+const BrandsTable = ({
+  setResSuccess,
+  setResMessage,
+  rerender,
+  setRerender,
+}) => {
+  const [brands, setBrands] = useState([]);
   const [size, setSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
@@ -32,12 +40,11 @@ const ProductsTable = ({ childCategoryId, setResSuccess, setResMessage }) => {
   useEffect(() => {
     setLoading(true);
     const delayedResponse = setTimeout(async () => {
-      adminAllProductsSummary(page, size, searchText, childCategoryId)
+      adminAllBrandsSummary(page, size, searchText)
         .then((response) => {
-          // console.log('response', response);
-          const { totalProducts, products } = response.data;
-          setProducts(products);
-          setRowCount(totalProducts);
+          const { totalBrands, brands } = response.data;
+          setBrands(brands);
+          setRowCount(totalBrands);
         })
         .catch((error) => {
           setResSuccess(error.data.success);
@@ -47,10 +54,20 @@ const ProductsTable = ({ childCategoryId, setResSuccess, setResMessage }) => {
     setLoading(false);
 
     return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, setResMessage, childCategoryId, setResSuccess]);
+  }, [page, size, searchText, setResMessage, rerender, setResSuccess]);
 
-  const handleEditProduct = (id) => {
-    navigate(`/product/${id}`);
+  const handleEditBrandGeo = (id) => {
+    navigate(`/brand/${id}`, { replace: true });
+  };
+
+  const handleDeleteBrandGeo = async (id) => {
+    setLoading(true);
+    const { data } = await adminDeleteBrandById(id);
+    setLoading(false);
+
+    setResSuccess(data.success);
+    setResMessage(data.message);
+    setRerender(!rerender);
   };
 
   const sizeOptionClickHandler = (option) => {
@@ -69,8 +86,6 @@ const ProductsTable = ({ childCategoryId, setResSuccess, setResMessage }) => {
       setPage(page + 1);
     }
   };
-
-  // console.log('products', products);
   return (
     <div className='relative overflow-y-visible'>
       {/* search and filter row */}
@@ -95,7 +110,7 @@ const ProductsTable = ({ childCategoryId, setResSuccess, setResMessage }) => {
       <div className='py-2 flex items-center gap-2'>
         <span className='text-sm'>Popular filters: </span>
         <ul className='flex items-center gap-1'>
-          {pdtPopularFilters.map((filter, index) => (
+          {brandPopularFilters.map((filter, index) => (
             <li
               className='px-2 py-1 rounded-full border text-xs font-barlow'
               key={index}
@@ -105,18 +120,14 @@ const ProductsTable = ({ childCategoryId, setResSuccess, setResMessage }) => {
           ))}
         </ul>
       </div>
-      {loading && (
-        <LoadSpinner className='absolute top-[11rem] left-[22rem] z-20' />
-      )}
       <div className='min-h-[10rem] border border-gray-300 shadow rounded'>
         <table className='w-full'>
           <thead className='border-b border-gray-200'>
             <tr>
-              {pdtTableHeaders.map((header, index) => (
+              {brandTableHeaders.map((header, index) => (
                 <th
+                  className='p-1 lg:p-2 text-sm font-semibold tracking-wide text-left md:min-w-[2rem] last:max-w-[2rem]'
                   key={index}
-                  className={`p-1 lg:p-2 text-sm font-semibold tracking-wide text-left 
-                            ${index === 1 && 'w-[15rem]'}`}
                 >
                   {header}
                 </th>
@@ -124,50 +135,41 @@ const ProductsTable = ({ childCategoryId, setResSuccess, setResMessage }) => {
             </tr>
           </thead>
           <tbody>
-            {products &&
-              products.map((product, index) => (
+            {brands &&
+              brands.map((brand, index) => (
                 <tr
                   className={`${index % 2 === 0 && 'bg-gray-100'}`}
                   key={index}
                 >
                   <td className='p-1 lg:p-2 text-sm text-gray-700'>
-                    {product.id}
+                    {brand.id}
                   </td>
                   <td className='p-1 lg:p-2 text-sm text-gray-700'>
-                    {product.name}
+                    {brand.name}
                   </td>
                   <td className='p-1 lg:p-2 text-sm text-gray-700'>
-                    {product.brandName}
+                    {brand.brandType}
                   </td>
                   <td className='p-1 lg:p-2 text-sm text-gray-700'>
-                    {product.childCategoryName}
-                  </td>
-
-                  <td className='p-1 lg:p-2 text-sm text-gray-700'>
-                    {product.subCategoryName}
+                    {brand.brandGeo}
                   </td>
                   <td className='p-1 lg:p-2 text-sm text-gray-700'>
-                    {product.categoryName}
+                    {brand.products}
                   </td>
-                  <td className='p-1 lg:p-2 text-sm text-gray-700 text-center'>
-                    {product.productOptionsCount}
-                  </td>
-                  <td className='p-1 lg:p-2 text-sm text-gray-700 text-center'>
-                    {product.productOptionSellersCount}
-                  </td>
-                  <td className='p-1 lg:p-2 text-sm text-gray-700 text-center'>
-                    {product.productOptionImagesCount}
-                  </td>
-                  <td className='p-1 lg:p-2 text-sm text-gray-700 text-center'>
-                    {product.skusCount}
-                  </td>
-                  <td className='p-1 lg:p-2 text-xs'>
+                  <td className='p-1 lg:p-2 text-xs flex gap-1'>
                     <button
-                      className='h-full flex items-center font-semibold px-1 py-0.5 opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100 rounded'
-                      onClick={() => handleEditProduct(product.id)}
+                      className='flex items-center font-semibold px-1 py-0.5 opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100 rounded'
+                      onClick={() => handleEditBrandGeo(brand.id)}
                     >
                       <AiOutlineEdit />
                       <span className='ml-1'>Edit</span>
+                    </button>
+                    <button
+                      className='flex items-center font-semibold px-1 py-0.5 opacity-70 bg-red-50 text-red-700 border border-red-700 hover:bg-red-100 rounded'
+                      onClick={() => handleDeleteBrandGeo(brand.id)}
+                    >
+                      <AiOutlineDelete />
+                      <span className='ml-0.5'>Delete</span>
                     </button>
                   </td>
                 </tr>
@@ -175,7 +177,9 @@ const ProductsTable = ({ childCategoryId, setResSuccess, setResMessage }) => {
           </tbody>
         </table>
       </div>
-
+      {loading && (
+        <LoadSpinner className='absolute top-[7rem] left-[22rem] z-20' />
+      )}
       {/* items per page and pages */}
       <div className='flex justify-between items-start py-4'>
         {/* left section */}
@@ -223,4 +227,4 @@ const ProductsTable = ({ childCategoryId, setResSuccess, setResMessage }) => {
   );
 };
 
-export default ProductsTable;
+export default BrandsTable;

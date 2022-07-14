@@ -1,8 +1,13 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Dashboard from './pages/Dashboard';
+
+// Common Pages
 import Home from './pages/Home';
 import Login from './pages/Login';
+import NotFound from './pages/NotFound';
+
+// Dashboard Page
+import Dashboard from './pages/Dashboard';
 
 // User Pages
 import Users from './pages/users/Users';
@@ -19,8 +24,7 @@ import EditCategory from './pages/categories/EditCategory';
 import EditSubCategory from './pages/categories/EditSubcategory';
 import EditChildCategory from './pages/categories/EditChildCategory';
 
-// Product Pages
-import Products from './pages/products/Products';
+// Category Attributes Pages
 import Variations from './pages/categories/variations/Variations';
 import AddVariation from './pages/categories/variations/AddVariation';
 import EditVariation from './pages/categories/variations/EditVariation';
@@ -32,6 +36,17 @@ import EditFeatOption from './pages/categories/features/EditFeatOption';
 import Details from './pages/categories/details/Details';
 import AddDetail from './pages/categories/details/AddDetail';
 import EditDetail from './pages/categories/details/EditDetail';
+
+// Product Pages
+import Products from './pages/products/Products';
+import AddProduct from './pages/products/AddProduct';
+import BulkAddProducts from './pages/products/BulkAddProducts';
+import EditProduct from './pages/products/EditProduct';
+
+// Brand Pages
+import Brands from './pages/products/brands/Brands';
+import AddBrand from './pages/products/brands/AddBrand';
+import EditBrand from './pages/products/brands/EditBrand';
 
 function App() {
   return (
@@ -86,7 +101,18 @@ function App() {
 
         {/* Products routes */}
         <Route path='/products' element={<Products />} />
+        <Route path='/products/bulk-upload' element={<BulkAddProducts />} />
+        <Route path='/product/new' element={<AddProduct />} />
+        <Route path='/product/edit/:productId' element={<EditProduct />} />
+
+        {/* Brand routes */}
+        <Route path='/brands' element={<Brands />} />
+        <Route path='/brand/new' element={<AddBrand />} />
+        <Route path='/brand/edit/:brandId' element={<EditBrand />} />
       </Route>
+
+      {/* Route Not found page */}
+      <Route path='*' element={<NotFound />} />
     </Routes>
   );
 }
