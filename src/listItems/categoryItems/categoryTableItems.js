@@ -1,3 +1,5 @@
+/************ 1. CATEGORY ITEMS *************/
+
 export const catPopularFilters = [
   { id: 1, text: 'This week', fromDate: '', toDate: '' },
   { id: 2, text: 'This month', fromDate: '', toDate: '' },
@@ -16,6 +18,7 @@ export const catTableHeaders = [
   'Actions',
 ];
 
+/************ 2. SUB CATEGORY ITEMS *************/
 export const subCatTableHeaders = [
   'id',
   'Sub-category',
@@ -25,14 +28,17 @@ export const subCatTableHeaders = [
   'Actions',
 ];
 
-export const childCatTableHeaders = [
-  'id',
-  'Child-category',
-  'Sub-category',
-  'Category',
-  '# Variations',
-  '# Features',
-  '# Details',
-  '# Products',
-  'Actions',
+/************ 3. CATEGORY ITEMS *************/
+
+// {label: HeaderName, jsonKey: 'headerName'}
+
+export const childCatTableItems = [
+  { label: 'Id', jsonKey: 'id' },
+  { label: 'Child Category', jsonKey: 'name' },
+  { label: 'Sub Category', jsonKey: 'subCategory' },
+  { label: 'Category', jsonKey: 'category' },
+  { label: '# Products', jsonKey: 'products' },
+  { label: '# Variations', jsonKey: 'variations' },
+  { label: '# Features', jsonKey: 'features' },
+  { label: '# Details', jsonKey: 'details' },
 ];

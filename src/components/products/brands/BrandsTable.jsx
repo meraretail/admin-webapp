@@ -27,11 +27,11 @@ const BrandsTable = ({
   setRerender,
 }) => {
   const [brands, setBrands] = useState([]);
+  const [searchText, setSearchText] = useState('');
   const [size, setSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
   const [sizeOptionsVisible, setSizeOptionsVisible] = useState(false);
-  const [searchText, setSearchText] = useState('');
 
   const [loading, setLoading] = useState(false);
 
@@ -120,6 +120,7 @@ const BrandsTable = ({
           ))}
         </ul>
       </div>
+      {loading && <LoadSpinner className='absolute top-1/2 left-1/2 z-20' />}
       <div className='min-h-[10rem] border border-gray-300 shadow rounded'>
         <table className='w-full'>
           <thead className='border-b border-gray-200'>
@@ -177,9 +178,7 @@ const BrandsTable = ({
           </tbody>
         </table>
       </div>
-      {loading && (
-        <LoadSpinner className='absolute top-[7rem] left-[22rem] z-20' />
-      )}
+
       {/* items per page and pages */}
       <div className='flex justify-between items-start py-4'>
         {/* left section */}

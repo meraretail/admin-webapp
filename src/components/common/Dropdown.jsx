@@ -26,20 +26,16 @@ const Dropdown = ({
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    const onClickOutside = () => {
-      setOpen(false);
-    };
-
     const handleClickOutside = (event) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        onClickOutside && onClickOutside();
+        setOpen(false);
       }
     };
     document.addEventListener('click', handleClickOutside, true);
     return () => {
       document.removeEventListener('click', handleClickOutside, true);
     };
-  }, []);
+  }, [wrapperRef]);
 
   // Step 3: Filter list based on search text
   const handleSearchTextChange = (event) => {
