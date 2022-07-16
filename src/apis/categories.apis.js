@@ -108,13 +108,23 @@ export const getCategoryImagesById = async (categoryId) => {
 };
 
 // ADMIN
-// 1.2 POST '/category-images/:categoryId' - add category images by Id
-export const adminAddCategoryImagesById = async (categoryId, images) => {
+// 1.2 POST '/admin/upload-category-images/:categoryId' - add category images by Id
+export const adminAddCategoryImagesById = async (
+  categoryId,
+  formData,
+  setProgress
+) => {
   try {
     const response = await axiosPdInstance({
       method: 'post',
-      url: `/category-images/${categoryId}`,
-      data: { images: images },
+      url: `/admin/upload-category-images/${categoryId}`,
+      data: formData,
+      timeout: 60000, // 60 seconds
+      onUploadProgress: (progressEvent) => {
+        setProgress(
+          Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        );
+      },
     });
     return response;
   } catch (error) {
@@ -123,12 +133,12 @@ export const adminAddCategoryImagesById = async (categoryId, images) => {
 };
 
 // ADMIN
-// 1.3 DELETE '/category-image/:categoryId/:imageId' - delete category images by Id
+// 1.3 DELETE '/admin/delete-category-image/:categoryId/:imageId' - delete category images by Id
 export const adminDeleteCategoryImageById = async (categoryId, imageId) => {
   try {
     const response = await axiosPdInstance({
       method: 'delete',
-      url: `/category-image/${categoryId}/${imageId}`,
+      url: `/admin/delete-category-image/${categoryId}/${imageId}`,
     });
     return response;
   } catch (error) {
@@ -137,12 +147,12 @@ export const adminDeleteCategoryImageById = async (categoryId, imageId) => {
 };
 
 // ADMIN
-// 1.4 PUT '/default-category-image/:categoryId/:imageId' - set default category images by Id
+// 1.4 PUT '/admin/default-category-image/:categoryId/:imageId' - set default category images by Id
 export const adminSetDefaultCategoryImageById = async (categoryId, imageId) => {
   try {
     const response = await axiosPdInstance({
       method: 'put',
-      url: `/default-category-image/${categoryId}/${imageId}`,
+      url: `/admin/default-category-image/${categoryId}/${imageId}`,
     });
     return response;
   } catch (error) {

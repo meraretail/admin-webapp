@@ -30,7 +30,7 @@ const MultiImageUpload = ({
         <form onSubmit={imageUploadHandler}>
           <div className='flex gap-4'>
             <label
-              htmlFor='categoryImages'
+              htmlFor='imageInput'
               className='block w-full py-1 px-2 rounded cursor-pointer border border-violet-700 bg-violet-50 hover:bg-violet-100 text-violet-700'
             >
               <span className='flex items-center gap-2'>
@@ -40,7 +40,7 @@ const MultiImageUpload = ({
               </span>
               <input
                 type='file'
-                id='categoryImages'
+                id='imageInput'
                 accept='image/*'
                 multiple
                 onChange={handleImageChange}

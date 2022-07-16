@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import {
-  adminDeleteCategoryImageById,
-  getCategoryImagesById,
-  adminSetDefaultCategoryImageById,
-  adminAddCategoryImagesById,
-} from '../../apis/categories.apis';
+import { useState, useEffect } from 'react';
 import ImageGallery from '../common/ImageGallery';
 import ItemContainer from '../common/ItemContainer';
 import MultiImageUpload from '../common/MultiImageUpload';
+import {
+  getCategoryImagesById,
+  adminAddCategoryImagesById,
+  adminDeleteCategoryImageById,
+  adminSetDefaultCategoryImageById,
+} from '../../apis/categories.apis';
 
 const EditCategoryImage = ({
   id,
-  setResStatus,
+  setResSuccess,
   setResMessage,
   rerender,
   setRerender,
@@ -25,46 +25,60 @@ const EditCategoryImage = ({
 
   // Step 1: fetch category images on load
   useEffect(() => {
-    getCategoryImagesById(id).then((response) => {
-      setCatImages(response.data.catImages);
-    });
-  }, [id, rerender]);
+    getCategoryImagesById(id)
+      .then((response) => {
+        setCatImages(response.data.catImages);
+      })
+      .catch((error) => {
+        setResMessage(error.data.message);
+        setResSuccess(error.data.success);
+      });
+  }, [id, rerender, setResMessage, setResSuccess]);
 
   // Step 2: Image upload handler
   const imageUploadHandler = async (event) => {
     event.preventDefault();
-    if (images) {
-      setLoading(true);
+
+    if (images && images.length > 0) {
       let formData = new FormData();
       images.forEach((image) => {
         formData.append('catImgs', image.file);
       });
-      const { data, statusText } = await adminAddCategoryImagesById(
+
+      console.log(formData);
+
+      setLoading(true);
+      const { data } = await adminAddCategoryImagesById(
         id,
         formData,
         setProgress
       );
       setLoading(false);
-      setResStatus(statusText);
+      setResSuccess(data.success);
       setResMessage(data.message);
       setImages([]);
     } else {
+      setResSuccess(false);
       setResMessage('Please choose an image to upload');
     }
   };
 
+  console.log('images: ', images);
+
   const imageDeleteHandler = async (imageId) => {
-    const response = await adminDeleteCategoryImageById(id, imageId);
-    const { statusText, data } = response;
-    setResStatus(statusText);
+    setLoading(true);
+    const { data } = await adminDeleteCategoryImageById(id, imageId);
+    setLoading(false);
+    setResSuccess(data.success);
     setResMessage(data.message);
     setRerender(!rerender);
   };
 
   const imageDefaultHandler = async (imageId) => {
-    const response = await adminSetDefaultCategoryImageById(id, imageId);
-    const { statusText, data } = response;
-    setResStatus(statusText);
+    setLoading(true);
+    const { data } = await adminSetDefaultCategoryImageById(id, imageId);
+    setLoading(false);
+    setResSuccess(data.success);
     setResMessage(data.message);
     setRerender(!rerender);
   };
@@ -73,11 +87,6 @@ const EditCategoryImage = ({
       {/* image gallery */}
       <ImageGallery
         images={catImages}
-        categoryId={id}
-        setResStatus={setResStatus}
-        setResMessage={setResMessage}
-        setRerender={setRerender}
-        rerender={rerender}
         imageDeleteHandler={imageDeleteHandler}
         imageDefaultHandler={imageDefaultHandler}
       />
