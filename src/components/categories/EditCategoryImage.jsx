@@ -56,6 +56,7 @@ const EditCategoryImage = ({
       setLoading(false);
       setResSuccess(data.success);
       setResMessage(data.message);
+      setRerender(!rerender);
       setImages([]);
     } else {
       setResSuccess(false);

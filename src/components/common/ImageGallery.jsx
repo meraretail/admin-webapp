@@ -10,7 +10,7 @@ const ImageGallery = ({ images, imageDeleteHandler, imageDefaultHandler }) => {
           images.map((image) => (
             <div key={image.id} className='flex-shrink-0 relative group'>
               <img
-                src={image.image}
+                src={image.imageUrl}
                 alt='category'
                 className='w-36 h-36 object-cover rounded shadow-lg border group-hover:scale-110 group-hover:border-violet-600 group-hover:border-2 transition'
               />
