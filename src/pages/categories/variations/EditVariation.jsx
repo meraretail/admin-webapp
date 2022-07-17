@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageTitle from '../../../components/common/PageTitle';
+import MainContainer from '../../../components/common/MainContainer';
 import SuccErrMsg from '../../../components/common/SuccErrMsg';
-import NewVarOptForVarId from '../../../components/categories/variations/NewVarOptForVarId';
-import UpdateVarForm from '../../../components/categories/variations/UpdateVarForm';
+import UpdateVariation from '../../../components/categories/variations/UpdateVariation';
+import NewVariationOption from '../../../components/categories/variations/NewVariationOption';
 import VarOptionTable from '../../../components/categories/variations/VarOptionTable';
 
 const EditVariation = () => {
@@ -13,42 +14,44 @@ const EditVariation = () => {
   const [rerender, setRerender] = useState(false);
 
   return (
-    <div className='p-6'>
+    <div>
       <PageTitle
         title='Edit variation and its options'
         link='/variations'
         btnText='Back to all variations'
         type='negative'
       />
-      {/* success / error message zone */}
-      <SuccErrMsg
-        resSuccess={resSuccess}
-        resMessage={resMessage}
-        showSuccess='true'
-      />
-      {/* success / error message zone ends */}
-      {/* main content starts */}
-      <div className='mt-6 space-y-8'>
-        <UpdateVarForm
-          id={id}
-          setResSuccess={setResSuccess}
-          setResMessage={setResMessage}
+      <MainContainer>
+        {/* success / error message zone */}
+        <SuccErrMsg
+          resSuccess={resSuccess}
+          resMessage={resMessage}
+          showSuccess='true'
         />
-        <NewVarOptForVarId
-          id={id}
-          setResSuccess={setResSuccess}
-          setResMessage={setResMessage}
-          rerender={rerender}
-          setRerender={setRerender}
-        />
-        <VarOptionTable
-          id={id}
-          setResSuccess={setResSuccess}
-          setResMessage={setResMessage}
-          rerender={rerender}
-          setRerender={setRerender}
-        />
-      </div>
+        {/* success / error message zone ends */}
+        {/* main content starts */}
+        <div className='mt-6 space-y-8'>
+          <UpdateVariation
+            id={id}
+            setResSuccess={setResSuccess}
+            setResMessage={setResMessage}
+          />
+          <NewVariationOption
+            id={id}
+            setResSuccess={setResSuccess}
+            setResMessage={setResMessage}
+            rerender={rerender}
+            setRerender={setRerender}
+          />
+          <VarOptionTable
+            id={id}
+            setResSuccess={setResSuccess}
+            setResMessage={setResMessage}
+            rerender={rerender}
+            setRerender={setRerender}
+          />
+        </div>
+      </MainContainer>
     </div>
   );
 };

@@ -19,12 +19,12 @@ export const showSimilarVariations = async (name) => {
 
 // ADMIN ONLY
 // 1.2 POST /admin/create-Variation - admin can add new Variation
-export const adminCreateVariation = async (name) => {
+export const adminCreateVariation = async (variation, variesImage) => {
   try {
     const response = await axiosPdInstance({
       method: 'post',
       url: '/admin/create-variation',
-      data: { name: name },
+      data: { name: variation, variesImage: variesImage },
     });
     return response;
   } catch (error) {
@@ -66,12 +66,12 @@ export const adminAllVariationsSummary = async (page, size, search) => {
 };
 
 // ADMIN
-// 1.5 GET '/admin/Variation/:VariationId' - get Variation by Id
+// 1.5 GET '/admin/get-variation/:variationId' - get Variation by Id
 export const adminGetVariationById = async (variationId) => {
   try {
     const response = await axiosPdInstance({
       method: 'get',
-      url: `/admin/variation/${variationId}`,
+      url: `/admin/get-variation/${variationId}`,
     });
     return response;
   } catch (error) {
@@ -81,12 +81,16 @@ export const adminGetVariationById = async (variationId) => {
 
 // ADMIN ONLY
 // 1.6 PUT '/admin/update-Variation/:VariationId' - Update Variation by Id
-export const adminUpdateVariationById = async (variationId, name) => {
+export const adminUpdateVariationById = async (
+  variationId,
+  name,
+  variesImage
+) => {
   try {
     const response = await axiosPdInstance({
       method: 'put',
       url: `/admin/update-variation/${variationId}`,
-      data: { name: name },
+      data: { name: name, variesImage: variesImage },
     });
     return response;
   } catch (error) {
@@ -127,12 +131,12 @@ export const showSimilarVariationOptions = async (name) => {
 
 // ADMIN ONLY
 // 2.2 POST /admin/create-Variation-option/:VariationId - admin can add new Variation option
-export const adminCreateVariationOption = async (name, variationId) => {
+export const adminCreateVariationOption = async (variationId, varOption) => {
   try {
     const response = await axiosPdInstance({
       method: 'post',
       url: `/admin/create-variation-option/${variationId}`,
-      data: { name: name },
+      data: { name: varOption.name, value: varOption.value },
     });
     return response;
   } catch (error) {
@@ -155,12 +159,17 @@ export const listAllVariationOptions = async () => {
 };
 
 // ADMIN
-// 2.4 GET /admin/all-Variation-options-summary - admin get summary of all Variations
-export const adminAllVariationOptionsSummary = async (page, size, search) => {
+// 2.4 GET /admin/all-variation-options-summary-for-variation/:variationId
+export const adminAllVariationOptionsSummaryForVariation = async (
+  page,
+  size,
+  search,
+  id
+) => {
   try {
     const response = await axiosPdInstance({
       method: 'get',
-      url: '/admin/all-variation-options-summary',
+      url: `/admin/all-variation-options-summary-for-variation/${id}`,
       params: {
         page: page,
         size: size,
@@ -179,7 +188,7 @@ export const adminGetVariationOptionById = async (varOptId) => {
   try {
     const response = await axiosPdInstance({
       method: 'get',
-      url: `/admin/variation-option/${varOptId}`,
+      url: `/admin/get-variation-option/${varOptId}`,
     });
     return response;
   } catch (error) {
@@ -188,7 +197,7 @@ export const adminGetVariationOptionById = async (varOptId) => {
 };
 
 // ADMIN ONLY
-// 2.6 PUT '/admin/update-Variation-option/:featOptId' - Update Variation by Id
+// 2.6 PUT '/admin/update-variation-option/:varOptId'
 export const adminUpdateVariationOptionById = async (varOptId, name) => {
   try {
     const response = await axiosPdInstance({

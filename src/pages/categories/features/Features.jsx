@@ -16,7 +16,7 @@ const Features = () => {
         title='Features'
         btnLink='/feature/new'
         btnIcon={<MdOutlineAddChart />}
-        btnText='Add new feature'
+        btnText='Add new feature and options'
         type='positive'
       />
       <MainContainer>

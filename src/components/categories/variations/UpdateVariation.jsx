@@ -10,7 +10,7 @@ import {
   adminUpdateVariationById,
 } from '../../../apis/variations.apis';
 
-const UpdateVarForm = ({ id, setResSuccess, setResMessage }) => {
+const UpdateVariation = ({ id, setResSuccess, setResMessage }) => {
   const [loading, setLoading] = useState(false);
   const [orgVar, setOrgVar] = useState({});
   const [variation, setVariation] = useState('');
@@ -63,24 +63,15 @@ const UpdateVarForm = ({ id, setResSuccess, setResMessage }) => {
   };
 
   return (
-    <ItemContainer title='Update variation name'>
-      <form onSubmit={handleEditVariation} className='space-y-4'>
-        <div className='grid md:grid-cols-2 gap-4 mt-2'>
-          <FormInput
-            label='Variation name'
-            id='variation'
-            type='text'
-            placeholder='Enter variation name'
-            value={variation}
-            onChange={(e) => setVariation(e.target.value)}
-          />
-          {/* variesImage choose from dropdown */}
-          <div className='border border-gray-300 rounded flex items-center gap-4 pl-2'>
-            <div className='text-sm font-semibold whitespace-nowrap'>
-              Does product image varies with change
-            </div>
+    <ItemContainer title='Update variation name and options'>
+      <div className='space-y-4 mt-2'>
+        <form onSubmit={handleEditVariation}>
+          <div className='grid md:grid-cols-2 gap-4 items-center'>
+            <span className='text-sm font-semibold text-gray-600'>
+              Would product photos change on changing value of variation option?
+            </span>
             <select
-              className='w-full font-semibold text-sm p-2 border outline-none'
+              className='w-full font-semibold text-sm px-4 py-2 border border-gray-300 outline-none rounded text-gray-600'
               id='variesImage'
               value={variesImage}
               onChange={(e) => setVariesImage(e.target.value === 'true')}
@@ -88,21 +79,32 @@ const UpdateVarForm = ({ id, setResSuccess, setResMessage }) => {
               <option value='false'>No</option>
               <option value='true'>Yes</option>
             </select>
+
+            <FormInput
+              label='Variation name'
+              id='variation'
+              type='text'
+              placeholder='Enter variation name'
+              value={variation}
+              onChange={(e) => setVariation(e.target.value)}
+            />
+
+            {loading ? (
+              <LoadingButton />
+            ) : (
+              <Button className='py-2 opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'>
+                Update variation
+              </Button>
+            )}
           </div>
-          {/* variesImage ends */}
-        </div>
-        {loading ? (
-          <LoadingButton />
-        ) : (
-          <Button
-            text='Update variation'
-            className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'
-          />
-        )}
-      </form>
-      <SimilarNames label='Similar variation names' array={similarVariations} />
+        </form>
+        <SimilarNames
+          label='Similar variation names'
+          array={similarVariations}
+        />
+      </div>
     </ItemContainer>
   );
 };
 
-export default UpdateVarForm;
+export default UpdateVariation;

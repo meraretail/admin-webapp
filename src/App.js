@@ -86,7 +86,7 @@ function App() {
         <Route path='/variations' element={<Variations />} />
         <Route path='/variation/new' element={<AddVariation />} />
         <Route path='/variation/edit/:id' element={<EditVariation />} />
-        <Route path='/variation-option/:id' element={<EditVarOption />} />
+        <Route path='/variation-option/edit/:id' element={<EditVarOption />} />
 
         {/* Features pages */}
         <Route path='/features' element={<Features />} />

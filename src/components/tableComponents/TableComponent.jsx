@@ -18,13 +18,15 @@ const TableComponent = ({
             <tr>
               {tableItems.map((item, index) => (
                 <th
-                  className='p-1 lg:p-2 text-sm font-semibold tracking-wide text-left md:min-w-[2rem]'
+                  className={`p-1 lg:p-2 text-sm font-semibold tracking-wide ${
+                    item.center ? 'text-center' : 'text-left'
+                  }`}
                   key={index}
                 >
                   {item.label}
                 </th>
               ))}
-              <th className='p-1 lg:p-2 text-sm font-semibold tracking-wide text-left md:min-w-[2rem]'>
+              <th className='p-1 lg:p-2 text-sm font-semibold tracking-wide text-left'>
                 Actions
               </th>
             </tr>
@@ -36,16 +38,27 @@ const TableComponent = ({
                   className={`${index % 2 === 0 && 'bg-gray-100'}`}
                   key={index}
                 >
-                  {tableItems.map((item, itemIndex) => (
-                    <td
-                      className={`p-1 lg:p-2 text-sm text-gray-700 ${
-                        itemIndex > 3 && 'text-center'
-                      }`}
-                      key={itemIndex}
-                    >
-                      {data[item.jsonKey]}
-                    </td>
-                  ))}
+                  {tableItems.map((item, itemIndex) =>
+                    item.type && item.type === 'boolean' ? (
+                      <td
+                        className={`p-1 lg:p-2 text-sm text-gray-700 ${
+                          item.center ? 'text-center' : 'text-left'
+                        }`}
+                        key={itemIndex}
+                      >
+                        {data[item.jsonKey] === 0 ? 'No' : 'Yes'}
+                      </td>
+                    ) : (
+                      <td
+                        className={`p-1 lg:p-2 text-sm text-gray-700 ${
+                          item.center ? 'text-center' : 'text-left'
+                        }`}
+                        key={itemIndex}
+                      >
+                        {data[item.jsonKey]}
+                      </td>
+                    )
+                  )}
 
                   <td className='p-1 lg:p-2 text-xs'>
                     <span className='flex gap-1'>

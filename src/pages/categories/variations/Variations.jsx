@@ -16,7 +16,7 @@ const Variations = () => {
         title='Variations'
         btnLink='/variation/new'
         btnIcon={<MdOutlineAddChart />}
-        btnText='Add new variation'
+        btnText='Add new variation and options'
         type='positive'
       />
       <MainContainer>

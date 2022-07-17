@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import PageTitle from '../../../components/common/PageTitle';
+import MainContainer from '../../../components/common/MainContainer';
 import SuccErrMsg from '../../../components/common/SuccErrMsg';
 import NewVariation from '../../../components/categories/variations/NewVariation';
-import NewVarOptSelectVar from '../../../components/categories/variations/NewVarOptSelectVar';
-import MainContainer from '../../../components/common/MainContainer';
+import NewVariationOption from '../../../components/categories/variations/NewVariationOption';
 
 const AddVariation = () => {
   const [resSuccess, setResSuccess] = useState(true);
@@ -12,7 +12,7 @@ const AddVariation = () => {
   return (
     <div>
       <PageTitle
-        title='Add new variation'
+        title='Add new variation and options'
         btnLink='/variations'
         btnText='Back to all variations'
         type='negative'
@@ -31,7 +31,7 @@ const AddVariation = () => {
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
           />
-          <NewVarOptSelectVar
+          <NewVariationOption
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
           />

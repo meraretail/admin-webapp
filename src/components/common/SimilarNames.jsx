@@ -1,6 +1,6 @@
-const SimilarNames = ({ label, array }) => {
+const SimilarNames = ({ label, array, className }) => {
   return (
-    <div>
+    <div className={className}>
       <h2 className='font-bold my-2 text-sm'>{label}</h2>
       <ul className='flex flex-wrap gap-2'>
         {array &&
