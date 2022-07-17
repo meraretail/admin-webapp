@@ -64,7 +64,7 @@ const EditCategoryImage = ({
     }
   };
 
-  console.log('images: ', images);
+  // console.log('images: ', images);
 
   const imageDeleteHandler = async (imageId) => {
     setLoading(true);
