@@ -8,7 +8,7 @@ export const showSimilarVariations = async (name) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: '/admin/show-similar-variations',
+      url: '/api/product/admin/show-similar-variations',
       data: { name: name },
     });
     return response;
@@ -23,7 +23,7 @@ export const adminCreateVariation = async (variation, variesImage) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: '/admin/create-variation',
+      url: '/api/product/admin/create-variation',
       data: { name: variation, variesImage: variesImage },
     });
     return response;
@@ -38,7 +38,7 @@ export const listAllVariations = async () => {
   try {
     const response = await axiosClient({
       method: 'get',
-      url: '/list-all-variations',
+      url: '/api/product/list-all-variations',
     });
     return response;
   } catch (error) {
@@ -52,7 +52,7 @@ export const adminAllVariationsSummary = async (page, size, search) => {
   try {
     const response = await axiosClient({
       method: 'get',
-      url: '/admin/all-variations-summary',
+      url: '/api/product/admin/all-variations-summary',
       params: {
         page: page,
         size: size,
@@ -71,7 +71,7 @@ export const adminGetVariationById = async (variationId) => {
   try {
     const response = await axiosClient({
       method: 'get',
-      url: `/admin/get-variation/${variationId}`,
+      url: `/api/product/admin/get-variation/${variationId}`,
     });
     return response;
   } catch (error) {
@@ -89,7 +89,7 @@ export const adminUpdateVariationById = async (
   try {
     const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-variation/${variationId}`,
+      url: `/api/product/admin/update-variation/${variationId}`,
       data: { name: name, variesImage: variesImage },
     });
     return response;
@@ -104,7 +104,7 @@ export const adminDeleteVariationById = async (variationId) => {
   try {
     const response = await axiosClient({
       method: 'delete',
-      url: `/admin/delete-variation/${variationId}`,
+      url: `/api/product/admin/delete-variation/${variationId}`,
     });
     return response;
   } catch (error) {
@@ -120,7 +120,7 @@ export const showSimilarVariationOptions = async (name) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: '/admin/show-similar-variation-options',
+      url: '/api/product/admin/show-similar-variation-options',
       data: { name: name },
     });
     return response;
@@ -135,7 +135,7 @@ export const adminCreateVariationOption = async (variationId, varOption) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: `/admin/create-variation-option/${variationId}`,
+      url: `/api/product/admin/create-variation-option/${variationId}`,
       data: { name: varOption.name, value: varOption.value },
     });
     return response;
@@ -150,7 +150,7 @@ export const listAllVariationOptions = async () => {
   try {
     const response = await axiosClient({
       method: 'get',
-      url: '/list-all-variation-options',
+      url: '/api/product/list-all-variation-options',
     });
     return response;
   } catch (error) {
@@ -169,7 +169,7 @@ export const adminAllVariationOptionsSummaryForVariation = async (
   try {
     const response = await axiosClient({
       method: 'get',
-      url: `/admin/all-variation-options-summary-for-variation/${id}`,
+      url: `/api/product/admin/all-variation-options-summary-for-variation/${id}`,
       params: {
         page: page,
         size: size,
@@ -188,7 +188,7 @@ export const adminGetVariationOptionById = async (varOptId) => {
   try {
     const response = await axiosClient({
       method: 'get',
-      url: `/admin/get-variation-option/${varOptId}`,
+      url: `/api/product/admin/get-variation-option/${varOptId}`,
     });
     return response;
   } catch (error) {
@@ -202,7 +202,7 @@ export const adminUpdateVariationOptionById = async (varOptId, name) => {
   try {
     const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-variation-option/${varOptId}`,
+      url: `/api/product/admin/update-variation-option/${varOptId}`,
       data: { name: name },
     });
     return response;
@@ -217,7 +217,7 @@ export const adminDeleteVariationOptionById = async (varOptId) => {
   try {
     const response = await axiosClient({
       method: 'delete',
-      url: `/admin/delete-variation/${varOptId}`,
+      url: `/api/product/admin/delete-variation/${varOptId}`,
     });
     return response;
   } catch (error) {

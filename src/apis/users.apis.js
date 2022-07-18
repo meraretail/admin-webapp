@@ -5,7 +5,7 @@ export const adminGetAllUsers = async (page, size, search) => {
   try {
     const response = await axiosClient({
       method: 'get',
-      url: '/admin/get-all-users',
+      url: '/api/identity/admin/get-all-users',
       params: {
         page: page,
         size: size,
@@ -23,7 +23,7 @@ export const adminGetUserById = async (id) => {
   try {
     const response = await axiosClient({
       method: 'get',
-      url: `/admin/get-user/${id}`,
+      url: `/api/identity/admin/get-user/${id}`,
     });
     return response;
   } catch (error) {
@@ -36,7 +36,7 @@ export const adminDeleteUserById = async (id) => {
   try {
     const response = await axiosClient({
       method: 'delete',
-      url: `/admin/delete-user/${id}`,
+      url: `/api/identity/admin/delete-user/${id}`,
     });
     return response;
   } catch (error) {
@@ -49,7 +49,7 @@ export const adminCreateUser = async (values) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: '/admin/create-user',
+      url: '/api/identity/admin/create-user',
       data: values,
     });
     return response;
@@ -63,7 +63,7 @@ export const adminGetRolesFromDb = async () => {
   try {
     const response = await axiosClient({
       method: 'get',
-      url: '/admin/get-roles-from-db',
+      url: '/api/identity/admin/get-roles-from-db',
     });
     return response;
   } catch (error) {
@@ -78,7 +78,7 @@ export const adminAddUserAddress = async (id, address) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: `/user/${id}/add-address`,
+      url: `/api/identity/user/${id}/add-address`,
       data: address,
     });
     return response;
@@ -92,7 +92,7 @@ export const adminMakeAddressDefault = async (id, addressId) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: `/user/${id}/${addressId}/make-default`,
+      url: `/api/identity/user/${id}/${addressId}/make-default`,
     });
     return response;
   } catch (error) {
@@ -105,7 +105,7 @@ export const adminDeleteUserAddress = async (id, addressId) => {
   try {
     const response = await axiosClient({
       method: 'delete',
-      url: `/user/${id}/${addressId}`,
+      url: `/api/identity/user/${id}/${addressId}`,
     });
     return response;
   } catch (error) {
@@ -118,7 +118,7 @@ export const adminUpdateUserAddress = async (id, addressId, address) => {
   try {
     const response = await axiosClient({
       method: 'put',
-      url: `/user/${id}/${addressId}`,
+      url: `/api/identity/user/${id}/${addressId}`,
       data: address,
     });
     return response;
@@ -134,7 +134,7 @@ export const adminUpdateUserProfileById = async (id, user) => {
   try {
     const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-user/${id}/profile`,
+      url: `/api/identity/admin/update-user/${id}/profile`,
       data: user,
     });
     return response;
@@ -148,7 +148,7 @@ export const adminUpdateUserPasswordById = async (id, user) => {
   try {
     const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-user/${id}/password`,
+      url: `/api/identity/admin/update-user/${id}/password`,
       data: user,
     });
     return response;
@@ -162,7 +162,7 @@ export const adminUpdateUserRolesById = async (id, user) => {
   try {
     const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-user/${id}/roles`,
+      url: `/api/identity/admin/update-user/${id}/roles`,
       data: user,
     });
     return response;
