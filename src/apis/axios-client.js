@@ -5,16 +5,8 @@ import axios from 'axios';
 // hence, withCredentials: true,
 
 /***** USE BELOW IN DEVELOPMENT *****/
-export const axiosIdInstance = axios.create({
-  baseURL: 'http://localhost:8000/api/identity',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
-});
-
-export const axiosPdInstance = axios.create({
-  baseURL: 'http://localhost:8000/api/product',
+export const axiosClient = axios.create({
+  baseURL: 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -25,8 +17,8 @@ export const axiosPdInstance = axios.create({
 // connected by k8s clusterIp
 
 /***** USE BELOW IN PRODUCTION *****/
-// export const axiosInstance = axios.create({
-//   baseURL: 'https://meraretail.dev/api/identity',
+// export const axiosClient = axios.create({
+//   baseURL: 'https://meraretail.dev',
 //   headers: {
 //     'Content-Type': 'application/json',
 //   },

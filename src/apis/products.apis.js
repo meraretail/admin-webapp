@@ -1,4 +1,4 @@
-import { axiosPdInstance } from './axios.config';
+import { axiosClient } from './axios-client';
 
 // Contains: 1. Product APIs 2. Brand APIs
 
@@ -8,9 +8,9 @@ import { axiosPdInstance } from './axios.config';
 // 1.1 POST '/admin/show-similar-products' - similar products while typing a new product name
 export const showSimilarProducts = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/show-similar-products',
+      url: '/api/product/admin/show-similar-products',
       data: { name: name },
     });
     return response;
@@ -30,9 +30,9 @@ export const adminCreateProduct = async (
   pdtGenders
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/create-product',
+      url: '/api/product/admin/create-product',
       data: {
         childCategoryId: childCatId,
         brandId: brandId,
@@ -57,9 +57,9 @@ export const adminAllProductsSummary = async (
   childCategoryId
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/admin/all-products-summary/${childCategoryId}`,
+      url: `/api/product/admin/all-products-summary/${childCategoryId}`,
       params: {
         page: page,
         size: size,
@@ -76,9 +76,9 @@ export const adminAllProductsSummary = async (
 // 1.4 GET '/admin/get-product/:productId' - get product name by Id
 export const adminGetProductById = async (productId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/admin/get-product/${productId}`,
+      url: `/api/product/admin/get-product/${productId}`,
     });
     return response;
   } catch (error) {
@@ -98,9 +98,9 @@ export const adminUpdateProductBasicsById = async (
   pdtGenders
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-product-basics/${id}`,
+      url: `/api/product/admin/update-product-basics/${id}`,
       data: {
         childCategoryId: childCatId,
         brandId: brandId,
@@ -122,9 +122,9 @@ export const adminUpdateProductAttributesById = async (
   details
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-product-attributes/${id}`,
+      url: `/api/product/admin/update-product-attributes/${id}`,
       data: {
         features: features,
         details: details,
@@ -149,9 +149,9 @@ export const adminUpdateProductFullById = async (
   details
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-product-full/${id}`,
+      url: `/api/product/admin/update-product-full/${id}`,
       data: {
         childCategoryId: childCatId,
         brandId: brandId,
@@ -179,9 +179,9 @@ export const adminUpdateProductVariationsSkusStocksPricesById = async (
   skus
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-product-variations-skus-stocks-prices/${id}`,
+      url: `/api/product/admin/update-product-variations-skus-stocks-prices/${id}`,
       data: {
         variations: variations,
         maxRetailPrice: maxRetailPrice,
@@ -208,9 +208,9 @@ export const uploadProductImagesById = async (
   setProgress
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: `/upload-product-image/${productId}/${variationId}/${varOptId}`,
+      url: `/api/product/upload-product-image/${productId}/${variationId}/${varOptId}`,
       data: formData,
       timeout: 60000, // 60 seconds
       onUploadProgress: (progressEvent) => {
@@ -229,9 +229,9 @@ export const uploadProductImagesById = async (
 // 1.6.2 PUT '/mark-default-product-image/:productOptionId/:imageId'
 export const markDefaultProductImageById = async (productOptionId, imageId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/mark-default-product-image/${productOptionId}/${imageId}`,
+      url: `/api/product/mark-default-product-image/${productOptionId}/${imageId}`,
     });
     return response;
   } catch (error) {
@@ -243,9 +243,9 @@ export const markDefaultProductImageById = async (productOptionId, imageId) => {
 // 1.6.3 DELETE '/delete-product-image/:productOptionId/:imageId'
 export const deleteProductImageById = async (productOptionId, imageId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'delete',
-      url: `/delete-product-image/${productOptionId}/${imageId}`,
+      url: `/api/product/delete-product-image/${productOptionId}/${imageId}`,
     });
     return response;
   } catch (error) {
@@ -261,9 +261,9 @@ export const adminUpdateProductOptionDataById = async (
   customDesc
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-product-option-data/${productOptionId}`,
+      url: `/api/product/admin/update-product-option-data/${productOptionId}`,
       data: {
         customName: customName,
         customDesc: customDesc,
@@ -280,9 +280,9 @@ export const adminUpdateProductOptionDataById = async (
 // 1.8.1 GET '/get-product-bulk-upload-template'
 export const getProductBulkUploadTemplate = async () => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: '/get-product-bulk-upload-template',
+      url: '/api/product/get-product-bulk-upload-template',
     });
     return response;
   } catch (error) {
@@ -293,9 +293,9 @@ export const getProductBulkUploadTemplate = async () => {
 // 1.8.2 POST '/bulk-add-products'
 export const bulkAddProducts = async (productsArray) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/bulk-add-products',
+      url: '/api/product/bulk-add-products',
       data: { productsArray: productsArray },
     });
     return response;
@@ -310,9 +310,9 @@ export const bulkAddProducts = async (productsArray) => {
 // 2.1 POST '/admin/show-similar-brands' - similar brands while typing a new brand name
 export const showSimilarBrands = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/show-similar-brands',
+      url: '/api/product/admin/show-similar-brands',
       data: { name: name },
     });
     return response;
@@ -325,9 +325,9 @@ export const showSimilarBrands = async (name) => {
 // 2.2 POST /admin/create-brand - admin can add new brand
 export const adminCreateBrand = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/create-brand',
+      url: '/api/product/admin/create-brand',
       data: { name: name },
     });
     return response;
@@ -340,9 +340,9 @@ export const adminCreateBrand = async (name) => {
 // 2.3 GET /list-all-brands - get all brands list
 export const listAllBrands = async () => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: '/list-all-brands',
+      url: '/api/product/list-all-brands',
     });
     return response;
   } catch (error) {
@@ -354,9 +354,9 @@ export const listAllBrands = async () => {
 // 2.4 GET /admin/all-brands-summary - admin can summary at brand level
 export const adminAllBrandsSummary = async () => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: '/admin/all-brands-summary',
+      url: '/api/product/admin/all-brands-summary',
     });
     return response;
   } catch (error) {
@@ -368,9 +368,9 @@ export const adminAllBrandsSummary = async () => {
 // 2.5 GET '/admin/get-brand/:brandId' - get brand by Id
 export const adminGetBrandById = async (brandId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/admin/get-brand/${brandId}`,
+      url: `/api/product/admin/get-brand/${brandId}`,
     });
     return response;
   } catch (error) {
@@ -382,9 +382,9 @@ export const adminGetBrandById = async (brandId) => {
 // 2.6 PUT '/admin/update-brand/:brandId' - update brand by Id
 export const adminUpdateBrandById = async (brandId, brand) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-brand/${brandId}`,
+      url: `/api/product/admin/update-brand/${brandId}`,
       data: { brand: brand },
     });
     return response;
@@ -397,9 +397,9 @@ export const adminUpdateBrandById = async (brandId, brand) => {
 // 2.6 DELETE '/admin/delete-brand/:brandId' - update brand by Id
 export const adminDeleteBrandById = async (brandId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'delete',
-      url: `/admin/delete-brand/${brandId}`,
+      url: `/api/product/admin/delete-brand/${brandId}`,
     });
     return response;
   } catch (error) {
@@ -412,9 +412,9 @@ export const adminDeleteBrandById = async (brandId) => {
 // 3.1 GET /list-all-genders - get all genders list
 export const listAllGenders = async () => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: '/list-all-genders',
+      url: '/api/product/list-all-genders',
     });
     return response;
   } catch (error) {

@@ -1,9 +1,9 @@
-import { axiosIdInstance } from './axios.config';
+import { axiosClient } from './axios-client';
 
 // 1. Admin: Get All Users | GET /admin/get-all-users
 export const adminGetAllUsers = async (page, size, search) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'get',
       url: '/admin/get-all-users',
       params: {
@@ -21,7 +21,7 @@ export const adminGetAllUsers = async (page, size, search) => {
 // 2. Admin: Get User by Id | GET /admin/get-user/:id
 export const adminGetUserById = async (id) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'get',
       url: `/admin/get-user/${id}`,
     });
@@ -34,7 +34,7 @@ export const adminGetUserById = async (id) => {
 // 3. Admin: Delete User by Id | DELETE /admin/delete-user/:id
 export const adminDeleteUserById = async (id) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'delete',
       url: `/admin/delete-user/${id}`,
     });
@@ -47,7 +47,7 @@ export const adminDeleteUserById = async (id) => {
 // 4. Admin: Create new user | POST /admin/create-user
 export const adminCreateUser = async (values) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'post',
       url: '/admin/create-user',
       data: values,
@@ -61,7 +61,7 @@ export const adminCreateUser = async (values) => {
 // 5 Admin: Get available roles from db | GET /admin/get-roles-from-db
 export const adminGetRolesFromDb = async () => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'get',
       url: '/admin/get-roles-from-db',
     });
@@ -76,7 +76,7 @@ export const adminGetRolesFromDb = async () => {
 // 1. Admin: Add new address | POST /user/:id/add-address
 export const adminAddUserAddress = async (id, address) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'post',
       url: `/user/${id}/add-address`,
       data: address,
@@ -90,7 +90,7 @@ export const adminAddUserAddress = async (id, address) => {
 // 2. Admin: Mark address as default | POST /user/:id/:addressId/make-default
 export const adminMakeAddressDefault = async (id, addressId) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'post',
       url: `/user/${id}/${addressId}/make-default`,
     });
@@ -103,7 +103,7 @@ export const adminMakeAddressDefault = async (id, addressId) => {
 // 3. Admin: Delete address | DELETE /user/:id/:addressId
 export const adminDeleteUserAddress = async (id, addressId) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'delete',
       url: `/user/${id}/${addressId}`,
     });
@@ -116,7 +116,7 @@ export const adminDeleteUserAddress = async (id, addressId) => {
 // 4. Admin: Update address | PUT /user/:id/:addressId
 export const adminUpdateUserAddress = async (id, addressId, address) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'put',
       url: `/user/${id}/${addressId}`,
       data: address,
@@ -132,7 +132,7 @@ export const adminUpdateUserAddress = async (id, addressId, address) => {
 // 1. Admin: Update User profile by Id | PUT /admin/update-user/:id/profile
 export const adminUpdateUserProfileById = async (id, user) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'put',
       url: `/admin/update-user/${id}/profile`,
       data: user,
@@ -146,7 +146,7 @@ export const adminUpdateUserProfileById = async (id, user) => {
 // 2. Admin: Update User password by Id | PUT /admin/update-user/:id/password
 export const adminUpdateUserPasswordById = async (id, user) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'put',
       url: `/admin/update-user/${id}/password`,
       data: user,
@@ -160,7 +160,7 @@ export const adminUpdateUserPasswordById = async (id, user) => {
 // 3. Admin: Update User roles by Id | PUT /admin/update-user/:id/roles
 export const adminUpdateUserRolesById = async (id, user) => {
   try {
-    const response = await axiosIdInstance({
+    const response = await axiosClient({
       method: 'put',
       url: `/admin/update-user/${id}/roles`,
       data: user,

@@ -1,12 +1,12 @@
-import { axiosPdInstance } from './axios.config';
+import { axiosClient } from './axios-client';
 
 // ADMIN ONLY
 // 2.1 POST '/admin/show-similar-subcategories' - show similar names while typing
 export const showSimilarSubCategories = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/show-similar-subcategories',
+      url: '/api/product/admin/show-similar-subcategories',
       data: { name: name },
     });
     return response;
@@ -19,9 +19,9 @@ export const showSimilarSubCategories = async (name) => {
 // 2.2 POST /admin/create-subcategory - admin can add new category
 export const adminCreateSubCategory = async (name, categoryId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/create-subcategory',
+      url: '/api/product/admin/create-subcategory',
       data: { name: name, categoryId: categoryId },
     });
     return response;
@@ -34,9 +34,9 @@ export const adminCreateSubCategory = async (name, categoryId) => {
 // 2.3 GET /list-all-subcategories/:categoryId - get all categories list
 export const listAllSubCategoriesForCategory = async (categoryId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/list-all-subcategories/${categoryId}`,
+      url: `/api/product/list-all-subcategories/${categoryId}`,
     });
     return response;
   } catch (error) {
@@ -53,9 +53,9 @@ export const adminAllSubCategoriesSummary = async (
   categoryId
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/admin/all-subcategories-summary/${categoryId}`,
+      url: `/api/product/admin/all-subcategories-summary/${categoryId}`,
       params: {
         page: page,
         size: size,
@@ -72,9 +72,9 @@ export const adminAllSubCategoriesSummary = async (
 // 2.5 GET '/admin/subcategory-details/:subCategoryId' - get category details by Id
 export const adminSubcategoryDetailsById = async (subCategoryId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/admin/subcategory-details/${subCategoryId}`,
+      url: `/api/product/admin/subcategory-details/${subCategoryId}`,
     });
     return response;
   } catch (error) {
@@ -86,9 +86,9 @@ export const adminSubcategoryDetailsById = async (subCategoryId) => {
 // 2.6 PUT '/admin/update-subcategory/:subCategoryId' - update category details by Id
 export const adminUpdateSubCategoryById = async (subCategoryId, name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-subcategory/${subCategoryId}`,
+      url: `/api/product/admin/update-subcategory/${subCategoryId}`,
       data: { name: name },
     });
     return response;

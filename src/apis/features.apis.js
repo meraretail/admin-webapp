@@ -1,4 +1,4 @@
-import { axiosPdInstance } from './axios.config';
+import { axiosClient } from './axios-client';
 
 /********** 1. FEATURES METHODS ************/
 
@@ -6,9 +6,9 @@ import { axiosPdInstance } from './axios.config';
 // 1.1 POST '/admin/show-similar-features' - get list of similar features
 export const showSimilarFeatures = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/show-similar-features',
+      url: '/api/product/admin/show-similar-features',
       data: { name: name },
     });
     return response;
@@ -21,9 +21,9 @@ export const showSimilarFeatures = async (name) => {
 // 1.2 POST /admin/create-feature - admin can add new feature
 export const adminCreateFeature = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/create-feature',
+      url: '/api/product/admin/create-feature',
       data: { name: name },
     });
     return response;
@@ -36,9 +36,9 @@ export const adminCreateFeature = async (name) => {
 // 1.3 GET /list-all-features - get all features list
 export const listAllFeatures = async () => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: '/list-all-features',
+      url: '/api/product/list-all-features',
     });
     return response;
   } catch (error) {
@@ -50,9 +50,9 @@ export const listAllFeatures = async () => {
 // 1.4 GET /admin/all-features-summary - admin get summary of all features
 export const adminAllFeaturesSummary = async (page, size, search) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: '/admin/all-features-summary',
+      url: '/api/product/admin/all-features-summary',
       params: {
         page: page,
         size: size,
@@ -69,9 +69,9 @@ export const adminAllFeaturesSummary = async (page, size, search) => {
 // 1.5 GET '/admin/feature/:featureId' - get feature by Id
 export const adminGetFeatureById = async (featureId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/admin/feature/${featureId}`,
+      url: `/api/product/admin/feature/${featureId}`,
     });
     return response;
   } catch (error) {
@@ -83,9 +83,9 @@ export const adminGetFeatureById = async (featureId) => {
 // 1.6 PUT '/admin/update-feature/:featureId' - Update feature by Id
 export const adminUpdateFeatureById = async (featureId, name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-feature/${featureId}`,
+      url: `/api/product/admin/update-feature/${featureId}`,
       data: { name: name },
     });
     return response;
@@ -98,9 +98,9 @@ export const adminUpdateFeatureById = async (featureId, name) => {
 // 1.7 DELETE '/admin/delete-feature/:featureId' - Delete feature by Id
 export const adminDeleteFeatureById = async (featureId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'delete',
-      url: `/admin/delete-feature/${featureId}`,
+      url: `/api/product/admin/delete-feature/${featureId}`,
     });
     return response;
   } catch (error) {
@@ -114,9 +114,9 @@ export const adminDeleteFeatureById = async (featureId) => {
 // 2.1 POST '/admin/show-similar-feature-options' - get list of similar feature options
 export const showSimilarFeatureOptions = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/show-similar-feature-options',
+      url: '/api/product/admin/show-similar-feature-options',
       data: { name: name },
     });
     return response;
@@ -129,9 +129,9 @@ export const showSimilarFeatureOptions = async (name) => {
 // 2.2 POST /admin/create-feature-option/:featureId - admin can add new feature option
 export const adminCreateFeatureOption = async (name, featureId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: `/admin/create-feature-option/${featureId}`,
+      url: `/api/product/admin/create-feature-option/${featureId}`,
       data: { name: name },
     });
     return response;
@@ -144,9 +144,9 @@ export const adminCreateFeatureOption = async (name, featureId) => {
 // 2.3 GET /list-all-feature-options - get all features list
 export const listAllFeatureOptions = async () => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: '/list-all-feature-options',
+      url: '/api/product/list-all-feature-options',
     });
     return response;
   } catch (error) {
@@ -158,9 +158,9 @@ export const listAllFeatureOptions = async () => {
 // 2.4 GET /admin/all-feature-options-summary - admin get summary of all features
 export const adminAllFeatureOptionsSummary = async (page, size, search) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: '/admin/all-feature-options-summary',
+      url: '/api/product/admin/all-feature-options-summary',
       params: {
         page: page,
         size: size,
@@ -177,9 +177,9 @@ export const adminAllFeatureOptionsSummary = async (page, size, search) => {
 // 2.5 GET '/admin/feature-option/:featOptId' - get feature by Id
 export const adminGetFeatureOptionById = async (featOptId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/admin/feature-option/${featOptId}`,
+      url: `/api/product/admin/feature-option/${featOptId}`,
     });
     return response;
   } catch (error) {
@@ -191,9 +191,9 @@ export const adminGetFeatureOptionById = async (featOptId) => {
 // 2.6 PUT '/admin/update-feature-option/:featOptId' - Update feature by Id
 export const adminUpdateFeatureOptionById = async (featOptId, name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-feature-option/${featOptId}`,
+      url: `/api/product/admin/update-feature-option/${featOptId}`,
       data: { name: name },
     });
     return response;
@@ -206,9 +206,9 @@ export const adminUpdateFeatureOptionById = async (featOptId, name) => {
 // 2.7 DELETE '/admin/delete-feature-option/:featOptId' - Delete feature by Id
 export const adminDeleteFeatureOptionById = async (featOptId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'delete',
-      url: `/admin/delete-feature/${featOptId}`,
+      url: `/api/product/admin/delete-feature/${featOptId}`,
     });
     return response;
   } catch (error) {

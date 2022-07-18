@@ -1,4 +1,4 @@
-import { axiosPdInstance } from './axios.config';
+import { axiosClient } from './axios-client';
 
 /********** 1. VARIATIONS METHODS ************/
 
@@ -6,7 +6,7 @@ import { axiosPdInstance } from './axios.config';
 // 1.1 POST '/admin/show-similar-Variations' - get list of similar Variations
 export const showSimilarVariations = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
       url: '/admin/show-similar-variations',
       data: { name: name },
@@ -21,7 +21,7 @@ export const showSimilarVariations = async (name) => {
 // 1.2 POST /admin/create-Variation - admin can add new Variation
 export const adminCreateVariation = async (variation, variesImage) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
       url: '/admin/create-variation',
       data: { name: variation, variesImage: variesImage },
@@ -36,7 +36,7 @@ export const adminCreateVariation = async (variation, variesImage) => {
 // 1.3 GET /list-all-Variations - get all Variations list
 export const listAllVariations = async () => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
       url: '/list-all-variations',
     });
@@ -50,7 +50,7 @@ export const listAllVariations = async () => {
 // 1.4 GET /admin/all-Variations-summary - admin get summary of all Variations
 export const adminAllVariationsSummary = async (page, size, search) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
       url: '/admin/all-variations-summary',
       params: {
@@ -69,7 +69,7 @@ export const adminAllVariationsSummary = async (page, size, search) => {
 // 1.5 GET '/admin/get-variation/:variationId' - get Variation by Id
 export const adminGetVariationById = async (variationId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
       url: `/admin/get-variation/${variationId}`,
     });
@@ -87,7 +87,7 @@ export const adminUpdateVariationById = async (
   variesImage
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
       url: `/admin/update-variation/${variationId}`,
       data: { name: name, variesImage: variesImage },
@@ -102,7 +102,7 @@ export const adminUpdateVariationById = async (
 // 1.7 DELETE '/admin/delete-Variation/:VariationId' - Delete Variation by Id
 export const adminDeleteVariationById = async (variationId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'delete',
       url: `/admin/delete-variation/${variationId}`,
     });
@@ -118,7 +118,7 @@ export const adminDeleteVariationById = async (variationId) => {
 // 2.1 POST '/admin/show-similar-Variation-options' - get list of similar Variation options
 export const showSimilarVariationOptions = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
       url: '/admin/show-similar-variation-options',
       data: { name: name },
@@ -133,7 +133,7 @@ export const showSimilarVariationOptions = async (name) => {
 // 2.2 POST /admin/create-Variation-option/:VariationId - admin can add new Variation option
 export const adminCreateVariationOption = async (variationId, varOption) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
       url: `/admin/create-variation-option/${variationId}`,
       data: { name: varOption.name, value: varOption.value },
@@ -148,7 +148,7 @@ export const adminCreateVariationOption = async (variationId, varOption) => {
 // 2.3 GET /list-all-Variation-options - get all Variations list
 export const listAllVariationOptions = async () => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
       url: '/list-all-variation-options',
     });
@@ -167,7 +167,7 @@ export const adminAllVariationOptionsSummaryForVariation = async (
   id
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
       url: `/admin/all-variation-options-summary-for-variation/${id}`,
       params: {
@@ -186,7 +186,7 @@ export const adminAllVariationOptionsSummaryForVariation = async (
 // 2.5 GET '/admin/Variation-option/:featOptId' - get Variation by Id
 export const adminGetVariationOptionById = async (varOptId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
       url: `/admin/get-variation-option/${varOptId}`,
     });
@@ -200,7 +200,7 @@ export const adminGetVariationOptionById = async (varOptId) => {
 // 2.6 PUT '/admin/update-variation-option/:varOptId'
 export const adminUpdateVariationOptionById = async (varOptId, name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
       url: `/admin/update-variation-option/${varOptId}`,
       data: { name: name },
@@ -215,7 +215,7 @@ export const adminUpdateVariationOptionById = async (varOptId, name) => {
 // 2.7 DELETE '/admin/delete-Variation-option/:featOptId' - Delete Variation by Id
 export const adminDeleteVariationOptionById = async (varOptId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'delete',
       url: `/admin/delete-variation/${varOptId}`,
     });

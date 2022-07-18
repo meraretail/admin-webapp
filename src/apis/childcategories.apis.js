@@ -1,12 +1,12 @@
-import { axiosPdInstance } from './axios.config';
+import { axiosClient } from './axios-client';
 
 // ADMIN ONLY
 // 3.1 POST '/admin/show-similar-childcategories' - show similar names while typing
 export const showSimilarChildCategories = async (name) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/show-similar-childcategories',
+      url: '/api/product/admin/show-similar-childcategories',
       data: { name: name },
     });
     return response;
@@ -19,9 +19,9 @@ export const showSimilarChildCategories = async (name) => {
 // 3.2 POST /admin/create-childcategory - admin can add new category
 export const adminCreateChildCategory = async (name, subCategoryId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/create-childcategory',
+      url: '/api/product/admin/create-childcategory',
       data: { name: name, subCategoryId: subCategoryId },
     });
     return response;
@@ -34,9 +34,9 @@ export const adminCreateChildCategory = async (name, subCategoryId) => {
 // 3.3 GET /list-all-childcategories/:subCategoryId - get all categories list
 export const listAllChildCategoriesForSubCategory = async (subCategoryId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/list-all-childcategories/${subCategoryId}`,
+      url: `/api/product/list-all-childcategories/${subCategoryId}`,
     });
     return response;
   } catch (error) {
@@ -53,9 +53,9 @@ export const adminAllChildCategoriesSummary = async (
   subCategoryId
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/admin/all-childcategories-summary/${subCategoryId}`,
+      url: `/api/product/admin/all-childcategories-summary/${subCategoryId}`,
       params: {
         page: page,
         size: size,
@@ -72,9 +72,9 @@ export const adminAllChildCategoriesSummary = async (
 // 3.5 GET '/admin/get-childcategory/:childCategoryId' - update category details by Id
 export const adminGetChildCategoryById = async (childCategoryId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/admin/get-childcategory/${childCategoryId}`,
+      url: `/api/product/admin/get-childcategory/${childCategoryId}`,
     });
     return response;
   } catch (error) {
@@ -90,9 +90,9 @@ export const adminUpdateChildCategoryById = async (
   subcategoryId
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'put',
-      url: `/admin/update-childcategory/${childCategoryId}`,
+      url: `/api/product/admin/update-childcategory/${childCategoryId}`,
       data: { name: name, subcategoryId: subcategoryId },
     });
     return response;
@@ -105,9 +105,9 @@ export const adminUpdateChildCategoryById = async (
 // 3.7 GET '/get-childcategory-parameters/:childCategoryId' - get category details by Id
 export const getChildCategoryParametersById = async (childCategoryId) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'get',
-      url: `/get-childcategory-parameters/${childCategoryId}`,
+      url: `/api/product/get-childcategory-parameters/${childCategoryId}`,
     });
     return response;
   } catch (error) {
@@ -125,9 +125,9 @@ export const adminUpdateChildCategoryVariations = async (
   variationId
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/update-childcategory-variations',
+      url: '/api/product/admin/update-childcategory-variations',
       data: {
         childCategoryId: childCategoryId,
         variationName: variationName,
@@ -148,9 +148,9 @@ export const adminUpdateChildCategoryFeatures = async (
   featureId
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/update-childcategory-features',
+      url: '/api/product/admin/update-childcategory-features',
       data: {
         childCategoryId: childCategoryId,
         featureName: featureName,
@@ -171,9 +171,9 @@ export const adminUpdateChildCategoryDetails = async (
   detailId
 ) => {
   try {
-    const response = await axiosPdInstance({
+    const response = await axiosClient({
       method: 'post',
-      url: '/admin/update-childcategory-details',
+      url: '/api/product/admin/update-childcategory-details',
       data: {
         childCategoryId: childCategoryId,
         detailName: detailName,
