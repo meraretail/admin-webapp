@@ -13,7 +13,7 @@ const PageTitle = ({ className, title, btnLink, btnIcon, btnText, type }) => {
   };
 
   return (
-    <div
+    <header
       className={`${className} flex items-center justify-between border-b fixed top-0 left-[12rem] right-0 px-4 shadow bg-white z-20`}
     >
       <h1 className='font-manrope text-2xl font-bold my-4'>{title}</h1>
@@ -30,7 +30,7 @@ const PageTitle = ({ className, title, btnLink, btnIcon, btnText, type }) => {
         {btnIcon ? btnIcon : <IoArrowBackCircleOutline className='scale-110' />}
         <span className='ml-2 whitespace-nowrap'>{btnText}</span>
       </button>
-    </div>
+    </header>
   );
 };
 
