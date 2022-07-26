@@ -29,7 +29,7 @@ const AddAddress = () => {
     state: '',
     pincode: '',
     country: '',
-    phoneNumber: '',
+    phone: '',
   });
 
   const onValueChange = (e) => {

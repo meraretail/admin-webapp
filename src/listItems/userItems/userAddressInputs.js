@@ -50,7 +50,7 @@ export const addressInputs = [
   },
   {
     id: 8,
-    name: 'phoneNumber',
+    name: 'phone',
     type: 'text',
     placeholder: 'Enter contact no.',
     label: 'Phone (e.g. 9876512345)',
