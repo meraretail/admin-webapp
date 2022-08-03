@@ -16,19 +16,19 @@ export const loginUser = async ({ email, phone, password }) => {
   return response;
 };
 
-// 7. Refresh Auth tokens | POST /api/identity/refresh-tokens
-export const refreshAccessAndRefreshTokens = async () => {
+// 7. Refresh Auth tokens | GET /api/identity/refresh-tokens
+export const refreshTokens = async () => {
   const response = await axiosClient({
-    method: 'post',
+    method: 'get',
     url: '/api/identity/refresh-tokens',
   });
   return response;
 };
 
-// 8. Logout route | POST /api/identity/logout
+// 8. Logout route | GET /api/identity/logout
 export const logoutUser = async () => {
   const response = await axiosClient({
-    method: 'post',
+    method: 'get',
     url: '/api/identity/logout',
   });
   return response;

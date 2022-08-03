@@ -19,12 +19,12 @@ export const showSimilarVariations = async (name) => {
 
 // ADMIN ONLY
 // 1.2 POST /admin/create-Variation - admin can add new Variation
-export const adminCreateVariation = async (variation, variesImage) => {
+export const adminCreateVariation = async (variation, variesProductOption) => {
   try {
     const response = await axiosClient({
       method: 'post',
       url: '/api/product/admin/create-variation',
-      data: { name: variation, variesImage: variesImage },
+      data: { name: variation, variesProductOption: variesProductOption },
     });
     return response;
   } catch (error) {
@@ -84,13 +84,13 @@ export const adminGetVariationById = async (variationId) => {
 export const adminUpdateVariationById = async (
   variationId,
   name,
-  variesImage
+  variesProductOption
 ) => {
   try {
     const response = await axiosClient({
       method: 'put',
       url: `/api/product/admin/update-variation/${variationId}`,
-      data: { name: name, variesImage: variesImage },
+      data: { name: name, variesProductOption: variesProductOption },
     });
     return response;
   } catch (error) {

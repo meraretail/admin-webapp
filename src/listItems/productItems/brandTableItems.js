@@ -7,11 +7,8 @@ export const brandPopularFilters = [
   { id: 6, text: 'Custom range', fromDate: '', toDate: '' },
 ];
 
-export const brandTableHeaders = [
-  'id',
-  'Brand name',
-  'Brand type',
-  'Brand geo',
-  '# of products',
-  'Actions',
+export const brandTableItems = [
+  { label: 'Id', jsonKey: 'id' },
+  { label: 'Brand name', jsonKey: 'name' },
+  { label: '# products', jsonKey: 'numOfProducts' },
 ];

@@ -306,13 +306,13 @@ export const bulkAddProducts = async (productsArray) => {
 
 /*************** 2. BRAND APIs *************/
 
-// ADMIN ONLY
-// 2.1 POST '/admin/show-similar-brands' - similar brands while typing a new brand name
+// ADMIN or SELLER ONLY
+// 1. POST '/show-similar-brands' - similar brands while typing a new brand name
 export const showSimilarBrands = async (name) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: '/api/product/admin/show-similar-brands',
+      url: '/api/product/show-similar-brands',
       data: { name: name },
     });
     return response;
@@ -321,14 +321,28 @@ export const showSimilarBrands = async (name) => {
   }
 };
 
-// ADMIN ONLY
-// 2.2 POST /admin/create-brand - admin can add new brand
-export const adminCreateBrand = async (name) => {
+// ADMIN or SELLER
+// 2. GET all brand types | GET '/list-brand-types'
+export const listBrandTypes = async () => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: '/api/product/list-brand-types',
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// ADMIN or SELLER
+// 3. Add new brand | POST '/add-brand'
+export const adminCreateBrand = async (name, brandTypeId) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: '/api/product/admin/create-brand',
-      data: { name: name },
+      url: '/api/product/add-brand',
+      data: { name: name, brandTypeId: brandTypeId },
     });
     return response;
   } catch (error) {
@@ -337,12 +351,12 @@ export const adminCreateBrand = async (name) => {
 };
 
 // LOGIN NOT REQUIRED
-// 2.3 GET /list-all-brands - get all brands list
+// 3. Get all brand | GET /get-brands
 export const listAllBrands = async () => {
   try {
     const response = await axiosClient({
       method: 'get',
-      url: '/api/product/list-all-brands',
+      url: '/api/product/get-brands',
     });
     return response;
   } catch (error) {

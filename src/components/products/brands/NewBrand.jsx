@@ -3,20 +3,34 @@ import Button from '../../formComponents/Button';
 import FormInput from '../../formComponents/FormInput';
 import LoadingButton from '../../formComponents/LoadingButton';
 import SimilarNames from '../../common/SimilarNames';
+import Dropdown from '../../common/Dropdown';
 import {
   showSimilarBrands,
   adminCreateBrand,
+  listBrandTypes,
 } from '../../../apis/products.apis';
 
 const NewBrand = ({ setResSuccess, setResMessage }) => {
   const [loading, setLoading] = useState(false);
-  const [brand, setBrand] = useState({
-    name: '',
-    brandGeo: '',
-  });
+  const [brand, setBrand] = useState('');
   const [similarBrands, setSimilarBrands] = useState([]);
 
-  // Step 1: Search similar brands using useEffect with 500ms delay
+  const [brandTypesList, setBrandTypesList] = useState([]);
+  const [selectedBrandType, setSelectedBrandType] = useState(null);
+
+  // Step 1: Get list of brand types from server
+  useEffect(() => {
+    listBrandTypes()
+      .then((response) => {
+        setBrandTypesList(response.data.brandTypes);
+      })
+      .catch((error) => {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      });
+  }, [setResMessage, setResSuccess]);
+
+  // Step 1: Search similar brands using useEffect with 200ms delay
   useEffect(() => {
     if (brand === '') {
       setSimilarBrands([]);
@@ -26,7 +40,7 @@ const NewBrand = ({ setResSuccess, setResMessage }) => {
     const delayedResponse = setTimeout(async () => {
       const response = await showSimilarBrands(brand);
       setSimilarBrands(response.data.brands);
-    }, 500);
+    }, 200);
 
     return () => clearTimeout(delayedResponse);
   }, [brand]);
@@ -40,10 +54,7 @@ const NewBrand = ({ setResSuccess, setResMessage }) => {
     setResSuccess(data.success);
     setResMessage(data.message);
     if (data.success) {
-      setBrand({
-        name: '',
-        brandGeo: '',
-      });
+      setBrand('');
     }
   };
 
@@ -51,7 +62,7 @@ const NewBrand = ({ setResSuccess, setResMessage }) => {
     <div>
       <form
         onSubmit={handleAddBrand}
-        className='grid md:grid-cols-2 gap-4 mt-4'
+        className='grid md:grid-cols-3 gap-4 mt-4'
       >
         <FormInput
           label='Brand name'
@@ -61,16 +72,14 @@ const NewBrand = ({ setResSuccess, setResMessage }) => {
           value={brand ? brand.name : ''}
           onChange={(event) => setBrand({ ...brand, name: event.target.value })}
         />
-        <FormInput
-          label='Brand geo (e.g. Regional, National, Global)'
-          id='brandGeo'
-          type='text'
-          placeholder='Enter brand geography'
-          value={brand ? brand.brandGeo : ''}
-          onChange={(event) =>
-            setBrand({ ...brand, brandGeo: event.target.value })
-          }
+        <Dropdown
+          list={brandTypesList}
+          placeholder='Search brand type'
+          value={selectedBrandType?.name}
+          setSelectedItem={setSelectedBrandType}
+          className='w-full'
         />
+
         {loading ? (
           <LoadingButton />
         ) : (

@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
-// redux imports
-import { useDispatch, useSelector } from 'react-redux';
-import { login, reset, errorFn } from '../redux/slices/auth.slice';
-import { refreshTokens } from '../redux/slices/auth.slice';
+import useAuth from '../hooks/useAuth';
 
 // Importing image assets
 import heroLogin from '../assets/hero-login.png';
@@ -13,6 +9,7 @@ import Button from '../components/formComponents/Button';
 import FormInput from '../components/formComponents/FormInput';
 import LoadingButton from '../components/formComponents/LoadingButton';
 import SuccErrMsg from '../components/common/SuccErrMsg';
+import { loginUser } from '../apis/auth.apis';
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -20,50 +17,44 @@ const Login = () => {
     password: '',
   });
 
+  const { setAuth, persist, setPersist } = useAuth();
+
+  // set persist state in localstorage
+  useEffect(() => {
+    localStorage.setItem('persist', persist);
+  }, [persist]);
+
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const location = useLocation();
   const from = location.state ? location.state.from.pathname : '/';
 
-  const { loading, isAuthenticated, success, message, roles } = useSelector(
-    (state) => state.auth
-  );
-
-  useEffect(() => {
-    if (from && !(from === '/' || from === '/login')) {
-      dispatch(refreshTokens());
-      dispatch(reset());
-    }
-  }, [dispatch, from]);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      if (roles.find((role) => role === process.env.REACT_APP_ROLE)) {
-        navigate(from, { replace: true });
-      } else {
-        dispatch(
-          errorFn({
-            success: false,
-            message: 'You are not authorized to access this page!',
-          })
-        );
-      }
-    }
-  }, [dispatch, from, isAuthenticated, navigate, roles]);
+  // API response states
+  const [loading, setLoading] = useState(false);
+  const [resSuccess, setResSuccess] = useState(true);
+  const [resMessage, setResMessage] = useState('');
 
   const handleLogin = async (event) => {
     event.preventDefault();
     if (values.email === '' || values.password === '') {
-      dispatch(
-        errorFn({
-          success: false,
-          message: 'Please enter your email and password to login!',
-        })
-      );
+      setResSuccess(false);
+      setResMessage('Please fill in all fields');
       return;
     }
-    dispatch(login(values));
-    dispatch(reset());
+
+    setLoading(true);
+    const response = await loginUser(values);
+    setLoading(false);
+    const { user, accessToken, roles, success, message } = response.data;
+    setResSuccess(success);
+    setResMessage(message);
+    if (success) {
+      setAuth({
+        user,
+        accessToken,
+        roles,
+      });
+      navigate(from, { replace: true });
+    }
   };
 
   const onValueChange = (e) => {
@@ -126,7 +117,8 @@ const Login = () => {
               className='h-12'
             />
 
-            <div className='flex items-center'>
+            {/* button and trust device section */}
+            <div className='space-y-2'>
               {loading ? (
                 <LoadingButton
                   className='bg-violet-50 text-violet-700 border border-violet-700 
@@ -137,14 +129,31 @@ const Login = () => {
                   Login
                 </Button>
               )}
+
+              {/* Trust this device check box */}
+              <div className='flex items-center'>
+                <input
+                  type='checkbox'
+                  id='persist'
+                  className='h-4 w-4'
+                  checked={persist}
+                  onChange={() => setPersist(!persist)}
+                />
+                <label
+                  htmlFor='persist'
+                  className='ml-2 text-sm text-violet-700'
+                >
+                  Trust this device
+                </label>
+              </div>
             </div>
           </form>
           {/* login form ends */}
           {/* success / error message zone */}
           <div className='pt-2'>
             <SuccErrMsg
-              resMessage={message}
-              resSuccess={success}
+              resMessage={resMessage}
+              resSuccess={resSuccess}
               showSuccess={true}
             />
           </div>

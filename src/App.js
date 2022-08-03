@@ -6,6 +6,10 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 
+// Authentication Imports
+import RequireAuth from './components/auth/RequireAuth';
+import PersistLogin from './components/auth/PersistLogin';
+
 // Dashboard Page
 import Dashboard from './pages/Dashboard';
 
@@ -38,15 +42,11 @@ import AddDetail from './pages/categories/details/AddDetail';
 import EditDetail from './pages/categories/details/EditDetail';
 
 // Product Pages
+import Brands from './pages/products/Brands';
 import Products from './pages/products/Products';
 import AddProduct from './pages/products/AddProduct';
 import BulkAddProducts from './pages/products/BulkAddProducts';
 import EditProduct from './pages/products/EditProduct';
-
-// Brand Pages
-import Brands from './pages/products/brands/Brands';
-import AddBrand from './pages/products/brands/AddBrand';
-import EditBrand from './pages/products/brands/EditBrand';
 
 function App() {
   return (
@@ -54,61 +54,70 @@ function App() {
       <Route path='/login' element={<Login />} />
 
       {/* Protected Routes */}
-      <Route path='/' element={<Home />}>
-        <Route path='/' element={<Dashboard />} index />
+      <Route element={<PersistLogin />}>
+        <Route element={<RequireAuth />}>
+          <Route path='/' element={<Home />}>
+            <Route path='/' element={<Dashboard />} index />
 
-        {/* User routes */}
-        <Route path='/users' element={<Users />} />
-        <Route path='/user/new' element={<AddUser />} />
-        <Route path='/user/:userId' element={<EditUser />} />
-        <Route path='/user/:userId/add-address' element={<AddAddress />} />
-        <Route
-          path='/user/:userId/edit-address/:addressId'
-          element={<EditAddress />}
-        />
+            {/* User routes */}
+            <Route path='/users' element={<Users />} />
+            <Route path='/user/new' element={<AddUser />} />
+            <Route path='/user/:userId' element={<EditUser />} />
+            <Route path='/user/:userId/add-address' element={<AddAddress />} />
+            <Route
+              path='/user/:userId/edit-address/:addressId'
+              element={<EditAddress />}
+            />
 
-        {/* Category routes */}
-        <Route path='/categories' element={<Categories />} />
-        <Route path='/sub-categories' element={<SubCategories />} />
-        <Route path='/child-categories' element={<ChildCategories />} />
-        <Route path='/category/edit/:categoryId' element={<EditCategory />} />
-        <Route
-          path='/sub-category/edit/:subCategoryId'
-          element={<EditSubCategory />}
-        />
-        <Route
-          path='/child-category/edit/:childCategoryId'
-          element={<EditChildCategory />}
-        />
+            {/* Category routes */}
+            <Route path='/categories' element={<Categories />} />
+            <Route path='/sub-categories' element={<SubCategories />} />
+            <Route path='/child-categories' element={<ChildCategories />} />
+            <Route
+              path='/category/edit/:categoryId'
+              element={<EditCategory />}
+            />
+            <Route
+              path='/sub-category/edit/:subCategoryId'
+              element={<EditSubCategory />}
+            />
+            <Route
+              path='/child-category/edit/:childCategoryId'
+              element={<EditChildCategory />}
+            />
 
-        {/* Variations, Features and Details routes */}
-        {/* Variation pages */}
-        <Route path='/variations' element={<Variations />} />
-        <Route path='/variation/new' element={<AddVariation />} />
-        <Route path='/variation/edit/:id' element={<EditVariation />} />
-        <Route path='/variation-option/edit/:id' element={<EditVarOption />} />
+            {/* Variations, Features and Details routes */}
+            {/* Variation pages */}
+            <Route path='/variations' element={<Variations />} />
+            <Route path='/variation/new' element={<AddVariation />} />
+            <Route path='/variation/edit/:id' element={<EditVariation />} />
+            <Route
+              path='/variation-option/edit/:id'
+              element={<EditVarOption />}
+            />
 
-        {/* Features pages */}
-        <Route path='/features' element={<Features />} />
-        <Route path='/feature/new' element={<AddFeature />} />
-        <Route path='/feature/edit/:id' element={<EditFeature />} />
-        <Route path='/feature-option/edit/:id' element={<EditFeatOption />} />
+            {/* Features pages */}
+            <Route path='/features' element={<Features />} />
+            <Route path='/feature/new' element={<AddFeature />} />
+            <Route path='/feature/edit/:id' element={<EditFeature />} />
+            <Route
+              path='/feature-option/edit/:id'
+              element={<EditFeatOption />}
+            />
 
-        {/* Details pages */}
-        <Route path='/details' element={<Details />} />
-        <Route path='/detail/new' element={<AddDetail />} />
-        <Route path='/detail/edit/:id' element={<EditDetail />} />
+            {/* Details pages */}
+            <Route path='/details' element={<Details />} />
+            <Route path='/detail/new' element={<AddDetail />} />
+            <Route path='/detail/edit/:id' element={<EditDetail />} />
 
-        {/* Products routes */}
-        <Route path='/products' element={<Products />} />
-        <Route path='/products/bulk-upload' element={<BulkAddProducts />} />
-        <Route path='/product/new' element={<AddProduct />} />
-        <Route path='/product/edit/:productId' element={<EditProduct />} />
-
-        {/* Brand routes */}
-        <Route path='/brands' element={<Brands />} />
-        <Route path='/brand/new' element={<AddBrand />} />
-        <Route path='/brand/edit/:brandId' element={<EditBrand />} />
+            {/* Products routes */}
+            <Route path='/brands' element={<Brands />} />
+            <Route path='/products' element={<Products />} />
+            <Route path='/products/bulk-upload' element={<BulkAddProducts />} />
+            <Route path='/product/new' element={<AddProduct />} />
+            <Route path='/product/edit/:productId' element={<EditProduct />} />
+          </Route>
+        </Route>
       </Route>
 
       {/* Route Not found page */}

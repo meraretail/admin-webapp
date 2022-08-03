@@ -22,7 +22,7 @@ const UpdateBrand = ({ brand, setResSuccess, setResMessage }) => {
     setNewBrand(brand.name);
   }, [brand]);
 
-  // Step 2: Search similar brands using useEffect with 1 sec delay
+  // Step 2: Search similar brands using useEffect with 200ms delay
   useEffect(() => {
     if (newBrand === '' || newBrand === brand.name) {
       setSimilarBrands([]);
@@ -32,7 +32,7 @@ const UpdateBrand = ({ brand, setResSuccess, setResMessage }) => {
     const delayedResponse = setTimeout(async () => {
       const response = await showSimilarBrands(newBrand);
       setSimilarBrands(response.data.brands);
-    }, 1000);
+    }, 200);
 
     return () => clearTimeout(delayedResponse);
   }, [newBrand, brand]);

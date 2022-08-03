@@ -3,8 +3,8 @@ export const varTableItems = [
   { label: 'Variation', jsonKey: 'name' },
   { label: 'Options', jsonKey: 'variationOptions' },
   {
-    label: 'Image Changes',
-    jsonKey: 'variesImage',
+    label: 'Creates Product Option',
+    jsonKey: 'variesProductOption',
     type: 'boolean',
     center: true,
   },
@@ -16,8 +16,8 @@ export const varOptTableItems = [
   { label: 'Value', jsonKey: 'value' },
   { label: 'Variation', jsonKey: 'variation' },
   {
-    label: 'Image Changes',
-    jsonKey: 'variesImage',
+    label: 'Creates Product Option',
+    jsonKey: 'variesProductOption',
     type: 'boolean',
     center: true,
   },

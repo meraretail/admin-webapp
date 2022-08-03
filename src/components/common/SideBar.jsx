@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import useAuth from '../../hooks/useAuth';
+import useLogout from '../../hooks/useLogout';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import { Link, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout, reset } from '../../redux/slices/auth.slice';
+import avatar from '../../assets/avatar.png';
 import { sidebarItems } from '../../listItems/common/sidebarItems';
 import { MdOutlineLogout } from 'react-icons/md';
 
-const SideBar = ({ className }) => {
+const Sidebar = ({ className }) => {
+  const { auth } = useAuth();
+  const logout = useLogout();
+
   const location = useLocation();
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const [activeMenu, setActiveMenu] = useState();
 
@@ -27,9 +30,9 @@ const SideBar = ({ className }) => {
     });
   }, [location.pathname]);
 
-  const logoutHandler = () => {
-    dispatch(logout());
-    dispatch(reset());
+  const logoutHandler = async () => {
+    await logout();
+    navigate('/login');
   };
 
   return (
@@ -94,16 +97,16 @@ const SideBar = ({ className }) => {
       {/* menu section ends */}
       {/* bottom section */}
       <div className='border-t absolute bottom-0 left-3 pb-4'>
-        {user && (
+        {auth?.user && (
           <div className='mt-2'>
             <div className='flex items-center gap-2'>
               <img
-                src={user.avatar}
+                src={auth?.user?.avatar || avatar}
                 alt='avatar'
                 className='w-10 h-10 rounded-full'
               />
 
-              <h4 className='m-0'>Welcome, {user.name}</h4>
+              <h4 className='m-0'>Welcome, {auth?.user?.firstName}</h4>
             </div>
             <div>
               <button
@@ -125,4 +128,4 @@ const SideBar = ({ className }) => {
   );
 };
 
-export default SideBar;
+export default Sidebar;
