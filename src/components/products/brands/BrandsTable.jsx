@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import SearchNDateOptions from '../../tableComponents/SearchNDateOptions';
 import PopularFilters from '../../tableComponents/PopularFilters';
 import TableComponent from '../../tableComponents/TableComponent';
@@ -7,7 +8,6 @@ import {
   brandPopularFilters,
   brandTableItems,
 } from '../../../listItems/productItems/brandTableItems';
-import { adminAllBrandsSummary } from '../../../apis/products.apis';
 
 const BrandsTable = ({
   setResSuccess,
@@ -15,6 +15,8 @@ const BrandsTable = ({
   rerender,
   handleEditBrand,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [brands, setBrands] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [size, setSize] = useState(10);
@@ -23,24 +25,44 @@ const BrandsTable = ({
 
   const [loading, setLoading] = useState(false);
 
+  // Step 1: get all brands summary on page load
   useEffect(() => {
-    setLoading(true);
-    const delayedResponse = setTimeout(async () => {
-      adminAllBrandsSummary(page, size, searchText)
-        .then((response) => {
-          const { totalBrands, brands } = response.data;
-          setBrands(brands);
-          setRowCount(totalBrands);
-        })
-        .catch((error) => {
-          setResSuccess(error.data.success);
-          setResMessage(error.data.message);
-        });
-    }, 200);
-    setLoading(false);
+    let isMounted = true;
+    const getAllBrandsSummary = async () => {
+      setLoading(true);
+      try {
+        const response = await axiosPrivate.get(
+          '/api/product/get-brands-summary',
+          {
+            params: {
+              page: page,
+              size: size,
+              search: searchText,
+            },
+          }
+        );
+        isMounted && setBrands(response.data.brands);
+        isMounted && setRowCount(response.data.totalBrands);
+      } catch (error) {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
+      setLoading(false);
+    };
+    getAllBrandsSummary();
 
-    return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, setResMessage, setResSuccess, rerender]);
+    return () => {
+      isMounted = false;
+    };
+  }, [
+    axiosPrivate,
+    page,
+    size,
+    searchText,
+    setResMessage,
+    setResSuccess,
+    rerender,
+  ]);
 
   return (
     <div className='overflow-y-visible'>

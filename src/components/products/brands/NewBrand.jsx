@@ -1,36 +1,26 @@
 import { useEffect, useState } from 'react';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import Button from '../../formComponents/Button';
 import FormInput from '../../formComponents/FormInput';
 import LoadingButton from '../../formComponents/LoadingButton';
 import SimilarNames from '../../common/SimilarNames';
 import Dropdown from '../../common/Dropdown';
-import {
-  showSimilarBrands,
-  adminCreateBrand,
-  listBrandTypes,
-} from '../../../apis/products.apis';
 
-const NewBrand = ({ setResSuccess, setResMessage }) => {
+const NewBrand = ({
+  setResSuccess,
+  setResMessage,
+  rerender,
+  setRerender,
+  brandTypesList,
+}) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [loading, setLoading] = useState(false);
-  const [brand, setBrand] = useState('');
   const [similarBrands, setSimilarBrands] = useState([]);
-
-  const [brandTypesList, setBrandTypesList] = useState([]);
+  const [brand, setBrand] = useState('');
   const [selectedBrandType, setSelectedBrandType] = useState(null);
 
-  // Step 1: Get list of brand types from server
-  useEffect(() => {
-    listBrandTypes()
-      .then((response) => {
-        setBrandTypesList(response.data.brandTypes);
-      })
-      .catch((error) => {
-        setResSuccess(error.response.data.success);
-        setResMessage(error.response.data.message);
-      });
-  }, [setResMessage, setResSuccess]);
-
-  // Step 1: Search similar brands using useEffect with 200ms delay
+  // Step 1: Upon typing a new brand name, search similar brands with 200ms delay
   useEffect(() => {
     if (brand === '') {
       setSimilarBrands([]);
@@ -38,24 +28,42 @@ const NewBrand = ({ setResSuccess, setResMessage }) => {
     }
 
     const delayedResponse = setTimeout(async () => {
-      const response = await showSimilarBrands(brand);
+      const response = await axiosPrivate.post(
+        '/api/product/show-similar-brands',
+        JSON.stringify({ name: brand })
+      );
       setSimilarBrands(response.data.brands);
     }, 200);
 
     return () => clearTimeout(delayedResponse);
-  }, [brand]);
+  }, [axiosPrivate, brand]);
 
-  // step 2: Add new brand
+  // Step 2: Add a new brand
   const handleAddBrand = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const { data } = await adminCreateBrand(brand);
-    setLoading(false);
-    setResSuccess(data.success);
-    setResMessage(data.message);
-    if (data.success) {
-      setBrand('');
+
+    try {
+      const response = await axiosPrivate.post(
+        '/api/product/add-brand',
+        JSON.stringify({
+          name: brand,
+          brandTypeId: selectedBrandType.id,
+        })
+      );
+      const { success, message } = response.data;
+      setResSuccess(success);
+      setResMessage(message);
+      if (success) {
+        setBrand('');
+        setRerender(!rerender);
+      }
+    } catch (error) {
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -69,8 +77,8 @@ const NewBrand = ({ setResSuccess, setResMessage }) => {
           id='brand'
           type='text'
           placeholder='Enter brand name'
-          value={brand ? brand.name : ''}
-          onChange={(event) => setBrand({ ...brand, name: event.target.value })}
+          value={brand}
+          onChange={(event) => setBrand(event.target.value)}
         />
         <Dropdown
           list={brandTypesList}

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import PageTitle from '../../components/common/PageTitle';
 import SuccErrMsg from '../../components/common/SuccErrMsg';
 import ItemContainer from '../../components/common/ItemContainer';
@@ -13,9 +14,35 @@ const Brands = () => {
   const [resMessage, setResMessage] = useState('');
   const [rerender, setRerender] = useState(false);
   const [editVisible, setEditVisible] = useState(false);
-  const [editBrand, setEditBrand] = useState('');
+  const [editBrandId, setEditBrandId] = useState('');
+
+  // Get list of brandTypes from server
+  const axiosPrivate = useAxiosPrivate();
+  const [brandTypesList, setBrandTypesList] = useState([]);
+  // Step 1: Get list of brand types from server
+  useEffect(() => {
+    let isMounted = true;
+    const getAllBrandTypes = async () => {
+      try {
+        const response = await axiosPrivate.get(
+          '/api/product/list-brand-types'
+        );
+        isMounted && setBrandTypesList(response.data.brandTypes);
+      } catch (error) {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
+    };
+
+    getAllBrandTypes();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [axiosPrivate, setResMessage, setResSuccess]);
 
   const handleEditBrand = async (id) => {
+    setEditBrandId(id);
     setEditVisible(true);
   };
 
@@ -36,6 +63,7 @@ const Brands = () => {
             setResMessage={setResMessage}
             setRerender={setRerender}
             rerender={rerender}
+            brandTypesList={brandTypesList}
           />
         </ItemContainer>
 
@@ -49,11 +77,16 @@ const Brands = () => {
         </ItemContainer>
 
         {editVisible && (
-          <ItemContainer title='Edit brand'>
+          <ItemContainer title={`Edit brand for brand id: ${editBrandId}`}>
             <UpdateBrand
-              brand={editBrand}
+              brandId={editBrandId}
               setResSuccess={setResSuccess}
               setResMessage={setResMessage}
+              setRerender={setRerender}
+              rerender={rerender}
+              brandTypesList={brandTypesList}
+              editVisible={editVisible}
+              setEditVisible={setEditVisible}
             />
           </ItemContainer>
         )}

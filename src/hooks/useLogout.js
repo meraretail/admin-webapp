@@ -7,7 +7,7 @@ const useLogout = () => {
   const logout = async () => {
     setAuth({});
     try {
-      const response = await logoutUser();
+      await logoutUser();
     } catch (error) {
       console.log(error);
     }

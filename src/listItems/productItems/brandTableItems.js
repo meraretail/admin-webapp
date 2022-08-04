@@ -10,5 +10,6 @@ export const brandPopularFilters = [
 export const brandTableItems = [
   { label: 'Id', jsonKey: 'id' },
   { label: 'Brand name', jsonKey: 'name' },
-  { label: '# products', jsonKey: 'numOfProducts' },
+  { label: 'Brand type', jsonKey: 'brandType' },
+  { label: '# products', jsonKey: 'products' },
 ];
