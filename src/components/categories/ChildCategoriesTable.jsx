@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import SearchNDateOptions from '../tableComponents/SearchNDateOptions';
 import PopularFilters from '../tableComponents/PopularFilters';
 import TableComponent from '../tableComponents/TableComponent';
 import SizePageOptions from '../tableComponents/SizePageOptions';
-
-import { adminAllChildCategoriesSummary } from '../../apis/childcategories.apis';
-
 import {
   catPopularFilters,
   childCatTableItems,
@@ -18,6 +16,9 @@ const ChildCategoriesTable = ({
   subCategoryId,
   rerender,
 }) => {
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+
   const [childCategories, setChildCategories] = useState([]);
   const [size, setSize] = useState(10);
   const [page, setPage] = useState(0);
@@ -26,38 +27,49 @@ const ChildCategoriesTable = ({
 
   const [loading, setLoading] = useState(false);
 
-  let navigate = useNavigate();
-
-  // useEffect(() => {
-  //   setLoading(true);
-  // }, []);
-
+  // Get all categories summary on page load with 500ms lag
+  // 500ms is most optimum time considering typing speed
   useEffect(() => {
-    const delayedResponse = setTimeout(async () => {
+    let isMounted = true;
+    const subCategoryId = null;
+    const getAllSubCategoriesSummary = async () => {
       setLoading(true);
-      adminAllChildCategoriesSummary(page, size, searchText, subCategoryId)
-        .then((response) => {
-          // console.log(response.data);
-          const { totalChildCategories, childCategories } = response.data;
-          setChildCategories(childCategories);
-          setRowCount(totalChildCategories);
-        })
-        .catch((error) => {
-          setResSuccess(error.data.success);
-          setResMessage(error.data.message);
-        });
+      try {
+        const response = await axiosPrivate.get(
+          `/api/product/admin/all-childcategories-summary/${subCategoryId}`,
+          {
+            params: {
+              page: page,
+              size: size,
+              search: searchText,
+            },
+          }
+        );
+        isMounted && setChildCategories(response.data.childCategories);
+        isMounted && setRowCount(response.data.totalChildCategories);
+      } catch (error) {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
       setLoading(false);
-    }, 100);
+    };
 
-    return () => clearTimeout(delayedResponse);
+    const delayedResponse = setTimeout(async () => {
+      await getAllSubCategoriesSummary();
+    }, 500);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(delayedResponse);
+    };
   }, [
+    axiosPrivate,
     page,
-    searchText,
     size,
     setResMessage,
     setResSuccess,
-    subCategoryId,
     rerender,
+    searchText,
   ]);
 
   const handleEditChildCategory = (id) => {

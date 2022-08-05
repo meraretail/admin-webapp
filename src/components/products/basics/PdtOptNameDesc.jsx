@@ -3,7 +3,6 @@ import Dropdown from '../../common/Dropdown';
 import Button from '../../formComponents/Button';
 import FormInput from '../../formComponents/FormInput';
 import LoadingButton from '../../formComponents/LoadingButton';
-import RichEditorSmall from '../../formComponents/RichEditorSmall';
 import SimilarProducts from './SimilarProducts';
 
 const PdtOptNameDesc = ({
@@ -129,7 +128,8 @@ const PdtOptNameDesc = ({
           name={name ? name : ''}
           orgName={product ? product.name : ''}
         />
-        <RichEditorSmall
+        <input
+          type='text'
           value={description ? description : ''}
           setValue={setDescription}
           placeholder='Describe this product option in 2-3 lines'

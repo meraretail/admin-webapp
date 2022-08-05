@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import SuccErrMsg from '../../components/common/SuccErrMsg';
 import SubCategoriesTable from '../../components/categories/SubCategoriesTable';
 import PageTitle from '../../components/common/PageTitle';
@@ -7,10 +8,11 @@ import ItemContainer from '../../components/common/ItemContainer';
 import EditCategoryImage from '../../components/categories/EditCategoryImage';
 import NewSubCategory from '../../components/categories/NewSubCategory';
 import EditCatName from '../../components/categories/EditCatName';
-import { adminGetCategoryNameById } from '../../apis/categories.apis';
 
 const EditCategory = () => {
   const { categoryId } = useParams();
+  const axiosPrivate = useAxiosPrivate();
+
   const [orgName, setOrgName] = useState(''); // original category name
   const [category, setCategory] = useState({}); // category object
 
@@ -19,20 +21,29 @@ const EditCategory = () => {
   const [resMessage, setResMessage] = useState('');
   const [rerender, setRerender] = useState(false);
 
-  // Step 1: get category by id
+  // Step 1: get category details by id
   useEffect(() => {
-    setLoading(true);
-    adminGetCategoryNameById(categoryId)
-      .then((res) => {
-        setCategory(res.data.category);
-        setOrgName(res.data.category.name);
-      })
-      .catch((err) => {
-        setResSuccess(err.data.success);
-        setResMessage(err.data.message);
-      });
-    setLoading(false);
-  }, [categoryId]);
+    let isMounted = true;
+    const getCategory = async () => {
+      setResMessage('');
+      setLoading(true);
+      try {
+        const response = await axiosPrivate.get(
+          `/api/product/admin/category-name/${categoryId}`
+        );
+        isMounted && setCategory(response.data.category);
+        isMounted && setOrgName(response.data.category.name);
+      } catch (error) {
+        isMounted && setResSuccess(error.response.data.success);
+        isMounted && setResMessage(error.response.data.message);
+      }
+      setLoading(false);
+    };
+    getCategory();
+    return () => {
+      isMounted = false;
+    };
+  }, [axiosPrivate, categoryId]);
 
   return (
     <div>
@@ -46,11 +57,7 @@ const EditCategory = () => {
       {/* page header ends */}
       <div className='px-4 mt-[5.5rem] mb-10 space-y-8'>
         {/* success / error message zone */}
-        <SuccErrMsg
-          resMessage={resMessage}
-          resSuccess={resSuccess}
-          showSuccess={true}
-        />
+        <SuccErrMsg resMessage={resMessage} resSuccess={resSuccess} />
         {/* success / error message zone ends */}
 
         {/* Category name update forms start */}
@@ -93,7 +100,7 @@ const EditCategory = () => {
         {/* sub categories list */}
         <ItemContainer title='Sub categories list for the category'>
           <SubCategoriesTable
-            categoryId={category ? category.id : ''}
+            categoryId={categoryId}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
             rerender={rerender}

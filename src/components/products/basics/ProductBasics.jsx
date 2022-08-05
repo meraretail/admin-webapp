@@ -1,6 +1,5 @@
 import React from 'react';
 import FormInput from '../../formComponents/FormInput';
-import RichEditorSmall from '../../formComponents/RichEditorSmall';
 import SimilarProducts from './SimilarProducts';
 
 const ProductBasics = ({
@@ -11,17 +10,17 @@ const ProductBasics = ({
   setDescription,
 }) => {
   return (
-    <div className="space-y-4">
-      <h4 className="text-sm font-semibold text-gray-600">
+    <div className='space-y-4'>
+      <h4 className='text-sm font-semibold text-gray-600'>
         {product
           ? 'Update product name and description'
           : 'Add your product name and description and click save'}
       </h4>
       <FormInput
-        label="Product name"
-        id="product"
-        type="text"
-        placeholder="Enter product name"
+        label='Product name'
+        id='product'
+        type='text'
+        placeholder='Enter product name'
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
@@ -29,10 +28,11 @@ const ProductBasics = ({
         name={name ? name : ''}
         orgName={product ? product.name : ''}
       />
-      <RichEditorSmall
+      <input
+        type='text'
         value={description ? description : ''}
         setValue={setDescription}
-        placeholder="Describe your product in 2-3 lines"
+        placeholder='Describe this product option in 2-3 lines'
       />
     </div>
   );

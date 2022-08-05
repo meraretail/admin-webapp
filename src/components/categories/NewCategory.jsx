@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import {
-  adminCreateCategory,
-  showSimilarCategories,
-} from '../../apis/categories.apis';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { showSimilarCategories } from '../../apis/categories.apis';
 import ItemContainer from '../common/ItemContainer';
 import Button from '../formComponents/Button';
 import FormInput from '../formComponents/FormInput';
@@ -15,6 +13,8 @@ const NewCategory = ({
   rerender,
   setRerender,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [loading, setLoading] = useState(false);
   const [similarCategories, setSimilarCategories] = useState([]);
   const [category, setCategory] = useState('');
@@ -42,15 +42,25 @@ const NewCategory = ({
       return;
     }
     setLoading(true);
-    const { data } = await adminCreateCategory(category);
-    setLoading(false);
-    setResSuccess(data.success);
-    setResMessage(data.message);
+    try {
+      const response = await axiosPrivate.post(
+        '/api/product/admin/create-category',
+        JSON.stringify({
+          name: category,
+        })
+      );
 
-    if (data.success) {
-      setCategory('');
-      setRerender(!rerender);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        setCategory('');
+        setRerender(!rerender);
+      }
+    } catch (error) {
+      setResSuccess(false);
+      setResMessage(error.message);
     }
+    setLoading(false);
   };
 
   return (

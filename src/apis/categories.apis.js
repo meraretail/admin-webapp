@@ -1,12 +1,12 @@
 import { axiosClient } from './axios-client';
 
-// ADMIN ONLY
-// 1.1 POST '/admin/show-similar-categories' - similar categories while typing a new category name
+// LOGIN NOT NEEDED
+// 1.1 POST '/show-similar-categories' - similar categories while typing a new category name
 export const showSimilarCategories = async (name) => {
   try {
     const response = await axiosClient({
       method: 'post',
-      url: '/api/product/admin/show-similar-categories',
+      url: '/api/product/show-similar-categories',
       data: { name: name },
     });
     return response;

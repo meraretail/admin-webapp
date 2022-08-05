@@ -9,23 +9,21 @@ export const catPopularFilters = [
   { id: 6, text: 'Custom range', fromDate: '', toDate: '' },
 ];
 
-export const catTableHeaders = [
-  'id',
-  'Category name',
-  '# of Subcategories',
-  '# of Child Categories',
-  '# of Products',
-  'Actions',
+export const categoryTableItems = [
+  { label: 'Id', jsonKey: 'id' },
+  { label: 'Category', jsonKey: 'name' },
+  { label: '# Subcategories', jsonKey: 'subCategories' },
+  { label: '# Childcategories', jsonKey: 'childCategories' },
+  { label: '# Products', jsonKey: 'products' },
 ];
 
 /************ 2. SUB CATEGORY ITEMS *************/
-export const subCatTableHeaders = [
-  'id',
-  'Sub-category',
-  'Category',
-  '# Child categories',
-  '# Products',
-  'Actions',
+export const subCategoryTableItems = [
+  { label: 'Id', jsonKey: 'id' },
+  { label: 'Sub Category', jsonKey: 'name' },
+  { label: 'Category', jsonKey: 'category' },
+  { label: '# Childcategories', jsonKey: 'childCategories' },
+  { label: '# Products', jsonKey: 'products' },
 ];
 
 /************ 3. CATEGORY ITEMS *************/

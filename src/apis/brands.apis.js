@@ -1,6 +1,6 @@
 import { axiosClient } from './axios-client';
 
-// ADMIN or SELLER ONLY
+// LOGIN NOT NEEDED
 // 1. POST '/show-similar-brands' - similar brands while typing a new brand name
 export const showSimilarBrands = async (name) => {
   try {
