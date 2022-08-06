@@ -76,7 +76,7 @@ const VarOptionTable = ({
     try {
       const response = await axiosPrivate({
         method: 'delete',
-        url: `/api/product/admin/delete-variation/${varOptId}`,
+        url: `/api/product/admin/delete-variation-option/${varOptId}`,
       });
       setLoading(false);
       setResSuccess(response.data.success);

@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { MdOutlineAddChart } from 'react-icons/md';
 import PageTitle from '../../../components/common/PageTitle';
 import FeatureTable from '../../../components/categories/features/FeatureTable';
 import SuccErrMsg from '../../../components/common/SuccErrMsg';
 import MainContainer from '../../../components/common/MainContainer';
+import AddUpdateFeature from '../../../components/categories/features/AddUpdateFeature';
+import ItemContainer from '../../../components/common/ItemContainer';
 
 const Features = () => {
+  const [loading, setLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
   const [rerender, setRerender] = useState(false);
@@ -14,10 +16,8 @@ const Features = () => {
     <div>
       <PageTitle
         title='Features'
-        btnLink='/feature/new'
-        btnIcon={<MdOutlineAddChart />}
-        btnText='Add new feature and options'
-        type='positive'
+        btnText='Back to previous page'
+        type='negative'
       />
       <MainContainer>
         {/* success / error message zone */}
@@ -25,12 +25,25 @@ const Features = () => {
         {/* success / error message zone ends */}
         {/* main content starts */}
         <div className='mt-6 space-y-8'>
-          <FeatureTable
+          <AddUpdateFeature
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
             rerender={rerender}
             setRerender={setRerender}
           />
+
+          <ItemContainer title='All Features summary'>
+            <FeatureTable
+              loading={loading}
+              setLoading={setLoading}
+              setResSuccess={setResSuccess}
+              setResMessage={setResMessage}
+              rerender={rerender}
+              setRerender={setRerender}
+            />
+          </ItemContainer>
         </div>
         {/* main content ends */}
       </MainContainer>

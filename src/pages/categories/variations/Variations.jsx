@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PageTitle from '../../../components/common/PageTitle';
 import SuccErrMsg from '../../../components/common/SuccErrMsg';
-import { MdOutlineAddChart } from 'react-icons/md';
 import MainContainer from '../../../components/common/MainContainer';
 import VariationTable from '../../../components/categories/variations/VariationTable';
 import AddUpdateVariation from '../../../components/categories/variations/AddUpdateVariation';
+import ItemContainer from '../../../components/common/ItemContainer';
 
 const Variations = () => {
   const [loading, setLoading] = useState(false);
@@ -16,10 +16,8 @@ const Variations = () => {
     <div>
       <PageTitle
         title='Variations'
-        btnLink='/variation/new'
-        btnIcon={<MdOutlineAddChart />}
-        btnText='Add new variation and options'
-        type='positive'
+        btnText='Back to previous page'
+        type='negative'
       />
       <MainContainer>
         {/* success / error message zone */}
@@ -36,14 +34,16 @@ const Variations = () => {
             setRerender={setRerender}
           />
 
-          <VariationTable
-            loading={loading}
-            setLoading={setLoading}
-            setResSuccess={setResSuccess}
-            setResMessage={setResMessage}
-            rerender={rerender}
-            setRerender={setRerender}
-          />
+          <ItemContainer title='All Variations summary'>
+            <VariationTable
+              loading={loading}
+              setLoading={setLoading}
+              setResSuccess={setResSuccess}
+              setResMessage={setResMessage}
+              rerender={rerender}
+              setRerender={setRerender}
+            />
+          </ItemContainer>
         </div>
         {/* main content ends */}
       </MainContainer>

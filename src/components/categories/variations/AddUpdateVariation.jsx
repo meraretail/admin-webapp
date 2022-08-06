@@ -78,6 +78,9 @@ const AddUpdateVariation = ({
       setLoading(false);
       setResSuccess(response.data.success);
       setResMessage(response.data.message);
+      if (response.data.success) {
+        setRerender(!rerender);
+      }
     } catch (error) {
       setLoading(false);
       setResSuccess(error.response.data.success);
@@ -99,6 +102,9 @@ const AddUpdateVariation = ({
       setLoading(false);
       setResSuccess(response.data.success);
       setResMessage(response.data.message);
+      if (response.data.success) {
+        setRerender(!rerender);
+      }
     } catch (error) {
       setLoading(false);
       setResSuccess(error.response.data.success);

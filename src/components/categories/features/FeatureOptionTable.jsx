@@ -1,65 +1,94 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import ItemContainer from '../../common/ItemContainer';
 import TableSearchInput from '../../tableComponents/TableSearchInput';
 import TableComponent from '../../tableComponents/TableComponent';
 import SizePageOptions from '../../tableComponents/SizePageOptions';
 import { featOptTableItems } from '../../../listItems/categoryItems/attributeTableItems';
-import {
-  adminDeleteFeatureOptionById,
-  adminAllFeatureOptionsSummary,
-} from '../../../apis/features.apis';
 
 const FeatureOptionTable = ({
-  id,
-  setResStatus,
+  featureId,
+  loading,
+  setLoading,
+  setResSuccess,
   setResMessage,
   rerender,
   setRerender,
+  handleEditFeatureOption,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [featOptions, setFeatOptions] = useState([]);
   const [size, setSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
   const [searchText, setSearchText] = useState('');
 
-  const [loading, setLoading] = useState(false);
-
-  let navigate = useNavigate();
-
+  // Get all variation options summary on page load with 500ms lag
+  // 500ms is most optimum time considering typing speed
   useEffect(() => {
+    let isMounted = true;
+    const getAllFeatureOptionsSummary = async () => {
+      setLoading(true);
+      try {
+        const response = await axiosPrivate({
+          method: 'get',
+          url: `/api/product/admin/all-feature-options-summary-for-feature/${featureId}`,
+          params: {
+            page: page,
+            size: size,
+            search: searchText,
+          },
+        });
+
+        // console.log('response', response);
+        isMounted && setFeatOptions(response.data.featureOptions);
+        isMounted && setRowCount(response.data.totalfeatureOptions);
+        isMounted && setResSuccess(response.data.success);
+        isMounted && setResMessage(response.data.message);
+      } catch (error) {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
+      setLoading(false);
+    };
+
     const delayedResponse = setTimeout(async () => {
-      adminAllFeatureOptionsSummary(page, size, searchText, id)
-        .then((response) => {
-          setLoading(true);
-          const { data, statusText } = response;
-          const { totalFeatOptions, featOptions } = data;
-          setFeatOptions(featOptions);
-          setRowCount(totalFeatOptions);
-          setResStatus(statusText);
-          setResMessage(data.message);
-          setLoading(false);
-        })
-        .catch((error) => setResMessage(error));
-    }, 200);
+      await getAllFeatureOptionsSummary();
+    }, 500);
 
-    return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, setResStatus, setResMessage, rerender, id]);
+    return () => {
+      isMounted = false;
+      clearTimeout(delayedResponse);
+    };
+  }, [
+    axiosPrivate,
+    featureId,
+    page,
+    size,
+    searchText,
+    setLoading,
+    setResMessage,
+    setResSuccess,
+    rerender,
+  ]);
 
-  const handleEditFeatureOption = (id) => {
-    navigate(`/feature-option/edit/${id}`);
-  };
-
-  const handleDeleteFeatureOption = async (id) => {
+  const handleDeleteFeatureOption = async (featOptId) => {
     setLoading(true);
-    const response = await adminDeleteFeatureOptionById(id);
-    const { data, statusText } = response;
-    setLoading(false);
-    if (statusText === 'OK') {
+    try {
+      const response = await axiosPrivate({
+        method: 'delete',
+        url: `/api/product/admin/delete-feature-option/${featOptId}`,
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
       setRerender(!rerender);
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
-    setResStatus(statusText);
-    setResMessage(data.message);
   };
 
   return (

@@ -6,18 +6,22 @@ import Button from '../../formComponents/Button';
 import ColorInput from '../../formComponents/ColorInput';
 import FormInput from '../../formComponents/FormInput';
 import LoadingButton from '../../formComponents/LoadingButton';
+import Dropdown from '../../common/Dropdown';
 import { listAllVariations } from '../../../apis/product.apis';
 import { showSimilarVariationOptions } from '../../../apis/product.apis';
-import Dropdown from '../../common/Dropdown';
+import { FaRegTimesCircle } from 'react-icons/fa';
 
-const NewVariationOption = ({
+const AddUpdateVariationOption = ({
   variationId,
+  varOptionId,
   loading,
   setLoading,
   setResSuccess,
   setResMessage,
   rerender,
   setRerender,
+  editVarOptVisible,
+  setEditVarOptVisible,
 }) => {
   const axiosPrivate = useAxiosPrivate();
 
@@ -30,6 +34,16 @@ const NewVariationOption = ({
   // console.log('variationId: ', variationId);
   // console.log('variationList: ', variationList);
   // console.log('selectedVariation: ', selectedVariation);
+
+  // Step 0. Scroll to bottom of page smoothly on page load
+  useEffect(() => {
+    if (editVarOptVisible) {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [editVarOptVisible]);
 
   // Step 1: Get all variations list
   useEffect(() => {
@@ -54,14 +68,21 @@ const NewVariationOption = ({
     }
   }, [variationId, variationList]);
 
-  // Step 3: If selected variation is color, set varOptionValue to #ffffff
+  // Step 3: set varOptionName and varOptionValue from varOptionId
+  // Else, If selected variation is color, set varOptionValue to #ffffff
   useEffect(() => {
-    if (selectedVariation && selectedVariation.name === 'Color') {
+    if (varOptionId) {
+      const varOption = selectedVariation?.variation_options?.find(
+        (option) => option.id === parseInt(varOptionId)
+      );
+      setVarOptionName(varOption?.name);
+      setVarOptionValue(varOption?.value);
+    } else if (selectedVariation && selectedVariation.name === 'Color') {
       setVarOptionValue('#ffffff');
     }
-  }, [selectedVariation]);
+  }, [selectedVariation, varOptionId]);
 
-  // Step 2: Search similar var options using useEffect with 200 mili sec delay
+  // Step 4: Search similar var options using useEffect with 500 mili sec delay
   useEffect(() => {
     if (varOptionName === '') {
       setSimilarVarOptions([]);
@@ -70,12 +91,12 @@ const NewVariationOption = ({
     const delayedResponse = setTimeout(async () => {
       const response = await showSimilarVariationOptions(varOptionName);
       setSimilarVarOptions(response.data.variationOptions);
-    }, 200);
+    }, 500);
 
     return () => clearTimeout(delayedResponse);
   }, [varOptionName]);
 
-  // Step 3: handle add variation option
+  // Step 5.1: handle add variation option
   const handleAddVarOption = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -100,10 +121,55 @@ const NewVariationOption = ({
     }
   };
 
+  // Step 5.2: update variation option
+  const handleUpdateVarOption = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await axiosPrivate({
+        method: 'put',
+        url: `/api/product/admin/update-variation-option/${selectedVariation?.id}/${varOptionId}`,
+        data: { name: varOptionName, value: varOptionValue },
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        setSimilarVarOptions([]);
+        setRerender(!rerender);
+        setEditVarOptVisible(!editVarOptVisible);
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.data.success);
+      setResMessage(error.data.message);
+    }
+  };
+
   return (
-    <ItemContainer title='Add new variation option'>
-      <div className='space-y-4 mt-2'>
-        <form onSubmit={handleAddVarOption}>
+    <ItemContainer
+      title={
+        varOptionId ? 'Update variation option' : 'Add new variation option'
+      }
+    >
+      <div className='space-y-4 mt-2 relative'>
+        {/* close button */}
+        {editVarOptVisible && (
+          <div className='absolute -top-12 -right-2 bg-white z-20'>
+            <button
+              className='bg-transparent border-0 text-red-500 opacity-80 hover:opacity-70 p-2 rounded-full'
+              onClick={() => setEditVarOptVisible(!editVarOptVisible)}
+            >
+              <FaRegTimesCircle className='scale-125' />
+            </button>
+          </div>
+        )}
+
+        {/* variation option form */}
+        <form
+          onSubmit={varOptionId ? handleUpdateVarOption : handleAddVarOption}
+        >
           <div className='grid md:grid-cols-2 gap-4 items-center'>
             <span className='text-sm font-semibold mb-2 text-gray-600'>
               Choose variation to add options
@@ -112,7 +178,7 @@ const NewVariationOption = ({
             <Dropdown
               list={variationList}
               placeholder='Search variations'
-              value={selectedVariation ? selectedVariation.name : ''}
+              value={selectedVariation?.name || ''}
               setSelectedItem={setSelectedVariation}
             />
 
@@ -145,8 +211,10 @@ const NewVariationOption = ({
             {loading ? (
               <LoadingButton />
             ) : (
-              <Button className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100'>
-                Create new variation option
+              <Button className='opacity-70 bg-violet-50 text-violet-700 border border-violet-700 hover:bg-violet-100 h-full'>
+                {varOptionId
+                  ? 'Update variation option'
+                  : 'Create new variation option'}
               </Button>
             )}
           </div>
@@ -160,4 +228,4 @@ const NewVariationOption = ({
   );
 };
 
-export default NewVariationOption;
+export default AddUpdateVariationOption;

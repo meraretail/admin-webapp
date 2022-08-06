@@ -24,7 +24,7 @@ const VariationTable = ({
   const [rowCount, setRowCount] = useState(0);
   const [searchText, setSearchText] = useState('');
 
-  // Get all categories summary on page load with 500ms lag
+  // Get all variations summary on page load with 500ms lag
   // 500ms is most optimum time considering typing speed
   useEffect(() => {
     let isMounted = true;
@@ -32,7 +32,7 @@ const VariationTable = ({
       setLoading(true);
       try {
         const response = await axiosPrivate.get(
-          `/api/product/admin/all-variations-summary/${childCategoryId}`,
+          '/api/product/admin/all-variations-summary',
           {
             params: {
               page: page,
@@ -61,7 +61,6 @@ const VariationTable = ({
     };
   }, [
     axiosPrivate,
-    childCategoryId,
     page,
     searchText,
     setLoading,

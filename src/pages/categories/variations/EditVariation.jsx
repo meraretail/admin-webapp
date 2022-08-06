@@ -3,10 +3,9 @@ import { useParams } from 'react-router-dom';
 import PageTitle from '../../../components/common/PageTitle';
 import MainContainer from '../../../components/common/MainContainer';
 import SuccErrMsg from '../../../components/common/SuccErrMsg';
-import NewVariationOption from '../../../components/categories/variations/NewVariationOption';
 import VarOptionTable from '../../../components/categories/variations/VarOptionTable';
 import AddUpdateVariation from '../../../components/categories/variations/AddUpdateVariation';
-import UpdateVariationOption from '../../../components/categories/variations/UpdateVariationOption';
+import AddUpdateVariationOption from '../../../components/categories/variations/AddUpdateVariationOption';
 
 const EditVariation = () => {
   const { id } = useParams();
@@ -47,8 +46,10 @@ const EditVariation = () => {
             setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
+            rerender={rerender}
+            setRerender={setRerender}
           />
-          <NewVariationOption
+          <AddUpdateVariationOption
             variationId={id}
             loading={loading}
             setLoading={setLoading}
@@ -69,7 +70,7 @@ const EditVariation = () => {
           />
 
           {editVarOptVisible && (
-            <UpdateVariationOption
+            <AddUpdateVariationOption
               variationId={id}
               varOptionId={varOptionId}
               loading={loading}

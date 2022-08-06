@@ -30,13 +30,9 @@ import EditChildCategory from './pages/categories/EditChildCategory';
 
 // Category Attributes Pages
 import Variations from './pages/categories/variations/Variations';
-import AddVariation from './pages/categories/variations/AddVariation';
 import EditVariation from './pages/categories/variations/EditVariation';
-import EditVarOption from './pages/categories/variations/EditVarOption';
 import Features from './pages/categories/features/Features';
-import AddFeature from './pages/categories/features/AddFeature';
 import EditFeature from './pages/categories/features/EditFeature';
-import EditFeatOption from './pages/categories/features/EditFeatOption';
 import Details from './pages/categories/details/Details';
 import AddDetail from './pages/categories/details/AddDetail';
 import EditDetail from './pages/categories/details/EditDetail';
@@ -89,21 +85,11 @@ function App() {
             {/* Variations, Features and Details routes */}
             {/* Variation pages */}
             <Route path='/variations' element={<Variations />} />
-            <Route path='/variation/new' element={<AddVariation />} />
             <Route path='/variation/edit/:id' element={<EditVariation />} />
-            <Route
-              path='/variation-option/edit/:id'
-              element={<EditVarOption />}
-            />
 
             {/* Features pages */}
             <Route path='/features' element={<Features />} />
-            <Route path='/feature/new' element={<AddFeature />} />
             <Route path='/feature/edit/:id' element={<EditFeature />} />
-            <Route
-              path='/feature-option/edit/:id'
-              element={<EditFeatOption />}
-            />
 
             {/* Details pages */}
             <Route path='/details' element={<Details />} />

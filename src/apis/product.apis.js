@@ -181,6 +181,66 @@ export const listAllVariationOptions = async () => {
   }
 };
 
+/*************** 5. FEATURE APIs *************/
+
+// LOGIN NOT NEEDED
+// 1.1 POST '/show-similar-features' - get list of similar features
+export const showSimilarFeatures = async (name) => {
+  try {
+    const response = await axiosClient({
+      method: 'post',
+      url: '/api/product/show-similar-features',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT NEEDED
+// 1.3 GET /list-all-features - get all features list
+export const listAllFeatures = async () => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: '/api/product/list-all-features',
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT NEEDED
+// 2.1 POST '/show-similar-feature-options' - get list of similar feature options
+export const showSimilarFeatureOptions = async (name) => {
+  try {
+    const response = await axiosClient({
+      method: 'post',
+      url: '/api/product/show-similar-feature-options',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT NEEDED
+// 2.3 GET /list-all-feature-options - get all features list
+export const listAllFeatureOptions = async () => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: '/api/product/list-all-feature-options',
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 /*************** 1. PRODUCT APIs *************/
 
 // ADMIN ONLY

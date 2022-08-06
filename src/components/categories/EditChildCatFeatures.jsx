@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from '../formComponents/Button';
 import LoadingButton from '../formComponents/LoadingButton';
-import { listAllFeatures } from '../../apis/features.apis';
+import { listAllFeatures } from '../../apis/product.apis';
 import { adminUpdateChildCategoryFeatures } from '../../apis/childcategories.apis';
 
 const EditChildCatFeatures = ({

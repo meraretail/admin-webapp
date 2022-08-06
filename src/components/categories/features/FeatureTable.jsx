@@ -1,62 +1,96 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import TableSearchInput from '../../tableComponents/TableSearchInput';
 import TableComponent from '../../tableComponents/TableComponent';
 import SizePageOptions from '../../tableComponents/SizePageOptions';
 import { featTableItems } from '../../../listItems/categoryItems/attributeTableItems';
-import {
-  adminDeleteFeatureById,
-  adminAllFeaturesSummary,
-} from '../../../apis/features.apis';
 
 const FeatureTable = ({
+  childCategoryId,
+  loading,
+  setLoading,
   setResSuccess,
   setResMessage,
   rerender,
   setRerender,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
+
   const [features, setFeatures] = useState([]);
   const [size, setSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
   const [searchText, setSearchText] = useState('');
 
-  const [loading, setLoading] = useState(false);
-
-  let navigate = useNavigate();
-
+  // Get all features summary on page load with 500ms lag
+  // 500ms is most optimum time considering typing speed
   useEffect(() => {
-    const delayedResponse = setTimeout(async () => {
+    let isMounted = true;
+    const getAllVariationsSummary = async () => {
       setLoading(true);
-      adminAllFeaturesSummary(page, size, searchText)
-        .then((response) => {
-          const { totalFeatures, features } = response.data;
-          setFeatures(features);
-          setRowCount(totalFeatures);
-        })
-        .catch((error) => {
-          setResSuccess(error.data.success);
-          setResMessage(error.data.message);
-        });
+      try {
+        const response = await axiosPrivate.get(
+          '/api/product/admin/all-features-summary',
+          {
+            params: {
+              page: page,
+              size: size,
+              search: searchText,
+            },
+          }
+        );
+        // console.log('response', response);
+        isMounted && setFeatures(response.data.features);
+        isMounted && setRowCount(response.data.totalFeatures);
+      } catch (error) {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
       setLoading(false);
-    }, 200);
+    };
 
-    return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, rerender, setResSuccess, setResMessage]);
+    const delayedResponse = setTimeout(async () => {
+      await getAllVariationsSummary();
+    }, 500);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(delayedResponse);
+    };
+  }, [
+    axiosPrivate,
+    page,
+    size,
+    searchText,
+    setLoading,
+    setResMessage,
+    setResSuccess,
+    rerender,
+  ]);
 
   const handleEditFeature = (id) => {
-    navigate(`/feature/${id}`);
+    navigate(`/feature/edit/${id}`);
   };
 
   const handleDeleteFeature = async (id) => {
     setLoading(true);
-    const { data } = await adminDeleteFeatureById(id);
-    setLoading(false);
-
-    setResSuccess(data.success);
-    setResMessage(data.message);
-    if (data.success) {
-      setRerender(!rerender);
+    try {
+      const response = await axiosPrivate({
+        method: 'DELETE',
+        url: `/api/product/admin/delete-feature/${id}`,
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        setRerender(!rerender);
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
 
