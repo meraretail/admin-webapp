@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { showSimilarProducts } from '../../../apis/products.apis';
+import { showSimilarProducts } from '../../../apis/product.apis';
 
 const SimilarProducts = ({ name, orgName }) => {
   const [similarProducts, setSimilarProducts] = useState([]);

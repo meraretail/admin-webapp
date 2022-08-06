@@ -9,7 +9,7 @@ import Tab4ProductOptions from '../../components/products/tabs/Tab4ProductOption
 
 import { productTabs } from '../../listItems/productItems/productTabs';
 import { getChildCategoryParametersById } from '../../apis/childcategories.apis';
-import { adminGetProductById } from '../../apis/products.apis';
+import { adminGetProductById } from '../../apis/product.apis';
 
 const EditProduct = () => {
   const { productId } = useParams();

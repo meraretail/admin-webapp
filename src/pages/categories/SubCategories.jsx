@@ -6,6 +6,7 @@ import NewSubCategory from '../../components/categories/NewSubCategory';
 import ItemContainer from '../../components/common/ItemContainer';
 
 const SubCategories = () => {
+  const [loading, setLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
   const [rerender, setRerender] = useState(false);
@@ -25,6 +26,8 @@ const SubCategories = () => {
         <SuccErrMsg resSuccess={resSuccess} resMessage={resMessage} />
         {/* success / error message zone ends */}
         <NewSubCategory
+          loading={loading}
+          setLoading={setLoading}
           setResSuccess={setResSuccess}
           setResMessage={setResMessage}
           setRerender={setRerender}
@@ -32,6 +35,8 @@ const SubCategories = () => {
         />
         <ItemContainer title='All sub categories summary'>
           <SubCategoriesTable
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
             rerender={rerender}

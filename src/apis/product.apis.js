@@ -1,6 +1,125 @@
 import { axiosClient } from './axios-client';
 
-// Contains: 1. Product APIs 2. Brand APIs
+/*
+Contains: (Unauthenticated APIs)
+1. Category APIs
+2. SubCategory APIs
+3. ChildCategory APIs
+4. Variation APIs
+5. Feature APIs
+6. Detail APIs
+7. Product APIs
+8. Brand APIs
+*/
+
+/*************** 1. CATEGORY APIs *************/
+
+// LOGIN NOT NEEDED
+// 1.1 POST '/show-similar-categories' - similar categories while typing a new category name
+export const showSimilarCategories = async (name) => {
+  try {
+    const response = await axiosClient({
+      method: 'post',
+      url: '/api/product/show-similar-categories',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT REQUIRED
+// 1.3 GET /list-all-categories - get all categories list
+export const listAllCategories = async () => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: '/api/product/list-all-categories',
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+/************* 1.1 CATEGORY IMAGE API ROUTES ************/
+
+// LOGIN NOT REQUIRED
+// 1.1 GET '/get-category-images/:categoryId' - get category images by Id
+export const getCategoryImagesById = async (categoryId) => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: `/api/product/get-category-images/${categoryId}`,
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+/*************** 2. SUB CATEGORY APIs *************/
+
+// LOGIN NOT NEEDED
+// 2.1 POST '/show-similar-subcategories' - show similar names while typing
+export const showSimilarSubCategories = async (name) => {
+  try {
+    const response = await axiosClient({
+      method: 'post',
+      url: '/api/product/show-similar-subcategories',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT REQUIRED
+// 2.3 GET /list-all-subcategories/:categoryId - get all categories list
+export const listAllSubCategoriesForCategory = async (categoryId) => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: `/api/product/list-all-subcategories/${categoryId}`,
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+/*************** 3. CHILD CATEGORY APIs *************/
+
+// LOGIN NOT NEEDED
+// 3.1 POST '/show-similar-childcategories' - show similar names while typing
+export const showSimilarChildCategories = async (name) => {
+  try {
+    const response = await axiosClient({
+      method: 'post',
+      url: '/api/product/show-similar-childcategories',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT NEEDED
+// 3.3 GET /list-all-childcategories/:subCategoryId - get all categories list
+export const listAllChildCategoriesForSubCategory = async (subCategoryId) => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: `/api/product/list-all-childcategories/${subCategoryId}`,
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
 
 /*************** 1. PRODUCT APIs *************/
 

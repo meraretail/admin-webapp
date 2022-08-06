@@ -79,6 +79,8 @@ const EditCategory = () => {
         {/* upload category images */}
         <EditCategoryImage
           id={categoryId}
+          loading={loading}
+          setLoading={setLoading}
           setResSuccess={setResSuccess}
           setResMessage={setResMessage}
           rerender={rerender}
@@ -90,6 +92,8 @@ const EditCategory = () => {
 
         <NewSubCategory
           category={category}
+          loading={loading}
+          setLoading={setLoading}
           setResSuccess={setResSuccess}
           setResMessage={setResMessage}
           rerender={rerender}
@@ -101,6 +105,8 @@ const EditCategory = () => {
         <ItemContainer title='Sub categories list for the category'>
           <SubCategoriesTable
             categoryId={categoryId}
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
             rerender={rerender}

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import PageTitle from '../../../components/common/PageTitle';
 import SuccErrMsg from '../../../components/common/SuccErrMsg';
-import VariationTable from '../../../components/categories/variations/VariationTable';
 import { MdOutlineAddChart } from 'react-icons/md';
 import MainContainer from '../../../components/common/MainContainer';
+import VariationTable from '../../../components/categories/variations/VariationTable';
+import NewVariation from '../../../components/categories/variations/NewVariation';
 
 const Variations = () => {
+  const [loading, setLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
   const [rerender, setRerender] = useState(false);
@@ -25,7 +27,18 @@ const Variations = () => {
         {/* success / error message zone ends */}
         {/* main content starts */}
         <div className='mt-6 space-y-8'>
+          <NewVariation
+            loading={loading}
+            setLoading={setLoading}
+            setResSuccess={setResSuccess}
+            setResMessage={setResMessage}
+            rerender={rerender}
+            setRerender={setRerender}
+          />
+
           <VariationTable
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
             rerender={rerender}

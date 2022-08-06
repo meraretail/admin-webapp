@@ -4,7 +4,7 @@ import LoadingButton from '../../formComponents/LoadingButton';
 import ProductVariations from '../attributes/ProductVariations';
 import ProductInvPrice from '../imageStockPrice/ProductInvPrice';
 import { productTabs } from '../../../listItems/productItems/productTabs';
-import { adminUpdateProductVariationsSkusStocksPricesById } from '../../../apis/products.apis';
+import { adminUpdateProductVariationsSkusStocksPricesById } from '../../../apis/product.apis';
 import { generateSkuFromProductAndVariation } from '../../../utils/sku.utils';
 
 const Tab2ProductVariations = ({

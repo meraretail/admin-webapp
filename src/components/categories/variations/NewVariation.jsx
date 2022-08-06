@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import ItemContainer from '../../common/ItemContainer';
 import SimilarNames from '../../common/SimilarNames';
 import Button from '../../formComponents/Button';
@@ -9,10 +10,18 @@ import {
   showSimilarVariations,
 } from '../../../apis/variations.apis';
 
-const NewVariation = ({ setResSuccess, setResMessage }) => {
-  const [loading, setLoading] = useState(false);
+const NewVariation = ({
+  loading,
+  setLoading,
+  setResSuccess,
+  setResMessage,
+  rerender,
+  setRerender,
+}) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [variation, setVariation] = useState('');
-  const [variesImage, setVariesImage] = useState(false);
+  const [variesProductOption, setVariesProductOption] = useState(false);
   const [similarVariations, setSimilarVariations] = useState([]);
 
   // Step 1: Search similar variations using useEffect with 200ms delay
@@ -33,18 +42,25 @@ const NewVariation = ({ setResSuccess, setResMessage }) => {
   const handleAddVariation = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const { data } = await adminCreateVariation(variation, variesImage);
-    setLoading(false);
-    setResSuccess(data.success);
-    setResMessage(data.message);
-
-    if (data.success) {
-      setVariation('');
-      setVariesImage(false);
+    try {
+      const response = await axiosPrivate({
+        method: 'post',
+        url: '/api/product/admin/create-variation',
+        data: { name: variation, variesProductOption: variesProductOption },
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        setVariation('');
+        setVariesProductOption(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
-
-  // console.log('image: ', variesImage);
 
   return (
     <ItemContainer title='Add new variation name and options'>
@@ -57,8 +73,10 @@ const NewVariation = ({ setResSuccess, setResMessage }) => {
             <select
               className='w-full font-semibold text-sm px-4 py-2 border border-gray-300 outline-none rounded text-gray-600'
               id='variesImage'
-              value={variesImage}
-              onChange={(e) => setVariesImage(e.target.value === 'true')}
+              value={variesProductOption}
+              onChange={(e) =>
+                setVariesProductOption(e.target.value === 'true')
+              }
             >
               <option value='false'>No</option>
               <option value='true'>Yes</option>

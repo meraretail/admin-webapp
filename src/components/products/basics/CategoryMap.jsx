@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Dropdown from '../../common/Dropdown';
-import { listAllCategories } from '../../../apis/categories.apis';
-import { listAllSubCategoriesForCategory } from '../../../apis/subcategories.apis';
-import { listAllChildCategoriesForSubCategory } from '../../../apis/childcategories.apis';
+import { listAllCategories } from '../../../apis/product.apis';
+import { listAllSubCategoriesForCategory } from '../../../apis/product.apis';
+import { listAllChildCategoriesForSubCategory } from '../../../apis/product.apis';
 
 const CategoryMap = ({
   heading,

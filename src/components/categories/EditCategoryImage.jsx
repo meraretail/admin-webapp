@@ -3,10 +3,12 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import ImageGallery from '../common/ImageGallery';
 import ItemContainer from '../common/ItemContainer';
 import MultiImageUpload from '../common/MultiImageUpload';
-import { getCategoryImagesById } from '../../apis/categories.apis';
+import { getCategoryImagesById } from '../../apis/product.apis';
 
 const EditCategoryImage = ({
   id,
+  loading,
+  setLoading,
   setResSuccess,
   setResMessage,
   rerender,
@@ -15,7 +17,6 @@ const EditCategoryImage = ({
   const axiosPrivate = useAxiosPrivate();
 
   const [catImages, setCatImages] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   // Image upload states
   const [images, setImages] = useState([]);

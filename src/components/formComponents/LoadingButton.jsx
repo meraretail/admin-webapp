@@ -4,7 +4,7 @@ const LoadingButton = ({ className }) => {
   return (
     <button
       type='button'
-      className={`${className} w-full rounded-md font-semibold text-sm p-1 inline-flex 
+      className={`${className} w-full rounded-md font-semibold text-sm p-1 inline-flex border border-purple-500
                 items-center justify-center leading-6 transition ease-in-out duration-150 cursor-not-allowed`}
       disabled=''
     >

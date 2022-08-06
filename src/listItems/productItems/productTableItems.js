@@ -7,11 +7,16 @@ export const pdtPopularFilters = [
   { id: 6, text: 'Custom range', fromDate: '', toDate: '' },
 ];
 
-export const pdtTableHeaders = [
-  'id',
-  'Category name',
-  '# of Subcategories',
-  '# of Child Categories',
-  '# of Products',
-  'Actions',
+export const productTableItems = [
+  { label: 'Id', jsonKey: 'id' },
+  { label: 'Name', jsonKey: 'name' },
+  { label: 'Brand', jsonKey: 'brand' },
+  { label: 'Child Category', jsonKey: 'childCategory' },
+  { label: 'Sub Category', jsonKey: 'subCategory' },
+  { label: 'Category', jsonKey: 'category' },
+  { label: '# options', jsonKey: 'productOptions' },
+  { label: '# live options', jsonKey: 'activeOptions' },
+  { label: '# skus', jsonKey: 'skus' },
+  { label: '# live skus', jsonKey: 'activeSkus' },
+  { label: '# sellers', jsonKey: 'productSellers' },
 ];

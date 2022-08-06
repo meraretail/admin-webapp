@@ -13,7 +13,7 @@ import { productTabs } from '../../../listItems/productItems/productTabs';
 import {
   adminCreateProduct,
   adminUpdateProductFullById,
-} from '../../../apis/products.apis';
+} from '../../../apis/product.apis';
 
 const Tab1ProductBasics = ({
   product,

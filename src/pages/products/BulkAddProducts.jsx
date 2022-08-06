@@ -7,7 +7,7 @@ import ExcelUploader from '../../components/products/bulkExcel/ExcelUploader';
 import {
   bulkAddProducts,
   getProductBulkUploadTemplate,
-} from '../../apis/products.apis';
+} from '../../apis/product.apis';
 
 const BulkAddProducts = () => {
   const [loading, setLoading] = useState(false);

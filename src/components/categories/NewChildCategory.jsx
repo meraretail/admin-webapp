@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { listAllCategories } from '../../apis/categories.apis';
-import { listAllSubCategoriesForCategory } from '../../apis/subcategories.apis';
-import {
-  adminCreateChildCategory,
-  showSimilarChildCategories,
-} from '../../apis/childcategories.apis';
+import { useEffect, useState } from 'react';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import Dropdown from '../common/Dropdown';
 import ItemContainer from '../common/ItemContainer';
 import Button from '../formComponents/Button';
 import FormInput from '../formComponents/FormInput';
 import LoadingButton from '../formComponents/LoadingButton';
 import SimilarNames from '../common/SimilarNames';
+import { listAllCategories } from '../../apis/product.apis';
+import { listAllSubCategoriesForCategory } from '../../apis/product.apis';
+import { showSimilarChildCategories } from '../../apis/product.apis';
 
 const NewChildCategory = ({
-  subCategoryId,
+  subCategory,
+  loading,
+  setLoading,
   setResSuccess,
   setResMessage,
   rerender,
   setRerender,
 }) => {
-  const [loading, setLoading] = useState(false);
-
+  const axiosPrivate = useAxiosPrivate();
+  // console.log('subCategory', subCategory);
   const [categoryList, setCategoryList] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [subCategoryList, setSubCategoryList] = useState([]);
-  const [selectedSubCategory, setSelectedSubCategory] = useState({});
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
 
   const [childCategory, setChildCategory] = useState('');
   const [similarChildCategories, setSimilarChildCategories] = useState([]);
@@ -39,34 +39,41 @@ const NewChildCategory = ({
         setResSuccess(error.data.success);
         setResMessage(error.data.message);
       });
-  }, [setResMessage, setResSuccess, rerender]);
-
-  // Step 1.1: Set selected category if subCategoryId is passed
-  useEffect(() => {
-    if (subCategoryId) {
-      const selectedCategory = categoryList.find(
-        (category) => category.id === subCategoryId.split('-')[0]
-      );
-      setSelectedCategory(selectedCategory);
-    }
-  }, [categoryList, subCategoryId]);
+  }, [setResMessage, setResSuccess]);
 
   // step 2: get all subcategories for selectedCategory if exists
   useEffect(() => {
-    if (selectedCategory) {
-      listAllSubCategoriesForCategory(selectedCategory.id)
-        .then((response) => {
-          // console.log(response.data);
-          setSubCategoryList(response.data.subCategories);
-        })
-        .catch((error) => {
-          setResSuccess(error.data.success);
-          setResMessage(error.data.message);
-        });
-    } else {
-      setSubCategoryList([]);
+    listAllSubCategoriesForCategory(
+      selectedCategory?.id ? selectedCategory?.id : subCategory?.categoryId
+    )
+      .then((response) => {
+        // console.log(response.data);
+        setSubCategoryList(response.data.subCategories);
+      })
+      .catch((error) => {
+        setResSuccess(error.data.success);
+        setResMessage(error.data.message);
+      });
+  }, [selectedCategory, subCategory, setResMessage, setResSuccess]);
+
+  // Step 3: Set selected category and subcategory from initial data
+  useEffect(() => {
+    if (subCategory) {
+      const selectedCategory = categoryList.find(
+        (category) => category.id === subCategory.categoryId
+      );
+      setSelectedCategory(selectedCategory);
     }
-  }, [selectedCategory, setResMessage, setResSuccess]);
+  }, [categoryList, subCategory]);
+
+  useEffect(() => {
+    if (subCategory) {
+      const selectedSubCategory = subCategoryList.find(
+        (subCat) => subCat.id === subCategory.id
+      );
+      setSelectedSubCategory(selectedSubCategory);
+    }
+  }, [subCategoryList, subCategory]);
 
   // Step 3: Search similar child categories using useEffect with 500ms delay
   useEffect(() => {
@@ -98,18 +105,23 @@ const NewChildCategory = ({
       return;
     }
     setLoading(true);
-    // console.log(childCategory, selectedSubCategory.id);
-    const { data } = await adminCreateChildCategory(
-      childCategory,
-      selectedSubCategory.id
-    );
-    setLoading(false);
-
-    setResSuccess(data.success);
-    setResMessage(data.message);
-    if (data.success) {
-      setChildCategory('');
-      setRerender(!rerender);
+    try {
+      const response = await axiosPrivate({
+        method: 'post',
+        url: '/api/product/admin/create-childcategory',
+        data: { name: childCategory, subCategoryId: selectedSubCategory.id },
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        setChildCategory('');
+        setRerender(!rerender);
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
 

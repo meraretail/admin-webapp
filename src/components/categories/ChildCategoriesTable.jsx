@@ -11,9 +11,11 @@ import {
 } from '../../listItems/categoryItems/categoryTableItems';
 
 const ChildCategoriesTable = ({
+  subCategoryId,
+  loading,
+  setLoading,
   setResSuccess,
   setResMessage,
-  subCategoryId,
   rerender,
 }) => {
   const navigate = useNavigate();
@@ -25,13 +27,10 @@ const ChildCategoriesTable = ({
   const [rowCount, setRowCount] = useState(0);
   const [searchText, setSearchText] = useState('');
 
-  const [loading, setLoading] = useState(false);
-
   // Get all categories summary on page load with 500ms lag
   // 500ms is most optimum time considering typing speed
   useEffect(() => {
     let isMounted = true;
-    const subCategoryId = null;
     const getAllSubCategoriesSummary = async () => {
       setLoading(true);
       try {
@@ -45,6 +44,7 @@ const ChildCategoriesTable = ({
             },
           }
         );
+        // console.log('response', response);
         isMounted && setChildCategories(response.data.childCategories);
         isMounted && setRowCount(response.data.totalChildCategories);
       } catch (error) {
@@ -70,6 +70,8 @@ const ChildCategoriesTable = ({
     setResSuccess,
     rerender,
     searchText,
+    setLoading,
+    subCategoryId,
   ]);
 
   const handleEditChildCategory = (id) => {

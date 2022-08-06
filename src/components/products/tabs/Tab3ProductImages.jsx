@@ -6,7 +6,7 @@ import { productTabs } from '../../../listItems/productItems/productTabs';
 import {
   markDefaultProductImageById,
   uploadProductImagesById,
-} from '../../../apis/products.apis';
+} from '../../../apis/product.apis';
 
 const Tab3ProductImages = ({
   product,

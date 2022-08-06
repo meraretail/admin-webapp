@@ -1,34 +1,46 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import SuccErrMsg from '../../components/common/SuccErrMsg';
 import ChildCategoriesTable from '../../components/categories/ChildCategoriesTable';
 import PageTitle from '../../components/common/PageTitle';
 import ItemContainer from '../../components/common/ItemContainer';
 import EditSubCatName from '../../components/categories/EditSubCatName';
-import { adminSubcategoryDetailsById } from '../../apis/subcategories.apis';
 import NewChildCategory from '../../components/categories/NewChildCategory';
 
 const EditSubCategory = () => {
   const { subCategoryId } = useParams();
+  const axiosPrivate = useAxiosPrivate();
+
   const [subCategory, setSubCategory] = useState({});
 
+  const [loading, setLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
-  // force re-render state - to be used in images and child category component
   const [rerender, setRerender] = useState(false);
 
-  // Step 1: get sub category by id
+  // Step 1: get sub category details by id
   useEffect(() => {
-    adminSubcategoryDetailsById(subCategoryId)
-      .then((res) => {
-        // console.log(res.data.subCategory);
-        setSubCategory(res.data.subCategory);
-      })
-      .catch((err) => {
-        setResSuccess(err.data.success);
-        setResMessage(err.data.message);
-      });
-  }, [subCategoryId]);
+    let isMounted = true;
+    const getCategory = async () => {
+      setResMessage('');
+      setLoading(true);
+      try {
+        const response = await axiosPrivate.get(
+          `/api/product/admin/subcategory-details/${subCategoryId}`
+        );
+        isMounted && setSubCategory(response.data.subCategory);
+      } catch (error) {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
+      setLoading(false);
+    };
+    getCategory();
+    return () => {
+      isMounted = false;
+    };
+  }, [axiosPrivate, subCategoryId]);
 
   return (
     <div>
@@ -52,19 +64,20 @@ const EditSubCategory = () => {
         <div className='mt-6 space-y-8'>
           {/* Category name update forms start */}
           <EditSubCatName
-            id={subCategoryId}
-            orgName={subCategory.name}
+            subCategory={subCategory}
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
-            rerender={rerender}
-            setRerender={setRerender}
           />
           {/* category name update ends */}
 
           {/* add new child category */}
 
           <NewChildCategory
-            subCategoryId={subCategoryId}
+            subCategory={subCategory}
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
             rerender={rerender}
@@ -75,9 +88,11 @@ const EditSubCategory = () => {
           {/* child categories list */}
           <ItemContainer title='Child categories list for the sub category'>
             <ChildCategoriesTable
+              subCategoryId={subCategoryId}
+              loading={loading}
+              setLoading={setLoading}
               setResSuccess={setResSuccess}
               setResMessage={setResMessage}
-              subCategoryId={subCategoryId}
               rerender={rerender}
             />
           </ItemContainer>

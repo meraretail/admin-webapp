@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import { showSimilarCategories } from '../../apis/categories.apis';
 import ItemContainer from '../common/ItemContainer';
 import Button from '../formComponents/Button';
 import FormInput from '../formComponents/FormInput';
 import LoadingButton from '../formComponents/LoadingButton';
 import SimilarNames from '../common/SimilarNames';
+import { showSimilarCategories } from '../../apis/product.apis';
 
 const NewCategory = ({
   setResSuccess,

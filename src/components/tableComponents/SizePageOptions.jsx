@@ -41,7 +41,7 @@ const SizePageOptions = ({ rowCount, size, setSize, page, setPage }) => {
   return (
     <div className='flex justify-between items-start py-4'>
       {/* left section */}
-      <div className='flex gap-2'>
+      <div className='flex items-center gap-2'>
         <div>Items per page:</div>
         <div ref={wrapperRef}>
           <button
@@ -66,6 +66,7 @@ const SizePageOptions = ({ rowCount, size, setSize, page, setPage }) => {
             ))}
           </ul>
         </div>
+        <div>of {rowCount}</div>
       </div>
       {/* right section */}
       <div className='flex items-center gap-1'>

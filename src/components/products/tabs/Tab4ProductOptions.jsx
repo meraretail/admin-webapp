@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import parse from 'html-react-parser';
 import PdtOptNameDesc from '../basics/PdtOptNameDesc';
-import { adminUpdateProductOptionDataById } from '../../../apis/products.apis';
+import { adminUpdateProductOptionDataById } from '../../../apis/product.apis';
 
 const Tab4ProductOptions = ({
   product,

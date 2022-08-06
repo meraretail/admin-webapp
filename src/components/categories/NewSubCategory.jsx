@@ -1,31 +1,33 @@
 import { useEffect, useState } from 'react';
-import { listAllCategories } from '../../apis/categories.apis';
-import {
-  adminCreateSubCategory,
-  showSimilarSubCategories,
-} from '../../apis/subcategories.apis';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import Dropdown from '../common/Dropdown';
 import ItemContainer from '../common/ItemContainer';
 import Button from '../formComponents/Button';
 import FormInput from '../formComponents/FormInput';
 import LoadingButton from '../formComponents/LoadingButton';
 import SimilarNames from '../common/SimilarNames';
+import { listAllCategories } from '../../apis/product.apis';
+import { showSimilarSubCategories } from '../../apis/product.apis';
 
 const NewSubCategory = ({
   category,
+  loading,
+  setLoading,
   setResSuccess,
   setResMessage,
   rerender,
   setRerender,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState({
     id: '',
   });
-  const [loading, setLoading] = useState(false);
   const [subCategory, setSubCategory] = useState('');
   const [similarSubCategories, setSimilarSubCategories] = useState([]);
 
+  // UNSECURED ROUTE
   // Step 1: Get all categories list to add sub category
   useEffect(() => {
     listAllCategories()
@@ -46,6 +48,7 @@ const NewSubCategory = ({
     }
   }, [category]);
 
+  // UNSECURED ROUTE
   // Step 2: Search similar sub categories using useEffect with 500ms delay
   useEffect(() => {
     if (subCategory === '') {
@@ -60,6 +63,7 @@ const NewSubCategory = ({
     return () => clearTimeout(delayedResponse);
   }, [subCategory]);
 
+  // SECURED ROUTE
   // Step 3: Add new sub category
   const handleAddSubCategory = async (event) => {
     event.preventDefault();
@@ -68,18 +72,26 @@ const NewSubCategory = ({
       setResMessage('Please select a category to create new subcategory!');
       return;
     }
-    setLoading(true);
-    const { data } = await adminCreateSubCategory(
-      subCategory,
-      selectedCategory.id
-    );
-    setLoading(false);
 
-    setResSuccess(data.success);
-    setResMessage(data.message);
-    if (data.success) {
-      setSubCategory('');
-      setRerender(!rerender);
+    setLoading(true);
+    try {
+      const response = await axiosPrivate({
+        method: 'post',
+        url: '/api/product/admin/create-subcategory',
+        data: { name: subCategory, categoryId: selectedCategory.id },
+      });
+
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        setSubCategory('');
+        setRerender(!rerender);
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
 

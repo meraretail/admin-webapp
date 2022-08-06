@@ -6,6 +6,7 @@ import NewChildCategory from '../../components/categories/NewChildCategory';
 import ItemContainer from '../../components/common/ItemContainer';
 
 const ChildCategories = () => {
+  const [loading, setLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
   const [rerender, setRerender] = useState(false);
@@ -26,6 +27,8 @@ const ChildCategories = () => {
         <SuccErrMsg resSuccess={resSuccess} resMessage={resMessage} />
         {/* success / error message zone ends */}
         <NewChildCategory
+          loading={loading}
+          setLoading={setLoading}
           setResSuccess={setResSuccess}
           setResMessage={setResMessage}
           setRerender={setRerender}
@@ -33,6 +36,8 @@ const ChildCategories = () => {
         />
         <ItemContainer title='All child categories summary'>
           <ChildCategoriesTable
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
             rerender={rerender}

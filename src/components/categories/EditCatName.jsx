@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
-import {
-  showSimilarCategories,
-  adminUpdateCategoryNameById,
-} from '../../apis/categories.apis';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import { showSimilarCategories } from '../../apis/product.apis';
 import SimilarNames from '../common/SimilarNames';
 import Button from '../formComponents/Button';
 import FormInput from '../formComponents/FormInput';
@@ -19,6 +17,8 @@ const EditCatName = ({
   rerender,
   setRerender,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [catName, setCatName] = useState(''); // only category name
   const [similarCategories, setSimilarCategories] = useState([]);
 
@@ -46,15 +46,24 @@ const EditCatName = ({
   const handleUpdateCategoryName = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const { data } = await adminUpdateCategoryNameById(categoryId, catName);
-    setLoading(false);
-    setResSuccess(data.success);
-    setResMessage(data.message);
+    try {
+      const response = await axiosPrivate({
+        method: 'put',
+        url: `/api/product/admin/update-category-name/${categoryId}`,
+        data: { name: catName },
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
 
-    if (data.success) {
-      setCatName('');
-      setSimilarCategories([]);
-      setRerender(!rerender);
+      if (response.data.success) {
+        setSimilarCategories([]);
+        setRerender(!rerender);
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
   return (

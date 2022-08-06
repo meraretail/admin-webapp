@@ -12,12 +12,15 @@ import {
 
 const SubCategoriesTable = ({
   categoryId,
+  loading,
+  setLoading,
   setResSuccess,
   setResMessage,
   rerender,
 }) => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
+  // console.log('categoryId: ', categoryId);
 
   const [subCategories, setSubCategories] = useState([]);
   const [size, setSize] = useState(10);
@@ -25,13 +28,10 @@ const SubCategoriesTable = ({
   const [rowCount, setRowCount] = useState(0);
   const [searchText, setSearchText] = useState('');
 
-  const [loading, setLoading] = useState(false);
-
   // Get all sub categories summary on page load with 500ms lag
   // 500ms is most optimum time considering typing speed
   useEffect(() => {
     let isMounted = true;
-    const categoryId = null;
     const getAllSubCategoriesSummary = async () => {
       setLoading(true);
       try {
@@ -45,6 +45,7 @@ const SubCategoriesTable = ({
             },
           }
         );
+        // console.log(response);
         isMounted && setSubCategories(response.data.subCategories);
         isMounted && setRowCount(response.data.totalSubCategories);
       } catch (error) {
@@ -66,10 +67,12 @@ const SubCategoriesTable = ({
     axiosPrivate,
     page,
     size,
+    searchText,
     setResMessage,
     setResSuccess,
     rerender,
-    searchText,
+    categoryId,
+    setLoading,
   ]);
 
   const handleEditSubCategory = (id) => {

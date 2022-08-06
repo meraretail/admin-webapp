@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { listAllBrands, listAllGenders } from '../../../apis/products.apis';
 import Dropdown from '../../common/Dropdown';
+import { listAllBrands, listAllGenders } from '../../../apis/product.apis';
 
 const SelectBrandNGender = ({
   setResSuccess,

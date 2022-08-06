@@ -1,36 +1,35 @@
 import { useState, useEffect } from 'react';
-import {
-  showSimilarSubCategories,
-  adminUpdateSubCategoryById,
-} from '../../apis/subcategories.apis';
+import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import ItemContainer from '../common/ItemContainer';
 import SimilarNames from '../common/SimilarNames';
 import Button from '../formComponents/Button';
 import FormInput from '../formComponents/FormInput';
 import LoadingButton from '../formComponents/LoadingButton';
+import { showSimilarSubCategories } from '../../apis/product.apis';
 
 const EditSubCatName = ({
-  id,
-  orgName,
-  setResStatus,
+  subCategory,
+  loading,
+  setLoading,
+  setResSuccess,
   setResMessage,
-  rerender,
-  setRerender,
 }) => {
-  const [loading, setLoading] = useState(false);
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [similarSubCategories, setSimilarSubCategories] = useState([]);
 
   // Step 1: Update sub category name
   useEffect(() => {
-    if (orgName) {
-      setName(orgName);
+    if (subCategory) {
+      setName(subCategory.name);
     }
-  }, [orgName]);
+  }, [subCategory]);
 
   // Step 2: Search similar sub categories using useEffect with 500 mili sec delay
   useEffect(() => {
-    if (name === '' || name === orgName) {
+    if (name === '' || name === subCategory.name) {
       setSimilarSubCategories([]);
       return;
     }
@@ -40,21 +39,30 @@ const EditSubCatName = ({
     }, 500);
 
     return () => clearTimeout(delayedResponse);
-  }, [name, orgName]);
+  }, [name, subCategory]);
 
   // Step 3: Update sub category
   const handleUpdateSubCatName = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const { data, statusText } = await adminUpdateSubCategoryById(id, name);
-    setResStatus(statusText);
-    setResMessage(data.message);
-    setLoading(false);
-
-    if (statusText === 'OK') {
-      setName('');
-      setSimilarSubCategories([]);
-      setRerender(!rerender);
+    try {
+      const response = await axiosPrivate({
+        method: 'put',
+        url: `/api/product/admin/update-subcategory/${subCategory.id}`,
+        data: { name: name },
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        setName('');
+        setSimilarSubCategories([]);
+        navigate(-1);
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
 
