@@ -1,48 +1,74 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import TableSearchInput from '../../tableComponents/TableSearchInput';
 import TableComponent from '../../tableComponents/TableComponent';
 import SizePageOptions from '../../tableComponents/SizePageOptions';
 import { varTableItems } from '../../../listItems/categoryItems/attributeTableItems';
-import {
-  adminDeleteVariationById,
-  adminAllVariationsSummary,
-} from '../../../apis/variations.apis';
 
 const VariationTable = ({
+  childCategoryId,
+  loading,
+  setLoading,
   setResSuccess,
   setResMessage,
   rerender,
   setRerender,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
+
   const [variations, setVariations] = useState([]);
   const [size, setSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
   const [searchText, setSearchText] = useState('');
 
-  const [loading, setLoading] = useState(false);
-
-  let navigate = useNavigate();
-
+  // Get all categories summary on page load with 500ms lag
+  // 500ms is most optimum time considering typing speed
   useEffect(() => {
-    const delayedResponse = setTimeout(async () => {
+    let isMounted = true;
+    const getAllVariationsSummary = async () => {
       setLoading(true);
-      adminAllVariationsSummary(page, size, searchText)
-        .then((response) => {
-          const { totalVariations, variations } = response.data;
-          setVariations(variations);
-          setRowCount(totalVariations);
-        })
-        .catch((error) => {
-          setResSuccess(error.data.success);
-          setResMessage(error.data.message);
-        });
+      try {
+        const response = await axiosPrivate.get(
+          `/api/product/admin/all-variations-summary/${childCategoryId}`,
+          {
+            params: {
+              page: page,
+              size: size,
+              search: searchText,
+            },
+          }
+        );
+        // console.log('response', response);
+        isMounted && setVariations(response.data.variations);
+        isMounted && setRowCount(response.data.totalVariations);
+      } catch (error) {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
       setLoading(false);
-    }, 200);
+    };
 
-    return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, rerender, setResMessage, setResSuccess]);
+    const delayedResponse = setTimeout(async () => {
+      await getAllVariationsSummary();
+    }, 500);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(delayedResponse);
+    };
+  }, [
+    axiosPrivate,
+    childCategoryId,
+    page,
+    searchText,
+    setLoading,
+    setResMessage,
+    setResSuccess,
+    size,
+  ]);
 
   const handleEditVariation = (id) => {
     navigate(`/variation/edit/${id}`);
@@ -50,13 +76,21 @@ const VariationTable = ({
 
   const handleDeleteVariation = async (id) => {
     setLoading(true);
-    const { data } = await adminDeleteVariationById(id);
-    setLoading(false);
-
-    setResSuccess(data.success);
-    setResMessage(data.message);
-    if (data.success) {
-      setRerender(!rerender);
+    try {
+      const response = await axiosPrivate({
+        method: 'DELETE',
+        url: `/api/product/admin/delete-variation/${id}`,
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        setRerender(!rerender);
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
 

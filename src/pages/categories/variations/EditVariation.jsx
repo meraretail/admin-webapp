@@ -3,15 +3,25 @@ import { useParams } from 'react-router-dom';
 import PageTitle from '../../../components/common/PageTitle';
 import MainContainer from '../../../components/common/MainContainer';
 import SuccErrMsg from '../../../components/common/SuccErrMsg';
-import UpdateVariation from '../../../components/categories/variations/UpdateVariation';
 import NewVariationOption from '../../../components/categories/variations/NewVariationOption';
 import VarOptionTable from '../../../components/categories/variations/VarOptionTable';
+import AddUpdateVariation from '../../../components/categories/variations/AddUpdateVariation';
+import UpdateVariationOption from '../../../components/categories/variations/UpdateVariationOption';
 
 const EditVariation = () => {
   const { id } = useParams();
+
+  const [loading, setLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
   const [rerender, setRerender] = useState(false);
+  const [editVarOptVisible, setEditVarOptVisible] = useState(false);
+  const [varOptionId, setVarOptionId] = useState({});
+
+  const handleEditVariationOption = (varOptId) => {
+    setEditVarOptVisible(true);
+    setVarOptionId(varOptId);
+  };
 
   return (
     <div>
@@ -30,26 +40,48 @@ const EditVariation = () => {
         />
         {/* success / error message zone ends */}
         {/* main content starts */}
-        <div className='mt-6 space-y-8'>
-          <UpdateVariation
-            id={id}
+        <div className='mt-6 pb-12 space-y-8'>
+          <AddUpdateVariation
+            variationId={id}
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
           />
           <NewVariationOption
-            id={id}
+            variationId={id}
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
             rerender={rerender}
             setRerender={setRerender}
           />
           <VarOptionTable
-            id={id}
+            variationId={id}
+            loading={loading}
+            setLoading={setLoading}
             setResSuccess={setResSuccess}
             setResMessage={setResMessage}
             rerender={rerender}
             setRerender={setRerender}
+            handleEditVariationOption={handleEditVariationOption}
           />
+
+          {editVarOptVisible && (
+            <UpdateVariationOption
+              variationId={id}
+              varOptionId={varOptionId}
+              loading={loading}
+              setLoading={setLoading}
+              setResSuccess={setResSuccess}
+              setResMessage={setResMessage}
+              rerender={rerender}
+              setRerender={setRerender}
+              editVarOptVisible={editVarOptVisible}
+              setEditVarOptVisible={setEditVarOptVisible}
+            />
+          )}
         </div>
       </MainContainer>
     </div>

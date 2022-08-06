@@ -55,7 +55,6 @@ const EditChildCatName = ({
       setResSuccess(response.data.success);
       setResMessage(response.data.message);
       if (response.data.success) {
-        setName('');
         setSimilarChildCategories([]);
         setRerender(!rerender);
       }

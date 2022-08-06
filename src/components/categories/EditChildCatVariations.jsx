@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from '../formComponents/Button';
 import LoadingButton from '../formComponents/LoadingButton';
-import { listAllVariations } from '../../apis/variations.apis';
+import { listAllVariations } from '../../apis/product.apis';
 import { adminUpdateChildCategoryVariations } from '../../apis/childcategories.apis';
 
 const EditChildCatVariations = ({

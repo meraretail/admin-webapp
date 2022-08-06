@@ -1,65 +1,91 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import ItemContainer from '../../common/ItemContainer';
 import TableSearchInput from '../../tableComponents/TableSearchInput';
 import TableComponent from '../../tableComponents/TableComponent';
 import SizePageOptions from '../../tableComponents/SizePageOptions';
 import { varOptTableItems } from '../../../listItems/categoryItems/attributeTableItems';
-import {
-  adminDeleteVariationOptionById,
-  adminAllVariationOptionsSummaryForVariation,
-} from '../../../apis/variations.apis';
 
 const VarOptionTable = ({
-  id,
+  variationId,
+  loading,
+  setLoading,
   setResSuccess,
   setResMessage,
   rerender,
   setRerender,
+  handleEditVariationOption,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [varOptions, setVarOptions] = useState([]);
   const [size, setSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
   const [searchText, setSearchText] = useState('');
 
-  const [loading, setLoading] = useState(false);
-
-  let navigate = useNavigate();
-
+  // Get all variation options summary on page load with 500ms lag
+  // 500ms is most optimum time considering typing speed
   useEffect(() => {
-    const delayedResponse = setTimeout(async () => {
+    let isMounted = true;
+    const getAllVariationOptionsSummary = async () => {
       setLoading(true);
-      adminAllVariationOptionsSummaryForVariation(page, size, searchText, id)
-        .then((response) => {
-          // console.log(response.data);
-          const { totalVariationOptions, variationOptions } = response.data;
-          setVarOptions(variationOptions);
-          setRowCount(totalVariationOptions);
-        })
-        .catch((error) => {
-          setResSuccess(error.data.success);
-          setResMessage(error.data.message);
+      try {
+        const response = await axiosPrivate({
+          method: 'get',
+          url: `/api/product/admin/all-variation-options-summary-for-variation/${variationId}`,
+          params: {
+            page: page,
+            size: size,
+            search: searchText,
+          },
         });
+
+        // console.log('response', response);
+        isMounted && setVarOptions(response.data.variationOptions);
+        isMounted && setRowCount(response.data.totalVariationOptions);
+      } catch (error) {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
       setLoading(false);
-    }, 200);
+    };
 
-    return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, id, setResMessage, setResSuccess, rerender]);
+    const delayedResponse = setTimeout(async () => {
+      await getAllVariationOptionsSummary();
+    }, 500);
 
-  const handleEditVariationOption = (id) => {
-    navigate(`/variation-option/edit/${id}`);
-  };
+    return () => {
+      isMounted = false;
+      clearTimeout(delayedResponse);
+    };
+  }, [
+    axiosPrivate,
+    page,
+    searchText,
+    setLoading,
+    setResMessage,
+    setResSuccess,
+    size,
+    variationId,
+    rerender,
+  ]);
 
-  const handleDeleteVariationOption = async (id) => {
+  const handleDeleteVariationOption = async (varOptId) => {
     setLoading(true);
-    const { data } = await adminDeleteVariationOptionById(id);
-    setLoading(false);
-    setResSuccess(data.success);
-    setResMessage(data.message);
-
-    if (data.success) {
+    try {
+      const response = await axiosPrivate({
+        method: 'delete',
+        url: `/api/product/admin/delete-variation/${varOptId}`,
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
       setRerender(!rerender);
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
 

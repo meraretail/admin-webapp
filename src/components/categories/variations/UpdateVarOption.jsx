@@ -6,8 +6,8 @@ import Button from '../../formComponents/Button';
 import FormInput from '../../formComponents/FormInput';
 import LoadingButton from '../../formComponents/LoadingButton';
 import ColorInput from '../../formComponents/ColorInput';
+import { showSimilarVariationOptions } from '../../../apis/product.apis';
 import {
-  showSimilarVariationOptions,
   adminGetVariationOptionById,
   adminUpdateVariationOptionById,
 } from '../../../apis/variations.apis';

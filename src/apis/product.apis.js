@@ -121,6 +121,66 @@ export const listAllChildCategoriesForSubCategory = async (subCategoryId) => {
   }
 };
 
+/*************** 4. VARIATIONS APIs *************/
+
+// LOGIN NOT NEEDED
+// 1.1 POST '/show-similar-Variations' - get list of similar Variations
+export const showSimilarVariations = async (name) => {
+  try {
+    const response = await axiosClient({
+      method: 'post',
+      url: '/api/product/show-similar-variations',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT NEEDED
+// 1.3 GET /list-all-Variations - get all Variations list
+export const listAllVariations = async () => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: '/api/product/list-all-variations',
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT NEEDED
+// 2.1 POST '/show-similar-Variation-options' - get list of similar Variation options
+export const showSimilarVariationOptions = async (name) => {
+  try {
+    const response = await axiosClient({
+      method: 'post',
+      url: '/api/product/show-similar-variation-options',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT NEEDED
+// 2.3 GET /list-all-Variation-options - get all Variations list
+export const listAllVariationOptions = async () => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: '/api/product/list-all-variation-options',
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 /*************** 1. PRODUCT APIs *************/
 
 // ADMIN ONLY

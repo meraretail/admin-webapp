@@ -4,7 +4,7 @@ import SuccErrMsg from '../../../components/common/SuccErrMsg';
 import { MdOutlineAddChart } from 'react-icons/md';
 import MainContainer from '../../../components/common/MainContainer';
 import VariationTable from '../../../components/categories/variations/VariationTable';
-import NewVariation from '../../../components/categories/variations/NewVariation';
+import AddUpdateVariation from '../../../components/categories/variations/AddUpdateVariation';
 
 const Variations = () => {
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const Variations = () => {
         {/* success / error message zone ends */}
         {/* main content starts */}
         <div className='mt-6 space-y-8'>
-          <NewVariation
+          <AddUpdateVariation
             loading={loading}
             setLoading={setLoading}
             setResSuccess={setResSuccess}

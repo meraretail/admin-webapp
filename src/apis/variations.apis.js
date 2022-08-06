@@ -3,21 +3,6 @@ import { axiosClient } from './axios-client';
 /********** 1. VARIATIONS METHODS ************/
 
 // ADMIN ONLY
-// 1.1 POST '/admin/show-similar-Variations' - get list of similar Variations
-export const showSimilarVariations = async (name) => {
-  try {
-    const response = await axiosClient({
-      method: 'post',
-      url: '/api/product/admin/show-similar-variations',
-      data: { name: name },
-    });
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
-// ADMIN ONLY
 // 1.2 POST /admin/create-Variation - admin can add new Variation
 export const adminCreateVariation = async (variation, variesProductOption) => {
   try {
@@ -25,20 +10,6 @@ export const adminCreateVariation = async (variation, variesProductOption) => {
       method: 'post',
       url: '/api/product/admin/create-variation',
       data: { name: variation, variesProductOption: variesProductOption },
-    });
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
-// ADMIN OR SELLER
-// 1.3 GET /list-all-Variations - get all Variations list
-export const listAllVariations = async () => {
-  try {
-    const response = await axiosClient({
-      method: 'get',
-      url: '/api/product/list-all-variations',
     });
     return response;
   } catch (error) {
@@ -115,21 +86,6 @@ export const adminDeleteVariationById = async (variationId) => {
 /********** 2. Variation OPTIONS METHODS ************/
 
 // ADMIN ONLY
-// 2.1 POST '/admin/show-similar-Variation-options' - get list of similar Variation options
-export const showSimilarVariationOptions = async (name) => {
-  try {
-    const response = await axiosClient({
-      method: 'post',
-      url: '/api/product/admin/show-similar-variation-options',
-      data: { name: name },
-    });
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
-// ADMIN ONLY
 // 2.2 POST /admin/create-Variation-option/:VariationId - admin can add new Variation option
 export const adminCreateVariationOption = async (variationId, varOption) => {
   try {
@@ -137,20 +93,6 @@ export const adminCreateVariationOption = async (variationId, varOption) => {
       method: 'post',
       url: `/api/product/admin/create-variation-option/${variationId}`,
       data: { name: varOption.name, value: varOption.value },
-    });
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
-// ADMIN OR SELLER
-// 2.3 GET /list-all-Variation-options - get all Variations list
-export const listAllVariationOptions = async () => {
-  try {
-    const response = await axiosClient({
-      method: 'get',
-      url: '/api/product/list-all-variation-options',
     });
     return response;
   } catch (error) {

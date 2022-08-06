@@ -35,8 +35,8 @@ export const childCatTableItems = [
   { label: 'Child Category', jsonKey: 'name' },
   { label: 'Sub Category', jsonKey: 'subCategory' },
   { label: 'Category', jsonKey: 'category' },
-  { label: '# Products', jsonKey: 'products' },
   { label: '# Variations', jsonKey: 'variations' },
   { label: '# Features', jsonKey: 'features' },
   { label: '# Details', jsonKey: 'details' },
+  { label: '# Products', jsonKey: 'products' },
 ];

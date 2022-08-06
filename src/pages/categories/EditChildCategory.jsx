@@ -60,11 +60,7 @@ const EditChildCategory = () => {
       {/* page header ends */}
       <div className='px-4 mt-[5.5rem] mb-10 space-y-8'>
         {/* success / error message zone */}
-        <SuccErrMsg
-          resMessage={resMessage}
-          resSuccess={resSuccess}
-          showSuccess={true}
-        />
+        <SuccErrMsg resMessage={resMessage} resSuccess={resSuccess} />
         {/* success / error message zone ends */}
         {/* User information update forms start */}
 
