@@ -34,8 +34,6 @@ import EditVariation from './pages/categories/variations/EditVariation';
 import Features from './pages/categories/features/Features';
 import EditFeature from './pages/categories/features/EditFeature';
 import Details from './pages/categories/details/Details';
-import AddDetail from './pages/categories/details/AddDetail';
-import EditDetail from './pages/categories/details/EditDetail';
 
 // Product Pages
 import Brands from './pages/products/Brands';
@@ -93,8 +91,6 @@ function App() {
 
             {/* Details pages */}
             <Route path='/details' element={<Details />} />
-            <Route path='/detail/new' element={<AddDetail />} />
-            <Route path='/detail/edit/:id' element={<EditDetail />} />
 
             {/* Products routes */}
             <Route path='/brands' element={<Brands />} />

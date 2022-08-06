@@ -241,6 +241,37 @@ export const listAllFeatureOptions = async () => {
   }
 };
 
+/*************** 6. DETAILS APIs *************/
+
+// LOGIN NOT NEEDED
+// 1.1 POST '/show-similar-details' - get list of similar details
+export const showSimilarDetails = async (name) => {
+  try {
+    const response = await axiosClient({
+      method: 'post',
+      url: '/api/product/show-similar-details',
+      data: { name: name },
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+// LOGIN NOT NEEDED
+// 1.3 GET /list-all-details - get all details list
+export const listAllDetails = async () => {
+  try {
+    const response = await axiosClient({
+      method: 'get',
+      url: '/api/product/list-all-details',
+    });
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 /*************** 1. PRODUCT APIs *************/
 
 // ADMIN ONLY

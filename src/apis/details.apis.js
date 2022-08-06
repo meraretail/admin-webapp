@@ -1,21 +1,6 @@
 import { axiosClient } from './axios-client';
 
 // ADMIN ONLY
-// 1.1 POST '/admin/show-similar-details' - get list of similar details
-export const showSimilarDetails = async (name) => {
-  try {
-    const response = await axiosClient({
-      method: 'post',
-      url: '/api/product/admin/show-similar-details',
-      data: { name: name },
-    });
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
-// ADMIN ONLY
 // 1.2 POST /admin/create-detail - admin can add new detail
 export const adminCreateDetail = async (name, demoAnswer) => {
   try {
@@ -31,18 +16,6 @@ export const adminCreateDetail = async (name, demoAnswer) => {
 };
 
 // ADMIN OR SELLER
-// 1.3 GET /list-all-details - get all details list
-export const listAllDetails = async () => {
-  try {
-    const response = await axiosClient({
-      method: 'get',
-      url: '/api/product/list-all-details',
-    });
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
 
 // ADMIN
 // 1.4 GET /admin/all-details-summary - admin get summary of all details

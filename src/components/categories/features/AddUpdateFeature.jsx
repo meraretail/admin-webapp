@@ -91,7 +91,7 @@ const AddUpdateFeature = ({
     setLoading(true);
     try {
       const response = await axiosPrivate({
-        method: 'post',
+        method: 'put',
         url: `/api/product/admin/update-feature/${featureId}`,
         data: { name: feature },
       });

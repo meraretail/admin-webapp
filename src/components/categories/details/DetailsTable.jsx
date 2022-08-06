@@ -1,66 +1,95 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import TableSearchInput from '../../tableComponents/TableSearchInput';
 import TableComponent from '../../tableComponents/TableComponent';
 import SizePageOptions from '../../tableComponents/SizePageOptions';
 import { detailTableItems } from '../../../listItems/categoryItems/attributeTableItems';
-import {
-  adminDeleteDetailById,
-  adminAllDetailsSummary,
-} from '../../../apis/details.apis';
 
 const DetailsTable = ({
+  loading,
+  setLoading,
   setResSuccess,
   setResMessage,
   rerender,
   setRerender,
+  handleEditDetail,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [details, setDetails] = useState([]);
   const [size, setSize] = useState(10);
   const [page, setPage] = useState(0);
   const [rowCount, setRowCount] = useState(0);
   const [searchText, setSearchText] = useState('');
 
-  const [loading, setLoading] = useState(false);
-
-  let navigate = useNavigate();
-
+  // Get all features summary on page load with 500ms lag
+  // 500ms is most optimum time considering typing speed
   useEffect(() => {
-    const delayedResponse = setTimeout(async () => {
+    let isMounted = true;
+    const getAllDetailsSummary = async () => {
       setLoading(true);
-      adminAllDetailsSummary(page, size, searchText)
-        .then((response) => {
-          const { totalDetails, details } = response.data;
-          setDetails(details);
-          setRowCount(totalDetails);
-        })
-        .catch((error) => {
-          setResSuccess(error.data.success);
-          setResMessage(error.data.message);
-        });
+      try {
+        const response = await axiosPrivate.get(
+          '/api/product/admin/all-details-summary',
+          {
+            params: {
+              page: page,
+              size: size,
+              search: searchText,
+            },
+          }
+        );
+        // console.log('response', response);
+        isMounted && setDetails(response.data.details);
+        isMounted && setRowCount(response.data.totalDetails);
+        isMounted && setResSuccess(response.data.success);
+        isMounted && setResMessage(response.data.message);
+      } catch (error) {
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
       setLoading(false);
-    }, 200);
+    };
 
-    return () => clearTimeout(delayedResponse);
-  }, [page, size, searchText, rerender, setResSuccess, setResMessage]);
+    const delayedResponse = setTimeout(async () => {
+      await getAllDetailsSummary();
+    }, 500);
 
-  const handleEditDetail = (id) => {
-    navigate(`/detail/${id}`);
-  };
+    return () => {
+      isMounted = false;
+      clearTimeout(delayedResponse);
+    };
+  }, [
+    axiosPrivate,
+    page,
+    size,
+    searchText,
+    setLoading,
+    setResMessage,
+    setResSuccess,
+    rerender,
+  ]);
 
-  const handleDeleteDetail = async (id) => {
+  const handleDeleteDetail = async (detailId) => {
     setLoading(true);
-    const { data } = await adminDeleteDetailById(id);
-    setLoading(false);
-    setResSuccess(data.success);
-    setResMessage(data.message);
-    if (data.success) {
+    try {
+      const response = await axiosPrivate({
+        method: 'delete',
+        url: `/api/product/admin/delete-detail/${detailId}`,
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
       setRerender(!rerender);
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
 
   return (
-    <div className='overflow-y-visible'>
+    <div className='overflow-y-visible py-2'>
       {/* search row */}
       <div className='w-full md:w-1/3 pb-6'>
         <TableSearchInput setSearchText={setSearchText} />

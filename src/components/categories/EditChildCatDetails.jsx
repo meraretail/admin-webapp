@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { adminUpdateChildCategoryDetails } from '../../apis/childcategories.apis';
-import { listAllDetails } from '../../apis/details.apis';
+import { listAllDetails } from '../../apis/product.apis';
 import Button from '../formComponents/Button';
 import LoadingButton from '../formComponents/LoadingButton';
 
