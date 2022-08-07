@@ -1,4 +1,4 @@
-import { refreshTokens } from '../apis/auth.apis';
+import { axiosClient } from '../apis/axios-client';
 import useAuth from './useAuth';
 
 /********** FUNCTION OF USE REFRESH TOKEN **********/
@@ -9,7 +9,10 @@ const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
   const refresh = async () => {
-    const response = await refreshTokens();
+    const response = await axiosClient({
+      method: 'get',
+      url: '/api/identity/refresh-tokens',
+    });
     // console.log('response', response);
     const { user, roles, stores, accessToken } = response.data;
     setAuth({ user, roles, stores, accessToken });

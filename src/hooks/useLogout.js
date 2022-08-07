@@ -1,4 +1,4 @@
-import { logoutUser } from '../apis/auth.apis';
+import { axiosClient } from '../apis/axios-client';
 import useAuth from './useAuth';
 
 const useLogout = () => {
@@ -7,9 +7,12 @@ const useLogout = () => {
   const logout = async () => {
     setAuth({});
     try {
-      await logoutUser();
+      const response = await axiosClient({
+        method: 'get',
+        url: '/api/identity/logout',
+      });
     } catch (error) {
-      console.log(error);
+      console.log(`Unable to logout: ${error}`);
     }
   };
   return logout;
