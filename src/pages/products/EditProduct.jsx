@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import SuccErrMsg from '../../components/common/SuccErrMsg';
 import PageTitle2Btn from '../../components/common/PageTitle2Btn';
 import Tab1ProductBasics from '../../components/products/tabs/Tab1ProductBasics';
 import Tab2ProductVariations from '../../components/products/tabs/Tab2ProductVariations';
 import Tab3ProductImages from '../../components/products/tabs/Tab3ProductImages';
 import Tab4ProductOptions from '../../components/products/tabs/Tab4ProductOptions';
-
 import { productTabs } from '../../listItems/productItems/productTabs';
-import { getChildCategoryParametersById } from '../../apis/childcategories.apis';
 import { adminGetProductById } from '../../apis/product.apis';
 
 const EditProduct = () => {
   const { productId } = useParams();
+  const axiosPrivate = useAxiosPrivate();
 
   const [loading, setLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(true);
@@ -42,17 +42,30 @@ const EditProduct = () => {
 
   /*** STEP 2: IF SELECTED CHILD CATEGORY ? SET CHILD CATEGORY PARAMETERS ***/
   useEffect(() => {
-    if (selectedChildCategory) {
-      getChildCategoryParametersById(selectedChildCategory.id)
-        .then((response) => {
-          setParameters(response.data);
-        })
-        .catch((error) => {
-          setResSuccess(error.data.success);
-          setResMessage(error.data.message);
+    let isMounted = true;
+    const getChildCategory = async () => {
+      setResMessage('');
+      setLoading(true);
+      try {
+        const response = await axiosPrivate({
+          method: 'get',
+          url: `/api/product/admin/get-childcategory-attributes/${selectedChildCategory?.id}`,
         });
-    }
-  }, [selectedChildCategory]);
+        setLoading(false);
+        isMounted && setParameters(response.data.childCategory);
+        isMounted && setResSuccess(response.data.success);
+        isMounted && setResMessage(response.data.message);
+      } catch (error) {
+        setLoading(false);
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
+    };
+    getChildCategory();
+    return () => {
+      isMounted = false;
+    };
+  }, [axiosPrivate, selectedChildCategory]);
 
   /********* EXTRACT PRODUCT VARIATIONS TO CHOOSE UPLOAD PARAMETERS *********/
   const [imageVariations, setImageVariations] = useState([]);

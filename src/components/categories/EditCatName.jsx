@@ -66,6 +66,7 @@ const EditCatName = ({
       setResMessage(error.response.data.message);
     }
   };
+
   return (
     <div>
       <form

@@ -12,6 +12,7 @@ export const catPopularFilters = [
 export const categoryTableItems = [
   { label: 'Id', jsonKey: 'id' },
   { label: 'Category', jsonKey: 'name' },
+  { label: '# Images', jsonKey: 'categoryImages' },
   { label: '# Subcategories', jsonKey: 'subCategories' },
   { label: '# Childcategories', jsonKey: 'childCategories' },
   { label: '# Products', jsonKey: 'products' },
