@@ -62,7 +62,15 @@ const ProductsTable = ({
       isMounted = false;
       clearTimeout(delayedResponse);
     };
-  }, [page, size, searchText, axiosPrivate, setResSuccess, setResMessage]);
+  }, [
+    page,
+    size,
+    searchText,
+    axiosPrivate,
+    setResSuccess,
+    setResMessage,
+    setLoading,
+  ]);
 
   const handleEditProduct = (id) => {
     navigate(`/product/${id}`);

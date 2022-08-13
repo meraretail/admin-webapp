@@ -1,24 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// Import components
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import Button from '../../components/formComponents/Button';
 import FormInput from '../../components/formComponents/FormInput';
 import LoadingButton from '../../components/formComponents/LoadingButton';
 import PageTitle from '../../components/common/PageTitle';
 import SuccErrMsg from '../../components/common/SuccErrMsg';
-
-// Import icons and services
-import { adminCreateUser, adminGetRolesFromDb } from '../../apis/users.apis';
+import ItemContainer from '../../components/common/ItemContainer';
+import MainContainer from '../../components/common/MainContainer';
 import { createUserInputs } from '../../listItems/userItems/createUserInputs';
 
 const AddUser = () => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [values, setValues] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
     email: '',
     password: '',
     confirmPassword: '',
-    phone: '',
   });
   const [roles, setRoles] = useState([]);
   const [availableRoles, setAvailableRoles] = useState([]);
@@ -31,20 +32,32 @@ const AddUser = () => {
 
   // Step 1: Get all roles from database
   useEffect(() => {
-    adminGetRolesFromDb()
-      .then((response) => {
+    let isMounted = true;
+    const getAllRoles = async () => {
+      setLoading(true);
+      try {
+        const response = await axiosPrivate({
+          method: 'get',
+          url: '/api/identity/admin/get-roles-from-db',
+        });
+        setLoading(false);
         const dbRoles = response.data.roles;
         let tmpRoles = [];
         dbRoles.forEach((dbRole) => {
           tmpRoles.push(dbRole.roleName);
         });
-        setAvailableRoles(tmpRoles);
-      })
-      .catch((error) => {
-        setResMessage(error.data.message);
-        setResSuccess(error.data.success);
-      });
-  }, [setResMessage, setResSuccess]);
+        isMounted && setAvailableRoles(tmpRoles);
+      } catch (error) {
+        setLoading(false);
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
+    };
+    getAllRoles();
+    return () => {
+      isMounted = false;
+    };
+  }, [axiosPrivate, setResMessage, setResSuccess]);
 
   // Step 2: Handle text input changes
   const onValueChange = (e) => {
@@ -77,15 +90,22 @@ const AddUser = () => {
     }
 
     setLoading(true);
-    const response = await adminCreateUser(newValues);
-    // console.log(response);
-    const { success, message } = response;
-    setResSuccess(success);
-    setResMessage(message);
-    setLoading(false);
-
-    if (success) {
-      navigate('/users');
+    try {
+      const response = await axiosPrivate({
+        method: 'post',
+        url: '/api/identity/admin/create-user',
+        data: newValues,
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        navigate('/users');
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
 
@@ -100,15 +120,13 @@ const AddUser = () => {
         className='fixed top-0 left-[12rem] right-0 px-4 shadow'
       />
       {/* page header ends */}
-      <div className='px-4 mt-[6rem] mb-10'>
+      <MainContainer>
         {/* success / error message zone */}
         <SuccErrMsg resMessage={resMessage} resSuccess={resSuccess} />
         {/* success / error message zone ends */}
         {/* User information update forms start */}
-        <div className='shadow rounded border p-4 relative'>
-          <div className='absolute -top-3 left-2 px-2 bg-white text-violet-700'>
-            Enter user details and password to create new user
-          </div>
+
+        <ItemContainer title='Enter user details and password to create new user'>
           <form onSubmit={handleAddUser} className='pt-2'>
             <div className='space-y-4'>
               <div className='grid grid-cols-2 gap-4'>
@@ -159,8 +177,8 @@ const AddUser = () => {
               </div>
             </div>
           </form>
-        </div>
-      </div>
+        </ItemContainer>
+      </MainContainer>
     </div>
   );
 };

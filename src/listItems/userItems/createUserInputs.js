@@ -4,14 +4,14 @@ export const createUserInputs = [
     name: 'firstName',
     type: 'text',
     placeholder: 'Enter your first name',
-    label: 'Name',
+    label: 'First name',
   },
   {
     id: 2,
     name: 'lastName',
     type: 'text',
     placeholder: 'Enter your last name',
-    label: 'Name',
+    label: 'Last name',
   },
   {
     id: 3,

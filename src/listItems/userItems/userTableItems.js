@@ -6,13 +6,3 @@ export const userPopularFilters = [
   { id: 5, text: 'Last 12 months', fromDate: '', toDate: '' },
   { id: 6, text: 'Custom range', fromDate: '', toDate: '' },
 ];
-
-export const userTableHeaders = [
-  'id',
-  'Name',
-  'Email',
-  'Phone',
-  'Roles',
-  'Verified',
-  'Actions',
-];

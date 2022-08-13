@@ -1,21 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-
-// Importing components
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import LoadingButton from '../../components/formComponents/LoadingButton';
 import Button from '../../components/formComponents/Button';
 import FormInput from '../../components/formComponents/FormInput';
-
-// Importing icons and input fields
-import { adminAddUserAddress } from '../../apis/users.apis';
-import { addressInputs } from '../../listItems/userItems/userAddressInputs';
 import SuccErrMsg from '../../components/common/SuccErrMsg';
 import PageTitle from '../../components/common/PageTitle';
+import { addressInputs } from '../../listItems/userItems/userAddressInputs';
 
 const AddAddress = () => {
   let { userId } = useParams();
   let navigate = useNavigate();
   const { state } = useLocation();
+  const axiosPrivate = useAxiosPrivate();
 
   const [loading, setLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(true);
@@ -36,17 +33,26 @@ const AddAddress = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  // Call API to create new address
   const handleAddAddress = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const response = await adminAddUserAddress(userId, values);
-    setLoading(false);
-    const { success, message } = response.data;
-    setResSuccess(success);
-    setResMessage(message);
-
-    if (success) {
-      navigate(`/user/${userId}`);
+    try {
+      const response = await axiosPrivate({
+        method: 'post',
+        url: `/api/identity/user/${userId}/add-address`,
+        data: values,
+      });
+      setLoading(false);
+      setResSuccess(response.data.success);
+      setResMessage(response.data.message);
+      if (response.data.success) {
+        navigate(`/user/edit/${userId}`);
+      }
+    } catch (error) {
+      setLoading(false);
+      setResSuccess(error.response.data.success);
+      setResMessage(error.response.data.message);
     }
   };
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 // Importing components
 import ViewAddressCard from '../../components/users/ViewAddressCard';
 import EditPassword from '../../components/users/EditPassword';
@@ -8,15 +8,15 @@ import EditProfile from '../../components/users/EditProfile';
 import EditRole from '../../components/users/EditRole';
 import SuccErrMsg from '../../components/common/SuccErrMsg';
 import PageTitle from '../../components/common/PageTitle';
-
-// Importing Icons
 import { MdAddCircleOutline } from 'react-icons/md';
-import { adminGetUserById } from '../../apis/users.apis';
+import MainContainer from '../../components/common/MainContainer';
 
 const EditUser = () => {
   let { userId } = useParams();
   let navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
 
+  const [loading, setLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(true);
   const [resMessage, setResMessage] = useState('');
   const [rerender, setRerender] = useState(false);
@@ -33,16 +33,30 @@ const EditUser = () => {
     addresses: [],
   });
 
+  // Step 1: Get user details from database
   useEffect(() => {
-    adminGetUserById(userId)
-      .then((response) => {
-        setUser(response.data.user);
-      })
-      .catch((error) => {
-        setResMessage(error.data.message);
-        setResSuccess(error.data.success);
-      });
-  }, [userId, rerender]);
+    let isMounted = true;
+    const getUserDetails = async () => {
+      setLoading(true);
+      try {
+        const response = await axiosPrivate({
+          method: 'get',
+          url: `/api/identity/admin/get-user/${userId}`,
+        });
+        setLoading(false);
+        isMounted && setUser(response.data.user);
+      } catch (error) {
+        setLoading(false);
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
+    };
+    getUserDetails();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [axiosPrivate, setResMessage, setResSuccess, userId, rerender]);
 
   const handleAddAddress = () => {
     navigate(`/user/${user.id}/add-address`, { state: { user } });
@@ -57,10 +71,9 @@ const EditUser = () => {
         btnText='Go to all users list'
         btnLink='/users'
         type='negative'
-        className='fixed top-0 left-[12rem] right-0 px-4 shadow'
       />
       {/* page header ends */}
-      <div className='px-4 mt-[5rem] mb-10'>
+      <MainContainer>
         {/* success / error message zone */}
         <SuccErrMsg
           resMessage={resMessage}
@@ -116,7 +129,7 @@ const EditUser = () => {
           />
         </div>
         {/* address section ends */}
-      </div>
+      </MainContainer>
     </div>
   );
 };

@@ -56,7 +56,7 @@ function App() {
             {/* User routes */}
             <Route path='/users' element={<Users />} />
             <Route path='/user/new' element={<AddUser />} />
-            <Route path='/user/:userId' element={<EditUser />} />
+            <Route path='/user/edit/:userId' element={<EditUser />} />
             <Route path='/user/:userId/add-address' element={<AddAddress />} />
             <Route
               path='/user/:userId/edit-address/:addressId'

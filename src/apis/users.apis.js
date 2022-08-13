@@ -44,33 +44,6 @@ export const adminDeleteUserById = async (id) => {
   }
 };
 
-// 4. Admin: Create new user | POST /admin/create-user
-export const adminCreateUser = async (values) => {
-  try {
-    const response = await axiosClient({
-      method: 'post',
-      url: '/api/identity/admin/create-user',
-      data: values,
-    });
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
-// 5 Admin: Get available roles from db | GET /admin/get-roles-from-db
-export const adminGetRolesFromDb = async () => {
-  try {
-    const response = await axiosClient({
-      method: 'get',
-      url: '/api/identity/admin/get-roles-from-db',
-    });
-    return response;
-  } catch (error) {
-    return error.response;
-  }
-};
-
 /*********** User Address Routes *************/
 
 // 1. Admin: Add new address | POST /user/:id/add-address

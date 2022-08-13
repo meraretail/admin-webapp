@@ -1,32 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import Button from '../formComponents/Button';
 import LoadingButton from '../formComponents/LoadingButton';
-import {
-  adminGetRolesFromDb,
-  adminUpdateUserRolesById,
-} from '../../apis/users.apis';
+import { adminUpdateUserRolesById } from '../../apis/users.apis';
 
 const EditRole = ({ user, setResSuccess, setResMessage }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const [loading, setLoading] = useState(false);
   const [roles, setRoles] = useState([]);
   const [availableRoles, setAvailableRoles] = useState([]);
 
   // Step 1: Get all roles from database
   useEffect(() => {
-    adminGetRolesFromDb()
-      .then((response) => {
+    let isMounted = true;
+    const getAllRoles = async () => {
+      setLoading(true);
+      try {
+        const response = await axiosPrivate({
+          method: 'get',
+          url: '/api/identity/admin/get-roles-from-db',
+        });
+        setLoading(false);
         const dbRoles = response.data.roles;
         let tmpRoles = [];
         dbRoles.forEach((dbRole) => {
           tmpRoles.push(dbRole.roleName);
         });
-        setAvailableRoles(tmpRoles);
-      })
-      .catch((error) => {
-        setResMessage(error.data.message);
-        setResSuccess(error.data.success);
-      });
-  }, [setResMessage, setResSuccess]);
+        isMounted && setAvailableRoles(tmpRoles);
+      } catch (error) {
+        setLoading(false);
+        setResSuccess(error.response.data.success);
+        setResMessage(error.response.data.message);
+      }
+    };
+    getAllRoles();
+    return () => {
+      isMounted = false;
+    };
+  }, [axiosPrivate, setResMessage, setResSuccess]);
 
   useEffect(() => {
     const rolesArray = [];
