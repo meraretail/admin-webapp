@@ -39,7 +39,7 @@ const EditChildCategory = () => {
       try {
         const response = await axiosPrivate({
           method: 'get',
-          url: `/api/product/admin/get-childcategory/${childCategoryId}`,
+          url: `/api/product/get-childcategory/${childCategoryId}`,
         });
         setLoading(false);
         isMounted && setChildCategory(response.data.childCategory);
