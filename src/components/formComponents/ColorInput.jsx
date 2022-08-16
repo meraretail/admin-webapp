@@ -24,7 +24,7 @@ const ColorInput = ({ id, label, value, onColorChange, onInputChange }) => {
 
   return (
     <div
-      className="w-full border border-inputBorder rounded relative flex items-center px-3 py-1"
+      className='w-full border border-inputBorder rounded relative flex items-center px-3 py-1'
       ref={wrapperRef}
     >
       <SketchPicker
@@ -35,19 +35,19 @@ const ColorInput = ({ id, label, value, onColorChange, onInputChange }) => {
         } absolute top-10 left-0 z-30`}
       />
       <span
-        className="w-5 h-5 rounded cursor-pointer border border-inputBorder"
+        className='w-5 h-5 rounded cursor-pointer border border-inputBorder'
         style={{ backgroundColor: value }}
         onClick={() => setSwatchVisible(!swatchVisible)}
       ></span>
       <input
-        type="text"
+        type='text'
         id={id}
-        value={value}
+        value={value ? value : ''}
         onChange={onInputChange}
         onFocus={() => setSwatchVisible(true)}
-        className="w-full focus:outline-none px-3 py-1 text-sm tracking-wider text-gray-700 uppercase"
+        className='w-full focus:outline-none px-3 py-1 text-sm tracking-wider text-gray-700 uppercase'
       />
-      <span className="text-xs font-medium absolute -top-2.5 left-2 bg-white px-1 text-gray-400">
+      <span className='text-xs font-medium absolute -top-2.5 left-2 bg-white px-1 text-gray-400'>
         {label}
       </span>
     </div>
