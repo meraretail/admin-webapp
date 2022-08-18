@@ -43,7 +43,6 @@ const EditCategoryImage = ({
       images.forEach((image) => {
         formData.append('catImgs', image.file);
       });
-      // console.log(formData);
 
       setLoading(true);
       try {
