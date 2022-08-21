@@ -53,12 +53,12 @@ const SizePageOptions = ({ rowCount, size, setSize, page, setPage }) => {
           <ul
             className={`${
               sizeOptionsVisible ? 'block' : 'hidden'
-            } border border-gray-300 z-30 relative`}
+            } border border-gray-300 z-30 relative rounded`}
           >
             {pageSizeOptions.map((option, index) => (
               <li
                 onClick={() => sizeOptionClickHandler(option)}
-                className='cursor-pointer px-2 py-0.5 text-gray-500 text-md'
+                className='cursor-pointer px-2 py-0.5 text-gray-600'
                 key={index}
               >
                 {option}
